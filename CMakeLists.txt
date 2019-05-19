@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(incs)
 include_directories(libs/libft)
 include_directories(libs/SDL2/include)
-include_directories(srcs)
+
 find_library(GL_LIB GL
         PATH
         /)
@@ -20,4 +20,9 @@ add_compile_options(-Wall -Wextra -Werror)
 link_libraries(${SDL_LIB} ${FT_LIB})
 
 add_executable(rtv1
-        main.c)
+       # srcs/parser.c
+        srcs/vector.c
+        srcs/sphere.c
+        srcs/vec_mul.c
+        srcs/vec_sum.c
+        srcs/main.c)
