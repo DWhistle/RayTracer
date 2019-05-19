@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgreenfe <hgreenfe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/19 15:02:23 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/05/19 15:35:00 by bturcott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "incs/libft.h"
+#include "../incs/libft.h"
 #include "SDL2/SDL.h"
 #include <OpenGL/gl.h>
 
