@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 18:40:37 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/19 21:14:34 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/05/19 23:25:46 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,16 @@ t_vec4		vec_mul(t_vec4 v1, t_vec4 v2)
 */
 
 ft_decimal	vec_sqrdist(t_vec4 vec)
-{
+{	
 	return (vec.vec.x * vec.vec.x +
 			vec.vec.y * vec.vec.y +
 			vec.vec.z * vec.vec.z +
 			vec.vec.w * vec.vec.w);
+}
+
+ft_decimal vec_len(t_vec4 vec)
+{
+	return (sqrt(vec_sqrdist(vec)));
 }
 
 /*

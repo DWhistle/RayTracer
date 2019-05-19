@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgreenfe <hgreenfe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 18:25:23 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/19 19:47:08 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/05/19 23:26:32 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,6 @@ t_vec4					vec_add(t_vec4 v1, ft_decimal val);
 t_vec4					vec_sub(t_vec4 v1, t_vec4 v2);
 int						vec_equ(t_vec4 v1, t_vec4 v2, ft_decimal eps);
 int						vec_ident(t_vec4 v1, t_vec4 v2);
+ft_decimal				vec_len(t_vec4 vec);
 
 #endif

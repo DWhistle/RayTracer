@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/19 21:44:32 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/05/19 23:36:27 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int     render(SDL_Window *window)
 	scene.objs = malloc(sizeof(t_obj) * 2);
 	t_light l;
 	l.type = DIRECT;
-	l.point = new_vec3(15500, 5100, 0);
+	l.point = new_vec3(0, 0, 0);
 	l.norm = vec_sub(l.point, new_vec3(1550, 510, 2000));
 	circle.type = CIRCLE;
 	circle.r = 150;
