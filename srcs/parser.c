@@ -6,14 +6,15 @@
 /*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 15:49:37 by bturcott          #+#    #+#             */
-/*   Updated: 2019/05/19 18:02:08 by bturcott         ###   ########.fr       */
+/*   Updated: 2019/05/19 19:54:22 by bturcott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "parser.h"
 
-t_json *create_json_obj(){
+t_json *create_json_obj()
+{
 	t_json *obj;
 
 	if (!(obj = (t_json *)malloc(sizeof(t_json))))
@@ -25,26 +26,56 @@ t_json *create_json_obj(){
 	return(obj);
 }
 
+
+char *parse_key(char *file, int pos)
+{
+	int quotes;
+	
+	quotes = pos;
+	while (file[pos])
+	{
+		if (file[pos++] == '"')
+			{
+				while (file[pos] && file[pos] != '"' && file[pos - 1] != '\\')
+					pos++;
+				return (ft_strsub(file, quotes, pos));
+			}
+		pos++;
+	}
+}
+
+void *parse_value(char *file, int pos)
+{
+	while (file[pos] && file[pos] != '"' || file[pos] != '[' 
+	|| file[pos] != '{' || !ft_isdigit(file[pos]))
+		pos++;
+	if (file[pos] == '"')
+		return (parse_key(file, pos));
+	else if (file[pos++] == '{')
+		return NULL;
+	else if (ft_isdigit(file[pos]))
+		return(ft_atoi(file + pos));
+	
+}
 t_json *make_json(char *file, int pos)
 {
 	t_json	*obj;
 	int		i;
-	int		quotes;
 
 	obj = create_json_obj();
 	i = -1;
-	while (file[pos] && ++i < MAX_FIELDS){
-		if (file[pos++] == "\"" && (quotes = pos))
-		{
-			while (file[pos] && file[pos] != "\"")
-				pos++;
-			obj->key[i] = ft_strsub(file, quotes, pos);
-			while (file[pos] != "\"")
-				pos++;
-			quotes = pos;
-		}
+	while (file[pos] && ++i < MAX_FIELDS)
+	{
+		obj->key[i] = parse_key(file, pos);
+		while (file[pos] != ':')
+			pos++;
+		if (!(obj->value[i] = parse_value(file, pos)))
+			obj->value[i] = make_json(file, file - ft_strchr(file + pos, '{') + 1);
+		while (file[pos] != ',')
+			pos++;
 	}
 }
+
 char *read_file(int fd){
 	
 	char *file;
@@ -60,7 +91,8 @@ char *read_file(int fd){
 	while (file[i] && file[i] != '{')
 		i++;
 	temp = ft_strsub(file, i, ft_strlen(file) - i);
-	return (file);
+	free(file);
+	return (temp);
 }
 
 t_list *parse_json(char *config_file)
