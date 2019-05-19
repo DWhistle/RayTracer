@@ -1,6 +1,6 @@
 # sdl pkg-config source file
 
-prefix=/Users/bturcott/Desktop/RT/libs/SDL
+prefix=/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include

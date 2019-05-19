@@ -2,7 +2,7 @@
 
 # libtool - Provide generalized library-building support services.
 # Generated automatically by config.status (SDL2_image) 2.0.4
-# Libtool was configured on host vo-f2.21-school.ru:
+# Libtool was configured on host vo-g3.21-school.ru:
 # NOTE: Changes made to this file will be lost: look at ltmain.sh.
 #
 #   Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005,
@@ -138,7 +138,7 @@ old_postuninstall_cmds=""
 LTCC="gcc"
 
 # LTCC compiler flags.
-LTCFLAGS="-g -O2 -D_THREAD_SAFE -I/Users/bturcott/.brew/include/SDL2"
+LTCFLAGS="-g -O2 -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/include/SDL2 -D_THREAD_SAFE"
 
 # Take the output of nm and produce a listing of raw symbols and C names.
 global_symbol_pipe="sed -n -e 's/^.*[	 ]\\([BCDEGRST][BCDEGRST]*\\)[	 ][	 ]*_\\([_A-Za-z][_A-Za-z0-9]*\\)\$/\\1 _\\2 \\2/p'"

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+         #
+#    By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 19:22:42 by hgreenfe          #+#    #+#              #
-#    Updated: 2019/05/19 15:35:38 by bturcott         ###   ########.fr        #
+#    Updated: 2019/05/19 20:40:40 by kmeera-r         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,11 @@ RMFLAGS = -rf
 
 #used directories and files
 
-FILES := main 
+FILES := main \
+		 raymarching \
+		 vec_mul \
+		 vec_sum \
+		 vector 
 
 
 HEADERS = $(INCDIR1)/SDL2/SDL.h $(INCDIR1)/ft_libui.h $(INCDIR1)/ft_window.h
@@ -56,7 +60,7 @@ all: $(NAME)
 $(OBJDIR):
 	mkdir $(OBJDIR)
 
-$(LIBDIR):
+$(LIBDIR): $(OBJDIR)
 	make -C $(LIBDIR)
 
 $(OBJDIR)%.o: $(SRCDIR)%.c

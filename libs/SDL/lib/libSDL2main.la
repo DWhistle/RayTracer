@@ -38,4 +38,4 @@ dlopen=''
 dlpreopen=''
 
 # Directory that this library needs to be installed in:
-libdir='/Users/bturcott/Desktop/RT/libs/SDL/lib'
+libdir='/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/lib'

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vec_mul.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgreenfe <hgreenfe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 18:40:37 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/19 19:55:44 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/05/19 21:14:34 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,7 @@ t_vec4		vec_norm(t_vec4 v)
 	t_vec4		vec;
 	ft_decimal	dist;
 
-	dist = 1.0 / sqrt(v.vec.x * v.vec.x +
-			v.vec.y * v.vec.y +
-			v.vec.z * v.vec.z +
-			v.vec.w * v.vec.w);
+	dist = 1.0 / sqrt(vec_sqrdist(v));
 	vec.vec.x = v.vec.x * dist;
 	vec.vec.y = v.vec.y * dist;
 	vec.vec.z = v.vec.z * dist;

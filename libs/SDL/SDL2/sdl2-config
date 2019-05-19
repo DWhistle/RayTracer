@@ -1,6 +1,6 @@
 #!/bin/sh
 
-prefix=/Users/bturcott/Desktop/RT/libs/SDL
+prefix=/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL
 exec_prefix=${prefix}
 exec_prefix_set=no
 libdir=${exec_prefix}/lib
