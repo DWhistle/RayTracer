@@ -6,7 +6,7 @@
 /*   By: hgreenfe <hgreenfe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 18:25:23 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/19 19:46:48 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/05/19 19:47:08 by hgreenfe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ t_vec4					new_vec0(void);
 t_vec4					vec_dotvec(t_vec4 v1, t_vec4 v2);
 t_vec4					vec_dotdec(t_vec4 v1, ft_decimal val);
 t_vec4					vec_mul(t_vec4 v1, t_vec4 v2);
+ft_decimal				vec_sqrdist(t_vec4 vec);
+t_vec4					vec_norm(t_vec4 v);
 t_vec4					vec_sum(t_vec4 v1, t_vec4 v2);
 t_vec4					vec_add(t_vec4 v1, ft_decimal val);
 t_vec4					vec_sub(t_vec4 v1, t_vec4 v2);
