@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 18:25:23 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/19 23:26:32 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/05/22 23:30:13 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_vec4					new_vec4(ft_decimal valx, ft_decimal valy, ft_decimal valz,
 t_vec4					new_vec3(ft_decimal valx, ft_decimal valy, ft_decimal valz);
 t_vec4					new_vec2(ft_decimal valx, ft_decimal valy);
 t_vec4					new_vec0(void);
-t_vec4					vec_dotvec(t_vec4 v1, t_vec4 v2);
+double					vec_dotvec(t_vec4 v1, t_vec4 v2);
 t_vec4					vec_dotdec(t_vec4 v1, ft_decimal val);
 t_vec4					vec_mul(t_vec4 v1, t_vec4 v2);
 ft_decimal				vec_sqrdist(t_vec4 vec);

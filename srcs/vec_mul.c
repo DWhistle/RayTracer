@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 18:40:37 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/19 23:25:46 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/05/22 23:29:57 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,9 @@
 ** (поэлементное произведение)
 */
 
-t_vec4		vec_dotvec(t_vec4 v1, t_vec4 v2)
+double		vec_dotvec(t_vec4 v1, t_vec4 v2)
 {
-	t_vec4	ret;
-
-	ret.vec.x = v1.vec.x * v2.vec.x;
-	ret.vec.y = v1.vec.y * v2.vec.y;
-	ret.vec.z = v1.vec.z * v2.vec.z;
-	ret.vec.w = v1.vec.w * v2.vec.w;
-	return (ret);
+	return (v1.vec.x * v2.vec.x + v1.vec.y * v2.vec.y + v1.vec.z * v2.vec.z + v1.vec.w * v2.vec.w);
 }
 
 /*
