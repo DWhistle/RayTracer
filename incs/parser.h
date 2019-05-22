@@ -6,7 +6,7 @@
 /*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 16:14:59 by bturcott          #+#    #+#             */
-/*   Updated: 2019/05/19 17:38:33 by bturcott         ###   ########.fr       */
+/*   Updated: 2019/05/21 17:51:35 by bturcott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 typedef struct s_json_object{
    char **key;
    void **value;
+   char *type;
 }              t_json;
 
 #endif

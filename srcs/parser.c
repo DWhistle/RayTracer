@@ -6,7 +6,7 @@
 /*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 15:49:37 by bturcott          #+#    #+#             */
-/*   Updated: 2019/05/20 17:10:02 by bturcott         ###   ########.fr       */
+/*   Updated: 2019/05/22 16:43:19 by bturcott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ t_json *create_json_obj()
 		return (NULL);
 	if (!(obj->value = malloc(sizeof(void *) * (MAX_FIELDS + 1))))
 		return (NULL);
+	if (!(obj->type = (char *)malloc(sizeof(char) * (MAX_FIELDS + 1))))
+		return (NULL);
 	return(obj);
 }
 
@@ -37,10 +39,8 @@ char *parse_key(char *file, int pos)
 		if (file[pos] == '"')
 			{
 				++pos;
-				printf("%d\n", pos);
 				while (file[pos + quotes] && file[pos + quotes] != '"')
 					quotes++;
-				printf("quotes %d pos == %d\n", quotes, pos);
 				return (ft_strsub(file, pos, quotes));
 			}
 		pos++;
@@ -48,61 +48,95 @@ char *parse_key(char *file, int pos)
 	return (NULL);
 }
 
-void *parse_value(char *file, int pos)
+int *parse_array(char *file, int pos)
 {
-	while (file[pos] && file[pos] != '"' && file[pos] != '[' 
-	&& file[pos] != '{' && !ft_isdigit(file[pos]))
+	int mem_pos;
+	int len;
+	int *arr;
+
+	len = 2;
+	mem_pos = pos - 1;
+	while (file[++mem_pos] != ']')
+		if (file[mem_pos] == ',')
+			len++;
+	arr = (int *)malloc(sizeof(int) * len);
+	len = -1;
+	while (pos <= mem_pos)
+	{
+		if (ft_isdigit(file[pos]))
+		{
+			arr[++len] = ft_atoi(file + pos);
+			while (ft_isdigit(file[pos]))
+				pos++;
+		}
 		pos++;
-	printf("%c\n", file[pos + 1]);
-	if (file[pos] == '"')
-		return (parse_key(file, pos));
-	else if (ft_isdigit(file[pos]))
-		return(ft_atoi(file + pos));
-	else
-		return (NULL);
+	}
+	return (arr);
 }
 
-t_json *make_json(char *file, int pos, t_json *obj)
+int parse_value(char *file, int pos, t_json *obj, int i)
+{
+	int *val;
+	
+	while (file[pos] && file[pos] != '"' && file[pos] != '['
+	&& file[pos] != '{' && !ft_isdigit(file[pos]))
+		pos++;
+	if (file[pos] == '[' && (obj->type[i] = 'a'))
+		obj->value[i] = parse_array(file, pos);
+	else if (file[pos] == '"' && (obj->type[i] = 's'))
+		obj->value[i] = parse_key(file, pos);
+	else if (ft_isdigit(file[pos]) && (obj->type[i] = 'i'))
+	{
+		obj->value[i] = (int *)malloc(sizeof(int));
+		val = (int *)obj->value[i];
+		val[0] = ft_atoi(file + pos);
+	}
+	else
+		return (-1);
+	return(0);
+}
+
+int make_json(char *file, int pos, t_json *obj)
 {
 	int		i;
 	
 	if (file[pos] == '}')
-		return NULL;
+		return 0;
 	obj = create_json_obj();
 	i = -1;
 	while (file[pos] && file[pos] != '}' && ++i < MAX_FIELDS)
 	{
-		printf("position before key %d\n", pos);
 		obj->key[i] = parse_key(file, pos);
-		printf("key == %s     pos == %d\n", obj->key[i], pos);
 		while (file[pos] && file[pos] != ':')
 			pos++;
-		obj->value[i] = parse_value(file, ++pos);
-		while (file[pos] && file[pos] != ',')
+		parse_value(file, ++pos, obj, i);
+		while (file[pos] && file[pos] != ',' && file[pos] != '}')
 			pos++;
-		printf("val == %d     pos == %d\n", obj->value[i], pos);	
 		while (file[pos] && file[pos] != '"' && file[pos] != '}')
 			pos++;
 		if (file[pos] == '}')
 			return (pos + 1);
 		else if (file[pos] == 0)
 			return (0);
-		printf("%c\n", file[pos]);
 	}
-	return (pos);
+	return (0);
 }
 
 char *read_file(int fd){
 	
 	char *file;
 	char *temp;
+	char *temp2;
 	int i;
 	
 	i = 0;
+	temp2 = ft_strdup("\0");
 	while (get_next_line(fd, &temp))
 	{
-		file = ft_strjoin(file, temp);
+		file = ft_strjoin(temp2, temp);
+		free(temp2);
 		free(temp);
+		temp2 = file;
 	}
 	while (file[i] && file[i] != '{')
 		i++;
@@ -115,7 +149,7 @@ t_list *parse_json(char *config_file)
 {
 	int fd;
 	t_list *json;
-	t_json *obj;
+	t_json obj;
 	int pos;
 	char 	*file;
 
@@ -128,11 +162,9 @@ t_list *parse_json(char *config_file)
 	}
 	file = read_file(fd);
 	close(fd);
-	printf("1\n");
-	while ((pos = make_json(file, pos, obj)))
+	while ((pos = make_json(file, pos, &obj)))
 	{
-		ft_lstpushback(json, ft_lstnew((void *)obj, sizeof(obj)));
-		printf("list");
+		ft_lstadd(&json, ft_lstnew((void **)&obj, sizeof(t_json)));
 	}
 	return (json);
 }
@@ -140,6 +172,5 @@ t_list *parse_json(char *config_file)
 
 int main(int ac, char **av)
 {
-	printf("%s\n", av[1]);
 	t_list *json = parse_json(av[1]);
 }
