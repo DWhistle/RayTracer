@@ -83,7 +83,7 @@ t_point_data raymarching(t_scene objs, t_vec vec, t_accuracy accuracy, t_vec poi
             if (r < accuracy.delta && r != -1)
             {
                 point_data.norm = get_normal(next_point, objs.objs[counter]);
-                point_data.obj = &objs.objs[counter];
+                point_data.obj = objs.objs + counter;
                 point_data.point = next_point;
                 return (point_data);
             }

@@ -21,6 +21,12 @@ link_libraries(${SDL_LIB} ${FT_LIB})
 
 add_executable(rtv1
        # srcs/parser.c
+        srcs/ray_tracing.c
+        srcs/antialiasing.c
+        srcs/path_tracing.c
+        srcs/raymarching.c
+        srcs/reflaction.c
+        srcs/len_obj.c
         srcs/vector.c
         srcs/sphere.c
         srcs/vec_mul.c

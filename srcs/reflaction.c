@@ -1,4 +1,5 @@
 #include "ray_render.h"
+#include "libft.h"
 
 t_vec   get_ref_vec(t_point_data point_data, t_vec vec)
 {
@@ -19,22 +20,15 @@ t_vec   get_ref_color(t_point_data *points)
     while(points[i].obj)
     {
         i++;
-        ft_putnbr(i);
-        ft_putendl("");
     }
     while(i-- != 1)
     {
-        ft_putnbr(i);
-        ft_putendl("");
         color_ref = points[i].color;
         ref = points[i-1].obj->reflection;
         color = points[i-1].color;
         color = vec_sum(vec_dotdec(color, 1 - ref), vec_dotdec(color_ref, ref));
         points[i-1].color = color;
-        ft_putnbr(i);
-        ft_putendl("");
     }
-    ft_putendl("");
     return(points[0].color);
 }
 
@@ -54,18 +48,13 @@ t_vec   ray_render(t_scene scene, t_vec point, t_accuracy accuracy)
         points = (t_point_data*)ft_memalloc(sizeof(t_point_data) * (accuracy.depth_ref + 1));
         points[0] = point_data;
         depth_ref = 0;
-        ft_putnbr(999999);
-        ft_putendl("");
-        ft_putendl("");
-        while(accuracy.depth_ref > depth_ref++ && point_data.obj->reflection)
+        while ((accuracy.depth_ref > depth_ref++) && (point_data.obj) && (point_data.obj->reflection))
         {
             scene.ignore = point_data.obj;
             point_data = path_tracing(scene, get_ref_vec(point_data, vec), accuracy, point_data.point);
             points[depth_ref] = point_data;
         }
-        points[depth_ref].obj = 0;
-        ft_putnbr(3534535);
-        ft_putendl("");
+        points[depth_ref].obj = 0;;
         color = get_ref_color(points);
         free(points);
         return(color);
