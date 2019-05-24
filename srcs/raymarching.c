@@ -65,11 +65,21 @@ t_vec get_normal(t_vec point, t_obj obj)
     return (new_vec0());
 }
 
-t_point_data raymarching(t_scene objs, t_vec vec, t_accuracy accuracy, t_vec point)
+t_point_data    crate_point_data(t_vec norm, t_obj *obj, t_vec point, t_vec color)
+{
+    t_point_data point_data;
+
+    point_data.norm = norm;
+    point_data.obj = obj;
+    point_data.point = point;
+    point_data.color = color;
+    return (point_data);
+}
+
+t_point_data    raymarching(t_scene objs, t_vec vec, t_accuracy accuracy, t_vec point)
 {
     double r;
     int counter;
-    t_point_data point_data;
     t_vec next_point;
 
     next_point = point;
@@ -81,17 +91,9 @@ t_point_data raymarching(t_scene objs, t_vec vec, t_accuracy accuracy, t_vec poi
         {
             r = update_r(r, objs.objs[counter], next_point, objs);
             if (r < accuracy.delta && r != -1)
-            {
-                point_data.norm = get_normal(next_point, objs.objs[counter]);
-                point_data.obj = &objs.objs[counter];
-                point_data.point = next_point;
-                return (point_data);
-            }
+                return (crate_point_data(get_normal(next_point, objs.objs[counter]), objs.objs + counter, next_point,  new_vec0()));
         }
         next_point = vec_sum(next_point, vec_dotdec(vec, r));
     }
-    point_data.norm = new_vec0();
-    point_data.obj = 0;
-    point_data.point = new_vec0();
-    return (point_data);
+    return (crate_point_data(new_vec0(), 0, new_vec0(), new_vec0()));
 }

@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/24 19:54:05 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/05/25 00:02:11 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 
 #define WIN_X   500
 #define WIN_Y   500
-#define WIN_W   1000
-#define WIN_H   600
+#define WIN_W   400
+#define WIN_H   200
 
 int    print_error(int errnum)
 {
@@ -128,11 +128,11 @@ int     render(SDL_Window *window)
 	circle.r = 100;
 	circle.point = new_vec3(0, 0, 2000);
 	circle2.r = 200;
-	circle2.point = new_vec3(150, 0, 2000);
+	circle2.point = new_vec3(150, 0, 1000);
 	plane.norm = new_vec3(0, 0, -1);
 	plane.point = new_vec3(0, 0, 3000);
-	plane2.norm = vec_norm(new_vec3(-1, 0, 0.2));
-	plane2.point = new_vec3(200, 0, 0);
+	plane2.norm = vec_norm(new_vec3(-1, 0, 0));
+	plane2.point = new_vec3(500, 0, 0);
 	plane3.norm = vec_norm(new_vec3(1, 0, 0));
 	plane3.point = new_vec3(-1000, 0, 0);
 	plane4.norm = vec_norm(new_vec3(0, 0, 1));
@@ -197,12 +197,13 @@ int     render(SDL_Window *window)
 	t_accuracy accuracy;
 	accuracy.delta = 0.00001;
 	accuracy.depth_march = 2000;
-	accuracy.depth_pt = 2;
-	accuracy.depth_ref = 2;
+	accuracy.depth_pt = 10;
+	accuracy.depth_ref = 0;
 	accuracy.max_dist = 10000;
-	accuracy.rpp = 9;
+	accuracy.rpp = 64;
 	scene.ignore = 0;
     SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0xff, 0xff, 0xff));
+	srand(time(NULL));
 	ray_tracing(scene, (int**)&(screen->pixels), accuracy, screen);
     SDL_UpdateWindowSurface(window);
     return (0);
