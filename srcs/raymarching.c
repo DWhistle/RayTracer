@@ -4,9 +4,11 @@
 #include <stdio.h>
 #include "SDL2/SDL.h"
 
-double update_r(double r, t_obj new_obj, t_vec point)
+double update_r(double r, t_obj new_obj, t_vec point, t_scene objs)
 {
     double len = 0;
+    if(objs.ignore && objs.ignore->ind == new_obj.ind)
+        return (r);
     if (new_obj.type == CIRCLE)
         len = len_circle(point, new_obj.obj);
     else if (new_obj.type == PLANE)
@@ -77,7 +79,7 @@ t_point_data raymarching(t_scene objs, t_vec vec, t_accuracy accuracy, t_vec poi
         counter = objs.number_objs;
         while (counter--)
         {
-            r = update_r(r, objs.objs[counter], next_point);
+            r = update_r(r, objs.objs[counter], next_point, objs);
             if (r < accuracy.delta && r != -1)
             {
                 point_data.norm = get_normal(next_point, objs.objs[counter]);

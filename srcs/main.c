@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/24 17:32:56 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/05/24 19:54:05 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 
 #define WIN_X   500
 #define WIN_Y   500
-#define WIN_W   500
-#define WIN_H   300
+#define WIN_W   1000
+#define WIN_H   600
 
 int    print_error(int errnum)
 {
@@ -131,8 +131,8 @@ int     render(SDL_Window *window)
 	circle2.point = new_vec3(150, 0, 2000);
 	plane.norm = new_vec3(0, 0, -1);
 	plane.point = new_vec3(0, 0, 3000);
-	plane2.norm = vec_norm(new_vec3(-1, 0, 0));
-	plane2.point = new_vec3(1000, 0, 0);
+	plane2.norm = vec_norm(new_vec3(-1, 0, 0.2));
+	plane2.point = new_vec3(200, 0, 0);
 	plane3.norm = vec_norm(new_vec3(1, 0, 0));
 	plane3.point = new_vec3(-1000, 0, 0);
 	plane4.norm = vec_norm(new_vec3(0, 0, 1));
@@ -147,12 +147,12 @@ int     render(SDL_Window *window)
 	scene.objs[0].obj = &circle;
 	scene.objs[0].type = CIRCLE;
 	scene.objs[0].color = new_vec3(200, 200, 0);
-	scene.objs[0].reflection = 1;
+	scene.objs[0].reflection = 0;
 	scene.objs[0].ind = 0;
 	scene.objs[1].obj = &circle2;
 	scene.objs[1].type = CIRCLE;
 	scene.objs[1].color = new_vec2(200, 200);
-	scene.objs[1].reflection = 0;
+	scene.objs[1].reflection = 0.9;
 	scene.objs[1].ind = 1;
 	scene.objs[3].obj = &plane;	
 	scene.objs[3].type = PLANE;
@@ -162,7 +162,7 @@ int     render(SDL_Window *window)
 	scene.objs[4].obj = &plane2;
 	scene.objs[4].type = PLANE;
 	scene.objs[4].color = new_vec2(200, 0);
-	scene.objs[4].reflection = 0;
+	scene.objs[4].reflection = 0.8;
 	scene.objs[4].ind = 4;
 	scene.objs[2].obj = &cylinder;	
 	scene.objs[2].type = CYLINDER;
@@ -198,9 +198,9 @@ int     render(SDL_Window *window)
 	accuracy.delta = 0.00001;
 	accuracy.depth_march = 2000;
 	accuracy.depth_pt = 2;
-	accuracy.depth_ref = 10;
+	accuracy.depth_ref = 2;
 	accuracy.max_dist = 10000;
-	accuracy.rpp = 4;
+	accuracy.rpp = 9;
 	scene.ignore = 0;
     SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0xff, 0xff, 0xff));
 	ray_tracing(scene, (int**)&(screen->pixels), accuracy, screen);
