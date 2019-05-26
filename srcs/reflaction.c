@@ -34,16 +34,16 @@ t_vec   get_ref_color(t_point_data *points)
 
 t_vec   ray_render(t_scene scene, t_vec point, t_accuracy accuracy)
 {
-    int depth_ref;
-    t_point_data point_data;
-    t_point_data *points;
-    t_vec color;
-    t_vec vec;
+    int				depth_ref;
+    t_point_data	point_data;
+    t_point_data	*points;
+    t_vec			color;
+    t_vec			vec;
 
     vec = vec_norm(vec_sub(point, scene.cam));
     point_data = path_tracing(scene, vec, accuracy, scene.cam);
     
-    if(point_data.obj)
+    if (point_data.obj)
     {
         points = (t_point_data*)ft_memalloc(sizeof(t_point_data) * (accuracy.depth_ref + 1));
         points[0] = point_data;
