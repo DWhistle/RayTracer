@@ -2,6 +2,7 @@
 # define RAY_RENDER_H
 # include "objects.h" 
 # include "SDL2/SDL.h"
+# include "libft.h"
 
 void            ray_tracing(t_scene scene, int **pixel, t_accuracy accuracy, SDL_Surface *screen);
 t_vec           antialiasing(t_scene scene, double x, double y, t_accuracy accuracy);
@@ -14,5 +15,5 @@ t_vec           ray_render(t_scene scene, t_vec point, t_accuracy accuracy);
 t_point_data    raymarching(t_scene objs, t_vec vec, t_accuracy accuracy, t_vec point);
 t_vec           get_normal(t_vec point, t_obj obj);
 double          light_render(t_scene objs, t_point_data point_data, t_vec n);
-double          update_r(double r, t_obj new_obj, t_vec point);
+double          update_r(double r, t_obj new_obj, t_vec point, t_scene objs);
 #endif

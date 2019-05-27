@@ -1,4 +1,4 @@
-# **************************************************************************** #
+	# **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
@@ -6,7 +6,7 @@
 #    By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 19:22:42 by hgreenfe          #+#    #+#              #
-#    Updated: 2019/05/22 22:54:25 by kmeera-r         ###   ########.fr        #
+#    Updated: 2019/05/27 16:56:16 by kmeera-r         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,12 @@ FILES := main \
 		 raymarching \
 		 vec_mul \
 		 vec_sum \
-		 vector 
+		 vector \
+		 path_tracing \
+		 ray_tracing \
+		 reflaction \
+		 antialiasing \
+		 len_obj
 
 
 HEADERS = $(INCDIR1)/SDL2/SDL.h $(INCDIR1)/ft_libui.h $(INCDIR1)/ft_window.h

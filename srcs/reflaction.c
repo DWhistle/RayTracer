@@ -56,6 +56,7 @@ t_vec   ray_render(t_scene scene, t_vec point, t_accuracy accuracy)
         points[depth_ref].obj = 0;
         color = get_ref_color(points);
         free(points);
+        scene.ignore = 0;   
         return(color);
     }
     return (new_vec0());

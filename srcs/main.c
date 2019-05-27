@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/25 00:02:11 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/05/27 20:15:06 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 
 #define WIN_X   500
 #define WIN_Y   500
-#define WIN_W   400
-#define WIN_H   200
+#define WIN_W   1600
+#define WIN_H   800
 
 int    print_error(int errnum)
 {
@@ -117,30 +117,28 @@ int     render(SDL_Window *window)
 	t_light l;
 	t_light l1;
 	t_light l2;
-	l.type = POINT;
-	l.point = new_vec3(0150, 0, 1500);
-	l.intensity = 0.5;
-	l2.type = POINT;
-	l2.intensity = 0.5;
-	l2.point = new_vec3(-700, 0, 0);
-	l1.type = AMBIENT;
+	l.ind = 0 ;
+	l.intensity = 1;
+	l2.intensity = 1;
+	l2.ind = 1;
+	l1.ind = 0;
 	l1.intensity = 0.1;
-	circle.r = 100;
-	circle.point = new_vec3(0, 0, 2000);
+	circle.r = 130;
+	circle.point = new_vec3(200, 200, 1100);
 	circle2.r = 200;
-	circle2.point = new_vec3(150, 0, 1000);
+	circle2.point = new_vec3(0, 0, 1000);
 	plane.norm = new_vec3(0, 0, -1);
-	plane.point = new_vec3(0, 0, 3000);
+	plane.point = new_vec3(0, 0, 1210);
 	plane2.norm = vec_norm(new_vec3(-1, 0, 0));
-	plane2.point = new_vec3(500, 0, 0);
+	plane2.point = new_vec3(210, 0, 0);
 	plane3.norm = vec_norm(new_vec3(1, 0, 0));
-	plane3.point = new_vec3(-1000, 0, 0);
+	plane3.point = new_vec3(-210, 0, 0);
 	plane4.norm = vec_norm(new_vec3(0, 0, 1));
 	plane4.point = new_vec3(0, 0, -1000);
 	plane5.norm = vec_norm(new_vec3(0, 1, 0));
-	plane5.point = new_vec3(0, -300, 0);
+	plane5.point = new_vec3(0, -210, 0);
 	plane6.norm = vec_norm(new_vec3(0, -1, 0));
-	plane6.point = new_vec3(0, 300, 0);
+	plane6.point = new_vec3(0, 210, 0);
 	cylinder.point = new_vec3(0, 0, 2000);;
 	cylinder.vec = vec_norm(new_vec3(0, 1, 3));
 	cylinder.r = 50;
@@ -161,7 +159,7 @@ int     render(SDL_Window *window)
 	scene.objs[3].ind = 3;
 	scene.objs[4].obj = &plane2;
 	scene.objs[4].type = PLANE;
-	scene.objs[4].color = new_vec2(200, 0);
+	scene.objs[4].color = new_vec3(255, 255, 255);
 	scene.objs[4].reflection = 0.8;
 	scene.objs[4].ind = 4;
 	scene.objs[2].obj = &cylinder;	
@@ -197,10 +195,10 @@ int     render(SDL_Window *window)
 	t_accuracy accuracy;
 	accuracy.delta = 0.00001;
 	accuracy.depth_march = 2000;
-	accuracy.depth_pt = 10;
+	accuracy.depth_pt = 15;
 	accuracy.depth_ref = 0;
 	accuracy.max_dist = 10000;
-	accuracy.rpp = 64;
+	accuracy.rpp = 1000;
 	scene.ignore = 0;
     SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0xff, 0xff, 0xff));
 	srand(time(NULL));

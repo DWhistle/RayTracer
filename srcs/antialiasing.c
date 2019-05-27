@@ -16,7 +16,7 @@ t_vec antialiasing(t_scene scene, double x, double y, t_accuracy accuracy)
         d_y = 0;
         while (y + d_y < y + 1)
         {
-            color_1 = vec_sum(color_1, ray_render(scene, new_vec3((x + d_x) * 1.5, (y + d_y)*1.5, MAX_Z), accuracy));
+            color_1 = vec_sum(color_1, ray_render(scene, new_vec3((x + d_x), (y + d_y), MAX_Z), accuracy));
             d_y += 1.0 / accuracy.rpp;
         }
         color_1 = vec_dotdec(color_1, 1.0 / accuracy.rpp);

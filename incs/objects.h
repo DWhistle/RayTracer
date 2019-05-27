@@ -56,10 +56,8 @@ typedef struct	s_plane
 
 typedef struct	s_light
 {
-	t_vec	point;
-	t_vec	norm;
 	double	intensity;
-	int		type;
+	int		ind;
 }				t_light;
 
 typedef struct	s_scene
