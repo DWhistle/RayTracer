@@ -74,7 +74,7 @@ $(OBJDIR)%.o: $(SRCDIR)%.c
 $(SDL):
 	cd $(PATH_SDL)/SDL2; ./configure --prefix=$(PATH_SDL)
 	make -sC $(PATH_SDL)/SDL2 install
-	cd $(PATH_SDL)/SDL2_image; ./configure --prefix=$(PATH_SDL) --with-sdl-prefix=$(PATH_SDL); make;
+	cd $(PATH_SDL)/SDL2_image; ./configure --prefix=$(PATH_SDL) --with-sdl-prefix=$(PATH_SDL)
 	make -sC $(PATH_SDL)/SDL2_image install
 
 $(NAME):  $(LIBDIR) $(SDL) $(FULL_OBJS)
@@ -85,7 +85,6 @@ clean: clean_sdl
 	$(RM) $(RMFLAGS) $(FULL_OBJS)
 
 clean_sdl:
-	cd $(PATH_SDL)/SDL2_image; ./configure --prefix=$(PATH_SDL)
 	make -C $(PATH_SDL)/SDL2 clean
 	make -C $(PATH_SDL)/SDL2_image clean
 	

@@ -3,6 +3,7 @@
 # include "objects.h" 
 # include "SDL2/SDL.h"
 # include "libft.h"
+# include <math.h>
 
 void            ray_tracing(t_scene scene, int **pixel, t_accuracy accuracy, SDL_Surface *screen);
 t_vec           antialiasing(t_scene scene, double x, double y, t_accuracy accuracy);

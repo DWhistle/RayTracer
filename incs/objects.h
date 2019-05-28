@@ -1,7 +1,9 @@
 #ifndef OBJECT_H
 # define OBJECT_H
 
+#ifndef __OPENCL_C_VERSION__
 #include "vector.h"
+#endif
 #define MAX_Z 800
 #define E 0.0001
 
@@ -16,8 +18,11 @@ enum
 	AMBIENT = 2,
 	POINT = 3
 };
-
+#ifdef __OPENCL_C_VERSION__
+typedef vec3 t_vec;
+#else
 typedef t_vec4 t_vec;
+#endif
 
 typedef struct s_obj
 {
@@ -87,5 +92,23 @@ typedef struct	s_accuracy
 	int 	max_dist;
 	double	delta;
 }				t_accuracy;
+
+typedef struct	s_triangle
+{
+}				t_triangle;
+
+typedef struct	s_polygon
+{
+	t_vec	*points;
+	int		number_point;
+	t_vec	*norm;
+}				t_polygon;
+
+typedef struct	s_segment
+{
+	t_vec		a;
+	t_vec		b;
+}				t_segment;
+
 
 #endif
