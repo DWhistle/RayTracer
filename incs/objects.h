@@ -10,7 +10,7 @@
 enum
 {
 	NONE = 0,
-	CIRCLE = 1,
+	SPHERE = 1,
 	PLANE = 2,
 	CYLINDER = 3,
 	CONE = 4,
@@ -27,10 +27,10 @@ typedef t_vec4 t_vec;
 typedef struct s_obj
 {
 	int		type;
-	t_vec	color;
 	void	*obj;
-	double	reflection;
 	int		ind;
+	double	reflection;
+	t_vec	color;
 }               t_obj;
 
 typedef struct	s_cylinder

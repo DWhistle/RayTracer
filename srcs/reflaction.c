@@ -1,4 +1,5 @@
 #include "ray_render.h"
+#include "libft.h"
 
 t_vec	get_ref_vec(t_point_data point_data, t_vec vec)
 {
@@ -67,5 +68,5 @@ t_vec	ray_render(t_scene scene, t_vec point, t_accuracy accuracy)
 		scene.ignore = 0;
 		return (f(points, depth_ref, scene));
 	}
-	return (new_vec0());
+	return (vec);
 }

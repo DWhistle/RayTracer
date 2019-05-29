@@ -11,7 +11,7 @@ double			update_r(double r, t_obj new_obj, t_vec point, t_scene objs)
 	len = 0;
 	if (objs.ignore && objs.ignore->ind == new_obj.ind)
 		return (r);
-	if (new_obj.type == CIRCLE)
+	if (new_obj.type == SPHERE)
 		len = len_circle(point, new_obj.obj);
 	else if (new_obj.type == PLANE)
 		len = len_plane(point, new_obj.obj);
@@ -30,7 +30,7 @@ t_vec			get_normal(t_vec point, t_obj obj)
 	double		k;
 	t_vec		vec;
 
-	if (obj.type == CIRCLE)
+	if (obj.type == SPHERE)
 		return (vec_norm(vec_sub(point, ((t_sphere*)obj.obj)->point)));
 	else if (obj.type == PLANE)
 		return (((t_plane*)obj.obj)->norm);

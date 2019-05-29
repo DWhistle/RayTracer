@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/28 17:23:36 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/05/29 20:33:27 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <OpenGL/gl.h>
 #include "objects.h"
 #include "ray_render.h"
+#include "ft_opencl_func.h"
 
 #define WIN_X   500
 #define WIN_Y   500
@@ -39,6 +40,18 @@ int		in_circle(SDL_Rect rect, int x, int y)
 	r_y = rect.h / 2;
 	return ((x - rect.x - r_x) * (x - rect.x - r_x) / (double)(r_x * r_x) +
 			(y - rect.y - r_y) * (y - rect.y - r_y) / (double)(r_y * r_y) <= 1.0);
+}
+
+void	add_params(t_opencl *cl, t_obj *obj)
+{
+	if (obj->type == SPHERE)
+	{
+		cl_mem mem = add_parameter_f(cl, 5, obj->obj)
+	}
+	else if (obj->type == CYLINDER)
+	{
+		
+	}
 }
 
 void	draw_circle(SDL_Surface *screen, SDL_Rect rect, int color)
@@ -88,6 +101,26 @@ void	draw_rect(SDL_Surface *screen, SDL_Rect rect, int color)
 		}
 		++i;
 	}
+}
+
+void	render_cl(t_scene scene, int **pixels, t_accuracy accuracy, SDL_Surface *screen)
+{
+	t_opencl	*ocl;
+	int			counter;
+	void		*obj;
+	
+	init_cl(&ocl);
+	add_parameter(ocl, 1, &scene, sizeof(t_scene));
+	add_parameter(ocl, scene.number_lights, scene.lights, sizeof(t_light));
+	add_parameter(ocl, scene.number_objs, scene.objs, sizeof(t_light));
+	compile_cl_by_name(ocl, "render");
+	counter = count_sphere(scene.objs, &obj);
+	add_parameter(ocl, counter, obj, sizeof(t_sphere));
+	counter = count_cylinder(scene.objs, &obj);
+	add_parameter(ocl, counter, obj, sizeof(t_cylinder));
+	counter = count_plane(scene.objs, &obj);
+	add_parameter(ocl, counter, obj, sizeof(t_plane));
+	run_queue(ocl, screen->h * screen->w);
 }
 
 int     render(SDL_Window *window)
@@ -143,12 +176,12 @@ int     render(SDL_Window *window)
 	cylinder.vec = vec_norm(new_vec3(0, 1, 3));
 	cylinder.r = 50;
 	scene.objs[0].obj = &circle;
-	scene.objs[0].type = CIRCLE;
+	scene.objs[0].type = SPHERE;
 	scene.objs[0].color = new_vec3(200, 200, 0);
 	scene.objs[0].reflection = 0;
 	scene.objs[0].ind = 0;
 	scene.objs[1].obj = &circle2;
-	scene.objs[1].type = CIRCLE;
+	scene.objs[1].type = SPHERE;
 	scene.objs[1].color = new_vec2(200, 200);
 	scene.objs[1].reflection = 0.9;
 	scene.objs[1].ind = 1;
@@ -202,7 +235,8 @@ int     render(SDL_Window *window)
 	scene.ignore = 0;
     SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0xff, 0xff, 0xff));
 	srand(time(NULL));
-	ray_tracing(scene, (int**)&(screen->pixels), accuracy, screen);
+	render_cl(scene, (int**)&(screen->pixels), accuracy, screen);
+	//ray_tracing(scene, (int**)&(screen->pixels), accuracy, screen);
     SDL_UpdateWindowSurface(window);
     return (0);
 }

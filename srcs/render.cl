@@ -25,12 +25,12 @@ double	len_cylinder(double3 point, t_cylinder *cylinder)
 
 double	len_plane(double3 point, t_plane *plane)
 {
-	return (fabs(plane->norm.arr[0] * point.arr[0] + \
-			plane->norm.arr[1] * point.arr[1] + \
-			plane->norm.arr[2] * point.arr[2] - \
-			plane->norm.arr[0] * plane->point.arr[0] - \
-			plane->norm.arr[1] * plane->point.arr[1] - \
-			plane->norm.arr[2] * plane->point.arr[2]));
+	return (fabs(plane->norm.x * point.x + \
+			plane->norm.y * point.y + \
+			plane->norm.z * point.z - \
+			plane->norm.x * plane->point.x - \
+			plane->norm.y * plane->point.y - \
+			plane->norm.z * plane->point.z));
 }
 
 
@@ -43,7 +43,7 @@ double			update_r(double r, t_obj new_obj, double3 point, t_scene objs, int n)
     
 	if (objs.ignore && objs.ignore->ind == new_obj.ind)
 		return (r);
-	if (new_obj.type == CIRCLE)
+	if (new_obj.type == SPHERE)
 		len = len_circle(point, new_obj.obj);
 	else if (new_obj.type == PLANE)
 		len = len_plane(point, new_obj.obj);
@@ -56,6 +56,38 @@ double			update_r(double r, t_obj new_obj, double3 point, t_scene objs, int n)
 	return (r);
 }
 
+t_vec			get_normal(t_vec point, t_obj obj)
+{
+	t_cylinder	*cylinder;
+	double		k;
+	t_vec		vec;
+
+	if (obj.type == SPHERE)
+		return (normalize(vec_sub(point - (t_sphere*)obj.obj)	->point));
+	else if (obj.type == PLANE)
+		return (((t_plane*)obj.obj)->norm);
+	else if (obj.type == CYLINDER)
+	{
+		cylinder = (t_cylinder*)obj.obj;
+		vec = point - cylinder->point;
+		k = dot(vec, cylinder->vec);
+		return (normalize(vec - cylinder->vec * k));
+	}
+	return (new_vec0());
+}
+
+t_point_data	crate_point_data(t_vec norm,
+				t_obj *obj, t_vec point, t_vec color)
+{
+	t_point_data point_data;
+
+	point_data.norm = norm;
+	point_data.obj = obj;
+	point_data.point = point;
+	point_data.color = color;
+	return (point_data);
+}
+
 t_point_data	raymarching(t_scene objs, double3 vec,
 							t_accuracy accuracy, double3 point)
 {
@@ -64,8 +96,7 @@ t_point_data	raymarching(t_scene objs, double3 vec,
 	double3	next_point;
 
 	next_point = point;
-	while (accuracy.depth_march-- &&
-			fast_length(point - next_point) < accuracy.max_dist)
+	while (accuracy.depth_march-- && fast_length(point - next_point) < accuracy.max_dist)
 	{
 		r = -1;
 		counter = objs.number_objs;
@@ -73,13 +104,43 @@ t_point_data	raymarching(t_scene objs, double3 vec,
 		{
 			r = update_r(r, objs.objs[counter], next_point, objs);
 			if (r < accuracy.delta && r != -1)
-				return (crate_point_data(get_normal(next_point, objs.objs[counter]), objs.objs + counter, next_point, (double3)(0.0, 0.0, 0.0)));
+				return (crate_point_data(normalize(next_point, objs.objs[counter]), objs.objs + counter, next_point, (double3)(0.0, 0.0, 0.0)));
 		}
 		next_point = next_point + dot(vec, r);
 	}
 	return (crate_point_data((double3)(0.0, 0.0, 0.0), 0, (double3)(0.0, 0.0, 0.0), (double3)(0.0, 0.0, 0.0)));
 }
 
+t_vec			rand_vec(t_vec vec)
+{
+	if (vec.x == 0)
+		vec.x = (rand() % 200000 + 1) * ((double)(rand() % 2) - 0.5);
+	else
+		vec.x = (rand() % 100000 + 1) * vec.x;
+	if (vec.y == 0)
+		vec.y = (rand() % 200000 + 1) * ((double)(rand() % 2) - 0.5);
+	else
+		vec.y = (rand() % 100000 + 1) * vec.y;
+	if (vec.z == 0)
+		vec.z = (rand() % 200000 + 1) * ((double)(rand() % 2) - 0.5);
+	else
+		vec.z = (rand() % 100000 + 1) * vec.z;
+	return (vec_norm(vec));
+}
+
+int				is_light(t_scene scene, int ind)
+{
+	int counter;
+
+	counter = 0;
+	while (counter != scene.number_lights)
+	{
+		if (scene.lights[counter].ind == ind)
+			return (1);
+		counter++;
+	}
+	return (0);
+}
 
 t_point_data	path_tracing(t_scene scene, double3 vec,
 							t_accuracy accuracy, double3 point)
@@ -99,8 +160,7 @@ t_point_data	path_tracing(t_scene scene, double3 vec,
 		if (point_data2.obj && is_light(scene, point_data2.obj->ind))
 		{
 			scene.ignore = 0;
-			point_data.color = dot(point_data.obj->color,
-											1.0 / depth_pt);
+			point_data.color = dot(point_data.obj->color, 1.0 / depth_pt);
 			break ;
 		}
 		point_data2 = raymarching(scene, rand_vec(norm), accuracy, point);
@@ -108,28 +168,32 @@ t_point_data	path_tracing(t_scene scene, double3 vec,
 	return (point_data);
 }
 
+t_vec	get_ref_vec(t_point_data point_data, t_vec vec)
+{
+	vec = vec * -1;
+	vec = point_data.norm * dot(point_data.norm, vec) * 2 - vec;
+	vec = normalize(vec);
+	return (vec);
+}
+
 double3	ray_render(t_scene scene, double3 point, t_accuracy accuracy)
 {
 	int				depth_ref;
 	t_point_data	point_data;
-	t_point_data	*points;
+	t_point_data	pointsх[accuracy.depth_ref + 1];
 	double3			color;
 	double3			vec;
 
-	vec = normalize(vec_sub(point, scene.cam));
+	vec = normalize(point - scene.cam);
 	point_data = path_tracing(scene, vec, accuracy, scene.cam);
 	if (point_data.obj)
 	{
-        //FIXME: сделать выделение статической памяти или посмотреть как выделять динамически
-		points = malloc(sizeof(t_point_data) * (accuracy.depth_ref + 1));
 		points[0] = point_data;
 		depth_ref = 0;
-		while (accuracy.depth_ref > depth_ref++ &&
-		point_data.obj && point_data.obj->reflection)
+		while (accuracy.depth_ref > depth_ref++ && point_data.obj && point_data.obj->reflection)
 		{
 			scene.ignore = point_data.obj;
-			point_data = path_tracing(scene,
-			    get_ref_vec(point_data, vec), accuracy, point_data.point);
+			point_data = path_tracing(scene, get_ref_vec(point_data, vec), accuracy, point_data.point);
 			points[depth_ref] = point_data;
 		}
 		scene.ignore = 0;
