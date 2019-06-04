@@ -18,11 +18,20 @@ enum
 	AMBIENT = 2,
 	POINT = 3
 };
-#ifdef __OPENCL_C_VERSION__
-typedef vec3 t_vec;
-#else
+
 typedef t_vec4 t_vec;
-#endif
+
+typedef struct s_obj2
+{
+	int		type;
+	t_vec	point;
+	t_vec	vec;
+	double	r;
+	double	angle;
+	int		ind;
+	double	reflection;
+	t_vec	color;
+}               t_obj2;
 
 typedef struct s_obj
 {
@@ -93,16 +102,19 @@ typedef struct	s_accuracy
 	double	delta;
 }				t_accuracy;
 
-typedef struct	s_triangle
-{
-}				t_triangle;
-
 typedef struct	s_polygon
 {
 	t_vec	*points;
 	int		number_point;
 	t_vec	*norm;
 }				t_polygon;
+
+typedef struct	s_triangle
+{
+	t_vec		a;
+	t_vec		b;
+	t_vec		c;
+}				t_triangle;
 
 typedef struct	s_segment
 {

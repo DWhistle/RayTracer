@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "*.cl": "c"
+        "*.cl": "c",
+        "objects.h": "c"
     }
 }

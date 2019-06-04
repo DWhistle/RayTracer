@@ -47,7 +47,6 @@ t_vec	ray_render(t_scene scene, t_vec point, t_accuracy accuracy)
 	int				depth_ref;
 	t_point_data	point_data;
 	t_point_data	*points;
-	t_vec			color;
 	t_vec			vec;
 
 	vec = vec_norm(vec_sub(point, scene.cam));

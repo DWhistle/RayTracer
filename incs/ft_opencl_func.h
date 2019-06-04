@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/14 21:19:48 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/29 20:11:51 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/06/03 17:33:33 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,6 @@ int						get_parameter_f(t_opencl *cl, int count, cl_mem memobj,
 size_t					text_from_file(const char *filename,
 											char **file_content);
 char					*ft_get_cl_name(const char *name, char *dirname);
-cl_mem					add_parameter(t_opencl *cl, int count, void *mem, unsigned long meme)
+cl_mem					add_parameter(t_opencl *cl, int count, void *mem, unsigned long meme);
 
 #endif
