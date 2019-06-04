@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/22 22:25:20 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/05/27 20:15:06 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 #include "objects.h"
 #include "ray_render.h"
 
-#define WIN_X   1920
-#define WIN_Y   1080
-#define WIN_W   1920
-#define WIN_H   1080
+#define WIN_X   500
+#define WIN_Y   500
+#define WIN_W   1600
+#define WIN_H   800
 
 int    print_error(int errnum)
 {
@@ -117,76 +117,92 @@ int     render(SDL_Window *window)
 	t_light l;
 	t_light l1;
 	t_light l2;
-	l.type = POINT;
-	l.point = new_vec3(0150, 0, 1500);
+	l.ind = 0 ;
 	l.intensity = 1;
-	l2.type = POINT;
-	l2.intensity = 0.0;
-	l2.point = new_vec3(-1500, 0, 0);
-	l1.type = AMBIENT;
+	l2.intensity = 1;
+	l2.ind = 1;
+	l1.ind = 0;
 	l1.intensity = 0.1;
-	circle.r = 100;
-	circle.point = new_vec3(0, 0, 2000);
+	circle.r = 130;
+	circle.point = new_vec3(200, 200, 1100);
 	circle2.r = 200;
-	circle2.point = new_vec3(150, 0, 2000);
-	plane.norm = new_vec3(0, 0, 1);
-	plane.point = new_vec3(0, 0, 3000);
-	plane2.norm = vec_norm(new_vec3(1, 0, 0));
-	plane2.point = new_vec3(1000, 0, 0);
+	circle2.point = new_vec3(0, 0, 1000);
+	plane.norm = new_vec3(0, 0, -1);
+	plane.point = new_vec3(0, 0, 1210);
+	plane2.norm = vec_norm(new_vec3(-1, 0, 0));
+	plane2.point = new_vec3(210, 0, 0);
 	plane3.norm = vec_norm(new_vec3(1, 0, 0));
-	plane3.point = new_vec3(-1000, 0, 0);
+	plane3.point = new_vec3(-210, 0, 0);
 	plane4.norm = vec_norm(new_vec3(0, 0, 1));
 	plane4.point = new_vec3(0, 0, -1000);
 	plane5.norm = vec_norm(new_vec3(0, 1, 0));
-	plane5.point = new_vec3(0, -300, 0);
-	plane6.norm = vec_norm(new_vec3(0, 1, 0));
-	plane6.point = new_vec3(0, 300, 0);
+	plane5.point = new_vec3(0, -210, 0);
+	plane6.norm = vec_norm(new_vec3(0, -1, 0));
+	plane6.point = new_vec3(0, 210, 0);
 	cylinder.point = new_vec3(0, 0, 2000);;
-	cylinder.vec = new_vec3(0, 1, 0);
+	cylinder.vec = vec_norm(new_vec3(0, 1, 3));
 	cylinder.r = 50;
 	scene.objs[0].obj = &circle;
 	scene.objs[0].type = CIRCLE;
 	scene.objs[0].color = new_vec3(200, 200, 0);
-	scene.objs[0].light = 0;
+	scene.objs[0].reflection = 0;
+	scene.objs[0].ind = 0;
 	scene.objs[1].obj = &circle2;
 	scene.objs[1].type = CIRCLE;
 	scene.objs[1].color = new_vec2(200, 200);
-	scene.objs[1].light = 0.5;
+	scene.objs[1].reflection = 0.9;
+	scene.objs[1].ind = 1;
 	scene.objs[3].obj = &plane;	
 	scene.objs[3].type = PLANE;
-	scene.objs[3].color = new_vec2(200, 200);
-	scene.objs[3].light = 0.01;
+	scene.objs[3].color = new_vec2(200, 0);
+	scene.objs[3].reflection = 0;
+	scene.objs[3].ind = 3;
 	scene.objs[4].obj = &plane2;
 	scene.objs[4].type = PLANE;
-	scene.objs[4].color = new_vec2(200, 100);
-	scene.objs[4].light = 0.01;
+	scene.objs[4].color = new_vec3(255, 255, 255);
+	scene.objs[4].reflection = 0.8;
+	scene.objs[4].ind = 4;
 	scene.objs[2].obj = &cylinder;	
 	scene.objs[2].type = CYLINDER;
-	scene.objs[2].color = new_vec2(200, 200);
-	scene.objs[2].light = 0.01;
+	scene.objs[2].color = new_vec3(0, 0, 255);
+	scene.objs[2].reflection = 0;
+	scene.objs[2].ind = 2;
 	scene.objs[8].obj = &plane3;	
 	scene.objs[8].type = PLANE;
-	scene.objs[8].color = new_vec2(200, 200);
-	scene.objs[8].light = 0.01;
+	scene.objs[8].color = new_vec2(200, 0);
+	scene.objs[8].reflection = 0;
+	scene.objs[8].ind = 8;
 	scene.objs[7].obj = &plane4;	
 	scene.objs[7].type = PLANE;
-	scene.objs[7].color = new_vec2(200, 200);
-	scene.objs[7].light = 0.01;
+	scene.objs[7].color = new_vec2(200, 0);
+	scene.objs[7].reflection = 0;
+	scene.objs[7].ind = 7;
 	scene.objs[6].obj = &plane5;	
 	scene.objs[6].type = PLANE;
-	scene.objs[6].color = new_vec2(200, 200);
-	scene.objs[6].light = 0.7;
+	scene.objs[6].color = new_vec2(200, 0);
+	scene.objs[6].reflection = 0;
+	scene.objs[6].ind = 6;
 	scene.objs[5].obj = &plane6;	
 	scene.objs[5].type = PLANE;
-	scene.objs[5].color = new_vec2(200, 200);
-	scene.objs[5].light = 0.9;
+	scene.objs[5].color = new_vec2(200, 0);
+	scene.objs[5].reflection = 0;
+	scene.objs[5].ind = 5;
 	scene.number_lights = 3;
 	scene.lights = malloc(sizeof(t_light) * scene.number_lights);
 	scene.lights[0] = l; 
 	scene.lights[1] = l1;
 	scene.lights[2] = l2;
+	t_accuracy accuracy;
+	accuracy.delta = 0.00001;
+	accuracy.depth_march = 2000;
+	accuracy.depth_pt = 15;
+	accuracy.depth_ref = 0;
+	accuracy.max_dist = 10000;
+	accuracy.rpp = 1000;
+	scene.ignore = 0;
     SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0xff, 0xff, 0xff));
-	ray_render(scene, (int**)&(screen->pixels), screen->h, screen->w);
+	srand(time(NULL));
+	ray_tracing(scene, (int**)&(screen->pixels), accuracy, screen);
     SDL_UpdateWindowSurface(window);
     return (0);
 }
