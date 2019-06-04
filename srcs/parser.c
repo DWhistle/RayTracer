@@ -6,14 +6,14 @@
 /*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 15:49:37 by bturcott          #+#    #+#             */
-/*   Updated: 2019/05/22 16:43:19 by bturcott         ###   ########.fr       */
+/*   Updated: 2019/06/04 20:10:24 by bturcott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "parser.h"
 
-t_json *create_json_obj()
+
+t_json *create_json_obj(void)
 {
 	t_json *obj;
 
@@ -23,103 +23,219 @@ t_json *create_json_obj()
 		return (NULL);
 	if (!(obj->value = malloc(sizeof(void *) * (MAX_FIELDS + 1))))
 		return (NULL);
-	if (!(obj->type = (char *)malloc(sizeof(char) * (MAX_FIELDS + 1))))
+	if (!(obj->type = (int *)malloc(sizeof(int) * (MAX_FIELDS + 1))))
 		return (NULL);
+	obj->key[MAX_FIELDS] = NULL;
+	obj->value[MAX_FIELDS] = NULL;
+	obj->type[MAX_FIELDS] = 0;
 	return(obj);
 }
 
-
-char *parse_key(char *file, int pos)
+int escape(t_parser *json)
 {
-	int quotes;
+	if (json->i > 0)
+		return (json->f[json->i - 1] == '\\');
+	return (0);
+}
+
+void parse_key(t_parser *json, char **key)
+{
+	int temp;
 	
-	quotes = 0;
-	while (file[pos])
+	temp = 0;
+	while (json->f[json->i])
 	{
-		if (file[pos] == '"')
+		if (json->f[json->i] == '"')
 			{
-				++pos;
-				while (file[pos + quotes] && file[pos + quotes] != '"')
-					quotes++;
-				return (ft_strsub(file, pos, quotes));
+				//printf("%c\n", json->f[json->i]);
+				temp = json->i;
+				while (json->f[json->i])
+				{
+					json->i++;
+					//printf("%c\n", json->f[json->i]);
+					if (json->f[json->i] == '"' && !escape(json))
+						{
+							// printf("%d %d\n", json->i, temp);
+							*key = ft_strsub(json->f,\
+							temp + 1, json->i - temp - 1);
+							// printf("%s\n", *key);
+							return ;
+						}
+				}
 			}
-		pos++;
+		json->i++;
 	}
+}
+
+int parse_int_array(t_parser *json, void **value, int len)
+{
+	int i;
+	int *array;
+
+	i = 0;
+	if (!(array = (int *)ft_memalloc(sizeof(int) * (len + 1))))
+		return (-1);
+	
+	while (json->f[json->i] != ']')
+	{
+		if (json->f[json->i] && ft_isdigit(json->f[json->i]))
+		{
+			array[i] = ft_atoi(json->f + json->i);
+			// printf("%d\n", array[i]);
+			while (json->f[json->i] && ft_isdigit(json->f[json->i]))
+				json->i++;
+			i++;
+		}
+		if (json->f[json->i] != ']')
+			json->i++;
+	}
+	array[i] = -2147483648;
+	*value = array; //TODO types
+	return (0);
+}
+
+char **parse_char_array(t_parser *json, void *value, int len)
+{
 	return (NULL);
 }
 
-int *parse_array(char *file, int pos)
-{
-	int mem_pos;
-	int len;
-	int *arr;
-
-	len = 2;
-	mem_pos = pos - 1;
-	while (file[++mem_pos] != ']')
-		if (file[mem_pos] == ',')
-			len++;
-	arr = (int *)malloc(sizeof(int) * len);
-	len = -1;
-	while (pos <= mem_pos)
-	{
-		if (ft_isdigit(file[pos]))
-		{
-			arr[++len] = ft_atoi(file + pos);
-			while (ft_isdigit(file[pos]))
-				pos++;
-		}
-		pos++;
-	}
-	return (arr);
-}
-
-int parse_value(char *file, int pos, t_json *obj, int i)
+int parse_int(t_parser *json, void **value)
 {
 	int *val;
 	
-	while (file[pos] && file[pos] != '"' && file[pos] != '['
-	&& file[pos] != '{' && !ft_isdigit(file[pos]))
-		pos++;
-	if (file[pos] == '[' && (obj->type[i] = 'a'))
-		obj->value[i] = parse_array(file, pos);
-	else if (file[pos] == '"' && (obj->type[i] = 's'))
-		obj->value[i] = parse_key(file, pos);
-	else if (ft_isdigit(file[pos]) && (obj->type[i] = 'i'))
+	if (!(val = ft_memalloc(sizeof(int))))
+		return (0);
+	val[0] = ft_atoi(json->f + json->i);
+	while (ft_isdigit(json->f[json->i]))
+		json->i++;
+	//printf("%c\n", json->f[json->i]);
+	*value = val;
+	return (1);
+}
+int *scan_array(t_parser *json)
+{
+	int i;
+	int params[2];
+	
+	i = json->i;
+	params[0] = 1;
+	params[1] = sizeof(int);
+	while (json->f[json->i] && json->f[json->i] != ']')
 	{
-		obj->value[i] = (int *)malloc(sizeof(int));
-		val = (int *)obj->value[i];
-		val[0] = ft_atoi(file + pos);
+		json->i++;
+		if (json->f[json->i] == '"' && (params[1] = sizeof(char)))
+			while (json->f[json->i] && json->f[json->i] != '"' && !escape(json))
+				json->i++;
+		if (json->f[json->i] == ',')
+			params[0]++;
 	}
-	else
-		return (-1);
-	return(0);
+	json->i = i;
+	//printf("len == %d sizeof == %d i == %d\n",params[0], params[1], i);
+	return ((int []){params[0], params[1]});
 }
 
-int make_json(char *file, int pos, t_json *obj)
+/*
+** params[0] - array length
+** params[1] - array type(1 for char, 4 for int)
+*/
+
+int parse_array(t_parser *json, void **value)
 {
-	int		i;
+	int *params;
 	
-	if (file[pos] == '}')
-		return 0;
-	obj = create_json_obj();
-	i = -1;
-	while (file[pos] && file[pos] != '}' && ++i < MAX_FIELDS)
+	params = scan_array(json);
+	if (params[1] == sizeof(int))
+		parse_int_array(json, value, params[0]);
+	else if (params[1] == sizeof(char))
+		parse_char_array(json, value, params[0]);
+	else
+		value = NULL;
+	return (1);
+}
+
+int parse_value(t_parser *json, void **value, int **type)
+{
+	//printf("char == %c %d\n", json->f[json->i], json->i);
+	while (json->f[json->i] && json->f[json->i] != '{' && !ft_isdigit(json->f[json->i]) 
+	&& json->f[json->i] != '[' && json->f[json->i] != '"')
+		json->i++;
+	//printf("char == %c %d\n", json->f[json->i], json->i);
+	if (!json->f[json->i])
+		return (-1);
+	else if (json->f[json->i] == '{')
 	{
-		obj->key[i] = parse_key(file, pos);
-		while (file[pos] && file[pos] != ':')
-			pos++;
-		parse_value(file, ++pos, obj, i);
-		while (file[pos] && file[pos] != ',' && file[pos] != '}')
-			pos++;
-		while (file[pos] && file[pos] != '"' && file[pos] != '}')
-			pos++;
-		if (file[pos] == '}')
-			return (pos + 1);
-		else if (file[pos] == 0)
-			return (0);
+		*value = create_json_obj();
+		make_json(json, *value);
 	}
-	return (0);
+	else if (json->f[json->i] == '"' && ((*type)[json->quant] = STRING))
+		parse_key(json, (char **)value);
+	else if (json->f[json->i] == '[' && ((*type)[json->quant] = ARRAY_INT))
+		parse_array(json, value);
+	else if (ft_isdigit(json->f[json->i]) && ((*type)[json->quant] = INT))
+		parse_int(json, value);
+	return (1);	
+}
+
+int make_json(t_parser *json, t_json *obj)
+{
+	int i;   
+	
+	json->quant = 0;
+	while (json->f[json->i] && json->f[json->i] != '}')
+	{
+		if (json->quant > MAX_FIELDS)
+			return(-1);
+		parse_key(json, &obj->key[json->quant]);
+		// printf("%d\n", json->i);
+		 //printf("key == %s\n", obj->key[json->quant]);
+		while (json->f[json->i] && json->f[json->i] != ':')
+			json->i++;
+		if (parse_value(json, &obj->value[json->quant], &obj->type) == -1)
+			return (1);
+		//printf("value == %d\n", (obj->type[json->quant]));
+		if (json->f[json->i] && json->f[json->i] != '}')
+			json->i++;
+		//printf("make\n");
+		json->quant++;
+	}
+	obj->type[json->quant] = 0;
+	obj->value[json->quant] = NULL;
+	obj->key[json->quant] = NULL;
+	return (1);
+}
+
+t_list *json_operator(t_parser *json)
+{
+	int ind;
+	t_json *obj;
+	
+	while (json->f[json->i])
+	{
+		if (json->f[json->i] == '{')
+		{
+			json->i++;
+			if (!(obj = create_json_obj()))
+				return (NULL);
+			make_json(json, obj);
+			for (int i = 0; obj->type[i]; i++)
+				if (obj->type[i] == 2)
+				{
+					
+						printf("type == %d  key == %s ", obj->type[i], obj->key[i]);
+						printf("inarr:  ");
+					for(int j = 0; ((int*)obj->value[i])[j] != -2147483648; j++)
+						printf("%d ", ((int *)obj->value[i])[j]);
+						printf("\n");
+				}
+				else
+					printf("type == %d  key == %s  value == %d\n", obj->type[i], obj->key[i], ((int *)obj->value[i])[0]);
+			ft_lstadd(&json->objects, ft_lstnew((void *)obj, sizeof(t_json)));
+			printf("+list\n");
+		}
+		
+		json->i++;
+	}
+	return NULL;
 }
 
 char *read_file(int fd){
@@ -138,39 +254,34 @@ char *read_file(int fd){
 		free(temp);
 		temp2 = file;
 	}
-	while (file[i] && file[i] != '{')
-		i++;
-	temp = ft_strsub(file, i, ft_strlen(file) - i);
-	free(file);
-	return (temp);
+	return (file);
 }
 
 t_list *parse_json(char *config_file)
 {
 	int fd;
-	t_list *json;
-	t_json obj;
-	int pos;
-	char 	*file;
-
+	t_parser *json;
+	
 	fd = open(config_file, O_RDONLY);
-	pos = 0;
 	if (fd == -1 || fd == 0)
 	{   
-		ft_putendl("Missing config file...");
+		ft_putendl("Missing json file...");
 		exit(0);
 	}
-	file = read_file(fd);
+	if (!(json = ft_memalloc(sizeof(t_parser))))
+		return (NULL);
+	if (!(json->f = read_file(fd)))
+		return (NULL);
+	json->i = 0;
+	json->objects = NULL;
 	close(fd);
-	while ((pos = make_json(file, pos, &obj)))
-	{
-		ft_lstadd(&json, ft_lstnew((void **)&obj, sizeof(t_json)));
-	}
-	return (json);
+	json_operator(json);
+	return(NULL);
 }
 
 
 int main(int ac, char **av)
 {
 	t_list *json = parse_json(av[1]);
+	// convert_objects(json);
 }
