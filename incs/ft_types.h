@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_types.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgreenfe <hgreenfe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 18:27:35 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/24 21:27:39 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/06/04 20:55:18 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_TYPES_H
 # define FT_TYPES_H
 
-#define INT_MIN 0x80000000
-#define INT_MAX 0x7fffffff
+//#define INT_MIN 0x80000000
+//#define INT_MAX 0x7fffffff
 
 typedef	double ft_decimal;
 

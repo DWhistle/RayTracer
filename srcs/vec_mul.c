@@ -6,11 +6,11 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 18:40:37 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/24 21:27:39 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/06/04 20:34:44 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vector.h"
+#include "../incs/vector.h"
 #include <math.h>
 
 /*

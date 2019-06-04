@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/06/03 18:10:26 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/06/04 20:31:29 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	draw_rect(SDL_Surface *screen, SDL_Rect rect, int color)
 	}
 }
 
-t_obj2	*f(t_obj *objs, double n)
+t_obj2	*fc(t_obj *objs, double n)
 {
 	t_obj2	*obj;
 	int		counter;
@@ -117,8 +117,8 @@ t_obj2	*f(t_obj *objs, double n)
 		}
 		if (objs[counter].type == PLANE)
 		{
-			obj[counter].point = ((t_cylinder*)objs[counter].obj)->point;
-			obj[counter].vec = ((t_cylinder*)objs[counter].obj)->vec;
+			obj[counter].point = ((t_plane*)objs[counter].obj)->point;	
+			obj[counter].vec = ((t_plane*)objs[counter].obj)->norm;
 		}
 		counter--;
 	}
@@ -128,7 +128,6 @@ t_obj2	*f(t_obj *objs, double n)
 void	render_cl(t_scene scene, int **pixels, t_accuracy accuracy, SDL_Surface *screen)
 {
 	t_opencl	*ocl;
-	int			counter;
 	t_obj2		*obj;
 	cl_mem		mem;
 	
@@ -136,12 +135,15 @@ void	render_cl(t_scene scene, int **pixels, t_accuracy accuracy, SDL_Surface *sc
 	add_parameter(ocl, 1, &accuracy, sizeof(t_accuracy));
 	add_parameter(ocl, 1, &scene, sizeof(t_scene));
 	add_parameter(ocl, scene.number_lights, scene.lights, sizeof(t_light));
-	add_parameter(ocl, scene.number_objs, scene.objs, sizeof(t_light));
-	obj = f(scene.objs, scene.number_objs);
+	obj = fc(scene.objs, scene.number_objs);
 	add_parameter(ocl, scene.number_objs, obj, sizeof(t_obj2));
-	if(!compile_cl_by_name(ocl, "render_cl"))
+	mem = add_parameter_i(ocl, screen->h * screen->w, *pixels);
+	add_parameter_i(ocl, 1, &screen->w);
+	add_parameter_i(ocl, 1, &screen->h);
+	if(!compile_cl_by_name(ocl, "render"))
 		printf("%s\n", "ты даун");
 	run_queue(ocl, screen->w * screen->h);
+	get_parameter_i(ocl, screen->h * screen->w, mem, *pixels);
 	free(obj);
 }
 
@@ -257,7 +259,7 @@ int     render(SDL_Window *window)
 	scene.ignore = 0;
     SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0xff, 0xff, 0xff));
 	srand(time(NULL));
-	//render_cl(scene, (int**)&(screen->pixels), accuracy, screen);
+	render_cl(scene, (int**)&(screen->pixels), accuracy, screen);
 	//ray_tracing(scene, (int**)&(screen->pixels), accuracy, screen);
 	printf("%lu\n", sizeof(t_obj));
     SDL_UpdateWindowSurface(window);

@@ -6,13 +6,13 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 18:25:23 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/24 21:27:39 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/06/04 20:44:51 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_H
 # define VECTOR_H
-# include "ft_types.h"
+# include "../incs/ft_types.h"
 
 union					u_vec4
 {
