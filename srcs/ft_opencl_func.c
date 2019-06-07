@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/14 21:03:42 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/06/04 20:31:57 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/06/06 01:08:12 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,13 @@ int			compile_cl_by_name(t_opencl *cl, const char *name)
 	size_t	source_size;
 
 	source_size = text_from_file(ft_get_cl_name(name, "cl/"), &source_str);
-	printf("%d\n", 1);
 	if (source_size <= 0)
 		return (0);
-	printf("%d\n", 1);
 	cl->program = clCreateProgramWithSource(
 			cl->context, 1, (const char **)&source_str,
 			(const size_t *)&source_size, &ret);
 	if (ret)
-		return (0);
-	printf("%d\n", 1);	
+		return (0);	
 	ret = clBuildProgram(cl->program, 1, &(cl->device_id), NULL, NULL, NULL);
 	if (ret == CL_BUILD_PROGRAM_FAILURE)
 	{
@@ -75,10 +72,12 @@ int			compile_cl_by_name(t_opencl *cl, const char *name)
 		return (0);
 	}
 	else if (ret)
+	{
+		print_log(cl);
 		return (0);
-	printf("%d\n", 1);
+	}
 	cl->kernel = clCreateKernel(cl->program,
-								name, &ret);
+								"ray_tracing", &ret);
 	return (ret ? 0 : 1);
 }
 

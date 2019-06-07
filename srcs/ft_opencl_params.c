@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/01 21:57:30 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/05/29 20:44:37 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/06/06 01:41:22 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@ cl_mem		add_parameter(t_opencl *cl, int count, void *mem, unsigned long meme)
 
 	memobj = clCreateBuffer(cl->context,
 					CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-					count * sizeof(meme), mem, &ret);
+					count * meme, mem, &ret);
 	if (ret)
 		return (NULL);
 	ret = clEnqueueWriteBuffer(cl->command_queue, memobj,
-			CL_TRUE, 0, count * sizeof(meme), mem, 0, NULL, NULL);
+			CL_TRUE, 0, count * meme, mem, 0, NULL, NULL);
 	if (ret)
 		return (NULL);
 	ret = clSetKernelArg(cl->kernel, cl->arg_count++,
-					sizeof(meme), (void *)&memobj);
+					sizeof(cl_mem), (void *)&memobj);
 	if (ret)
 		return (NULL);
 	return (memobj);

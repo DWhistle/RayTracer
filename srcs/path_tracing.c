@@ -34,6 +34,15 @@ int				is_light(t_scene scene, int ind)
 	return (0);
 }
 
+static t_vec	get_ref_vec(t_point_data point_data, t_vec vec)
+{
+	vec = vec_dotdec(vec, -1);
+	vec = vec_sub(vec_dotdec(point_data.norm,
+	vec_dotvec(point_data.norm, vec) * 2), vec);
+	vec = vec_norm(vec);
+	return (vec);
+}
+
 t_point_data	path_tracing(t_scene scene, t_vec vec,
 							t_accuracy accuracy, t_vec point)
 {
@@ -56,7 +65,7 @@ t_point_data	path_tracing(t_scene scene, t_vec vec,
 											1.0 / depth_pt);
 			break ;
 		}
-		point_data2 = raymarching(scene, rand_vec(norm), accuracy, point);
+		point_data2 = raymarching(scene, get_ref_vec(point_data2, norm), accuracy, point);
 	}
 	return (point_data);
 }

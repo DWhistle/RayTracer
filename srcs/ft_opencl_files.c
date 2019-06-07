@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_opencl_files.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgreenfe <hgreenfe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/01 21:59:14 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/03/01 22:10:09 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/06/06 01:04:01 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "libft.h"
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdio.h>
 
 char		*ft_get_cl_name(const char *name, char *dirname)
 {
@@ -35,7 +36,7 @@ size_t		text_from_file(const char *filename, char **file_content)
 	size_t	filesize;
 
 	fd = open(filename, O_RDONLY);
-	if (fd < 0 || !file_content || !*file_content)
+	if (fd < 0)
 		return (0);
 	filesize = 0;
 	ret = 1;

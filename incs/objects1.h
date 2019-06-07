@@ -76,18 +76,17 @@ typedef struct	s_light
 
 typedef struct	s_scene
 {
-	t_obj		*objs;
 	int			number_objs;
 	int			number_lights;
 	t_vec		cam;
 	__global t_light		*lights;
-	t_obj2		*ignore;
+	__global t_obj2		*ignore;
 }				t_scene;
 
 typedef struct	s_point_data
 {
 	t_vec norm;
-	t_obj2 *obj;
+	__global t_obj2 *obj;
 	t_vec point;
 	t_vec color;
 }				t_point_data;

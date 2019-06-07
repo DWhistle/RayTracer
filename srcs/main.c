@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/06/04 20:31:29 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/06/07 03:27:21 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,13 @@
 #include "objects.h"
 #include "ray_render.h"
 #include "ft_opencl_func.h"
+#include "libft.h"
+#include <stdio.h>
 
 #define WIN_X   500
 #define WIN_Y   500
-#define WIN_W   1600
-#define WIN_H   800
+#define WIN_W   800
+#define WIN_H   400
 
 int    print_error(int errnum)
 {
@@ -98,7 +100,7 @@ t_obj2	*fc(t_obj *objs, double n)
 
 	obj = ft_memalloc(sizeof(t_obj2) * n);
 	counter = n;
-	while(counter)
+	while(counter--)
 	{
 		obj[counter].color = objs[counter].color;
 		obj[counter].ind = objs[counter].ind;
@@ -120,7 +122,6 @@ t_obj2	*fc(t_obj *objs, double n)
 			obj[counter].point = ((t_plane*)objs[counter].obj)->point;	
 			obj[counter].vec = ((t_plane*)objs[counter].obj)->norm;
 		}
-		counter--;
 	}
 	return(obj);
 }
@@ -132,6 +133,9 @@ void	render_cl(t_scene scene, int **pixels, t_accuracy accuracy, SDL_Surface *sc
 	cl_mem		mem;
 	
 	init_cl(&ocl);
+	accuracy.rpp = (int)sqrt((float)accuracy.rpp);
+	if(!compile_cl_by_name(ocl, "render"))
+		printf("%s\n", "ты даун");
 	add_parameter(ocl, 1, &accuracy, sizeof(t_accuracy));
 	add_parameter(ocl, 1, &scene, sizeof(t_scene));
 	add_parameter(ocl, scene.number_lights, scene.lights, sizeof(t_light));
@@ -140,8 +144,6 @@ void	render_cl(t_scene scene, int **pixels, t_accuracy accuracy, SDL_Surface *sc
 	mem = add_parameter_i(ocl, screen->h * screen->w, *pixels);
 	add_parameter_i(ocl, 1, &screen->w);
 	add_parameter_i(ocl, 1, &screen->h);
-	if(!compile_cl_by_name(ocl, "render"))
-		printf("%s\n", "ты даун");
 	run_queue(ocl, screen->w * screen->h);
 	get_parameter_i(ocl, screen->h * screen->w, mem, *pixels);
 	free(obj);
@@ -174,11 +176,11 @@ int     render(SDL_Window *window)
 	t_light l;
 	t_light l1;
 	t_light l2;
-	l.ind = 0 ;
+	l.ind = 4;
 	l.intensity = 1;
 	l2.intensity = 1;
-	l2.ind = 0;
-	l1.ind = 0;
+	l2.ind = 4;
+	l1.ind = 4;
 	l1.intensity = 0.1;
 	circle.r = 130;
 	circle.point = new_vec3(200, 200, 1100);
@@ -250,7 +252,7 @@ int     render(SDL_Window *window)
 	scene.lights[1] = l1;
 	scene.lights[2] = l2;
 	t_accuracy accuracy;
-	accuracy.delta = 0.00001;
+	accuracy.delta = 0.1;
 	accuracy.depth_march = 2000;
 	accuracy.depth_pt = 3;
 	accuracy.depth_ref = 0;
@@ -261,7 +263,7 @@ int     render(SDL_Window *window)
 	srand(time(NULL));
 	render_cl(scene, (int**)&(screen->pixels), accuracy, screen);
 	//ray_tracing(scene, (int**)&(screen->pixels), accuracy, screen);
-	printf("%lu\n", sizeof(t_obj));
+	printf("%d\n", ((int*)screen->pixels)[0]);
     SDL_UpdateWindowSurface(window);
     return (0);
 }
@@ -272,7 +274,8 @@ int		main_loop(SDL_Window *window)
 	SDL_Event	event;
 
 	quit = 0;
-	render(window);
+	window = 0;
+	//render(window);
 	while (!quit)
 	{
 		while (SDL_PollEvent(&event) != 0)
