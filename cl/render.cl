@@ -246,7 +246,7 @@ int				is_light(__global t_scene *scene, int ind)
 }
 
 t_point_data	path_tracing(__global t_scene *scene, t_vec vec,
-							__global t_accuracy *accuracy, t_vec point, __global  t_obj2 *objs)
+							__global t_accuracy *accuracy, t_vec point, __global  t_obj2 *objs, int *ignore)
 {
 	t_point_data	point_data;
 	t_point_data	point_data2;
@@ -261,11 +261,11 @@ t_point_data	path_tracing(__global t_scene *scene, t_vec vec,
 	return (point_data);
 	while (accuracy->depth_pt > depth_pt++ && point_data2.obj)
 	{
-		scene->ignore = point_data2.obj;
+		*ignore = point_data2.obj;
 		norm = point_data2.norm;
 		if (point_data2.obj && is_light(scene, point_data2.obj->ind))
 		{
-			scene->ignore = 0;
+			*ignore = 0;
 			point_data.color = point_data.obj->color;
 			point_data.color = vec_dotdec(point_data.color, 1.0 / depth_pt);
 			break ;
@@ -316,7 +316,7 @@ t_vec	f(t_point_data *points, int depth_ref, __global t_scene *scene)
 	return (color);
 }
 
-t_vec	ray_render(__global t_scene *scene, t_vec point, __global t_accuracy *accuracy, __global  t_obj2 *objs)
+t_vec	ray_render(__global t_scene *scene, t_vec point, __global t_accuracy *accuracy, __global  t_obj2 *objs, int *ignore)
 {
 	int				depth_ref;
 	t_point_data	point_data;
@@ -324,7 +324,8 @@ t_vec	ray_render(__global t_scene *scene, t_vec point, __global t_accuracy *accu
 	t_vec			vec;
 
 	vec = scene->cam;
-	point_data = path_tracing(scene, vec_norm(vec_sub(point, vec)), accuracy, vec, objs);
+	point_data = path_tracing(scene, vec_norm(vec_sub(point, vec)), accuracy, vec, objs, ignore);
+	return(point_data.color);
 	if (point_data.obj)
 	{
 		points[0] = point_data;
@@ -332,19 +333,19 @@ t_vec	ray_render(__global t_scene *scene, t_vec point, __global t_accuracy *accu
 		while (accuracy->depth_ref > depth_ref++ &&
 		point_data.obj && point_data.obj->reflection)
 		{
-			scene->ignore = point_data.obj;
+			*ignore = point_data.obj;
 			point_data = path_tracing(scene,
-			get_ref_vec(point_data, vec), accuracy, point_data.point, objs);
+			get_ref_vec(point_data, vec), accuracy, point_data.point, objs, ignore);
 			points[depth_ref] = point_data;
 		}
-		scene->ignore = 0;
+		*ignore = 0;
 		vec = f(points, depth_ref, scene);
 		return (vec);
 	}
 	return (vec);
 }
 
-t_vec	antialiasing(__global t_scene *scene, double x, double y, __global t_accuracy *accuracy, __global t_obj2 *objs)
+t_vec	antialiasing(__global t_scene *scene, double x, double y, __global t_accuracy *accuracy, __global t_obj2 *objs, int *ignore)
 {
 	double	d_x;
 	double	d_y;
@@ -354,14 +355,15 @@ t_vec	antialiasing(__global t_scene *scene, double x, double y, __global t_accur
 
 	color_1 = new_vec0();
 	color_2 = new_vec0();
+	return (color_2);
 	d_x = 0;
-	scene->ignore = 0;
+	*ignore = 0;
 	while (x + d_x < x + 1)
 	{
 		d_y = 0;
 		while (y + d_y < y + 1)
 		{
-			color_3 = ray_render(scene, new_vec3((x + d_x), (y + d_y), 400), accuracy, objs);
+			color_3 = ray_render(scene, new_vec3((x + d_x), (y + d_y), 400), accuracy, objs, ignore);
 			color_1 = vec_sum(color_1, color_3);
 			d_y += 1.0 / accuracy->rpp;
 		}
@@ -385,13 +387,16 @@ __kernel void	ray_tracing(__global t_accuracy *accuracy,\
 	int			y;
 	t_vec		color;
 	int			i = get_global_id(0);
+	int			ignore;
 
 	x = i % *w;
 	y = i / (*h*2);
 
 	scene->number_objs = 9;
 	scene->lights = lights;
-	color = antialiasing(scene, x - *w / 2, y - *h / 2, accuracy, obj);
+	ignore = 0;
+	color = antialiasing(scene, x - *w / 2, y - *h / 2, accuracy, obj, &ignore);
+	color = new_vec3(200, 0, 0);
 	if (color.arr[0] > 255)
 		color.arr[0] = 255;
 	if (color.arr[1] > 255)

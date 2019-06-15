@@ -95,6 +95,7 @@ typedef struct	s_point_data
 typedef struct	s_accuracy
 {
 	int		rpp;
+	//int		path;
 	int		depth_march;
 	int		depth_pt;
 	int 	depth_ref;

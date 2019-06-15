@@ -42,7 +42,9 @@ FILES := main \
 		 len_obj \
 		 ft_opencl_files \
 		 ft_opencl_func \
-		 ft_opencl_params 
+		 ft_opencl_params \
+		 quaternion_1 \
+		 quaternion_2
 
 
 HEADERS = $(INCDIR1)/SDL2/SDL.h $(INCDIR1)/ft_libui.h $(INCDIR1)/ft_window.h
