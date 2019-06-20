@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "*.cl": "c",
-        "objects.h": "c",
-        "vector.h": "c"
-    }
-}

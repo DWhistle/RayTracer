@@ -25,10 +25,5 @@ double	len_cylinder(t_vec point, t_cylinder *cylinder)
 
 double	len_plane(t_vec point, t_plane *plane)
 {
-	return (fabs(plane->norm.arr[0] * point.arr[0] + \
-			plane->norm.arr[1] * point.arr[1] + \
-			plane->norm.arr[2] * point.arr[2] - \
-			plane->norm.arr[0] * plane->point.arr[0] - \
-			plane->norm.arr[1] * plane->point.arr[1] - \
-			plane->norm.arr[2] * plane->point.arr[2]));
+	return (fabs(vec_dotvec(point, plane->norm) - vec_dotvec(plane->point, plane->norm)));
 }

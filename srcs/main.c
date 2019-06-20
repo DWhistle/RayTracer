@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/06/14 10:04:58 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/06/19 13:15:04 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 
 #define WIN_X   500
 #define WIN_Y   500
-#define WIN_W   200
-#define WIN_H   200
+#define WIN_W   100
+#define WIN_H   100
 
 int    print_error(int errnum)
 {
@@ -183,23 +183,23 @@ int     render(SDL_Window *window)
 	l1.ind = 5;
 	l1.intensity = 0;
 	circle.r = 60;
-	circle.point = new_vec3(0, -160, 800);
+	circle.point = new_vec3(0, -160, 400);
 	circle2.r = 100;
 	circle2.point = new_vec3(0, 0, 400);
-	plane.norm = new_vec3(0, -1, 1);
+	plane.norm = new_vec3(0, 0, 1);
 	plane.point = new_vec3(0, 0, 500);
 	plane2.norm = vec_norm(new_vec3(-1, -1, 0));
 	plane2.point = new_vec3(210, 0, 0);
-	plane3.norm = vec_norm(new_vec3(1, -1, 0));
+	plane3.norm = vec_norm(new_vec3(1, -0.5, 0));
 	plane3.point = new_vec3(-210, 0, 0);
 	plane4.norm = vec_norm(new_vec3(0, 0, 1));
 	plane4.point = new_vec3(0, 0, -1);
 	plane5.norm = vec_norm(new_vec3(0, 1, 0));
-	plane5.point = new_vec3(0, -110, 0);
+	plane5.point = new_vec3(0, -210, 0);
 	plane6.norm = vec_norm(new_vec3(0, -1, 0));
-	plane6.point = new_vec3(0, 110, 0);
-	cylinder.point = new_vec3(0, 0, 2000);
-	cylinder.vec = vec_norm(new_vec3(0, 1, 3));
+	plane6.point = new_vec3(0, 210, 0);
+	cylinder.point = new_vec3(0, 0, 3000);
+	cylinder.vec = vec_norm(new_vec3(0, 2, 1));
 	cylinder.r = 50;
 	scene.objs[0].obj = &circle;
 	scene.objs[0].type = SPHERE;
@@ -213,12 +213,12 @@ int     render(SDL_Window *window)
 	scene.objs[1].ind = 1;
 	scene.objs[3].obj = &plane;	
 	scene.objs[3].type = PLANE;
-	scene.objs[3].color = new_vec2(200, 0);
+	scene.objs[3].color = new_vec2(200, 200);
 	scene.objs[3].reflection = 0;
 	scene.objs[3].ind = 3;
 	scene.objs[4].obj = &plane2;
 	scene.objs[4].type = PLANE;
-	scene.objs[4].color = new_vec3(200, 0, 0);
+	scene.objs[4].color = new_vec3(200, 200, 0);
 	scene.objs[4].reflection = 0.8;
 	scene.objs[4].ind = 4;
 	scene.objs[2].obj = &cylinder;	
@@ -228,22 +228,22 @@ int     render(SDL_Window *window)
 	scene.objs[2].ind = 2;
 	scene.objs[8].obj = &plane3;	
 	scene.objs[8].type = PLANE;
-	scene.objs[8].color = new_vec2(200, 0);
+	scene.objs[8].color = new_vec2(200, 200);
 	scene.objs[8].reflection = 0;
 	scene.objs[8].ind = 8;
 	scene.objs[7].obj = &plane4;	
 	scene.objs[7].type = PLANE;
-	scene.objs[7].color = new_vec2(200, 0);
+	scene.objs[7].color = new_vec2(200, 200);
 	scene.objs[7].reflection = 0;
 	scene.objs[7].ind = 7;
 	scene.objs[6].obj = &plane5;	
 	scene.objs[6].type = PLANE;
-	scene.objs[6].color = new_vec2(200, 0);
+	scene.objs[6].color = new_vec2(200, 200);
 	scene.objs[6].reflection = 0;
 	scene.objs[6].ind = 6;
 	scene.objs[5].obj = &plane6;	
 	scene.objs[5].type = PLANE;
-	scene.objs[5].color = new_vec2(200, 0);
+	scene.objs[5].color = new_vec2(200, 200);
 	scene.objs[5].reflection = 0;
 	scene.objs[5].ind = 5;
 	scene.number_lights = 3;
@@ -252,19 +252,19 @@ int     render(SDL_Window *window)
 	scene.lights[1] = l1;
 	scene.lights[2] = l2;
 	t_accuracy accuracy;
-	accuracy.delta = 0.1;
+	accuracy.delta = 0.001;
 	accuracy.depth_march = 2000;
 	accuracy.depth_pt = 10;
 	accuracy.depth_ref = 0;
 	accuracy.max_dist = 10000;
 	accuracy.rpp = 1;
-	//accuracy.path = 9;
 	scene.ignore = 0;
-    SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0xff, 0xff, 0xff));
 	srand(time(NULL));
 	//render_cl(scene, (int**)&(screen->pixels), accuracy, screen);
 	ray_tracing(scene, (int**)&(screen->pixels), accuracy, screen);
     SDL_UpdateWindowSurface(window);
+	free(scene.objs);
+	free(scene.lights);
     return (0);
 }
 
@@ -275,7 +275,6 @@ int		main_loop(SDL_Window *window)
 
 	quit = 0;
 	window = 0;
-	//render(window);
 	while (!quit)
 	{
 		while (SDL_PollEvent(&event) != 0)
@@ -283,7 +282,6 @@ int		main_loop(SDL_Window *window)
 			if (event.type == SDL_QUIT)
 				quit = 1;
 		}
-		
 	}
 	return (0);
 }
@@ -294,6 +292,8 @@ int     main(int argc, char **argv)
 
     (void)argc;
     (void)argv;
+	int i;
+	i = 2;
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         return (print_error(1));
     else
@@ -303,7 +303,8 @@ int     main(int argc, char **argv)
         return (print_error(2));
     else
     {
-        render(window);
+		while(i--)
+    		render(window);
     }
     main_loop(window);
     SDL_DestroyWindow(window);

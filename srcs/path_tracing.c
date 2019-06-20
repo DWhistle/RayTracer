@@ -22,11 +22,10 @@ t_vec			rand_vec(t_vec vec)
 
 	v = new_vec3(0, 0, 0);
 	v.arr[0] = (rand() % 1000) * (rand() % 2 - 0.5) * 2;
-	v.arr[1] = (rand() % 100);
+	v.arr[1] = (rand() % 500);
 	v.arr[2] = (rand() % 1000) * (rand() % 2 - 0.5) * 2;
 	v = vec_norm(v);
 	v = rot(vec_dotvec(new_vec3(0, 1, 0), vec), vec_mul(new_vec3(0, 1, 0), vec), v);
-	
 	return (vec_norm(v));
 }
 
@@ -52,7 +51,7 @@ t_point_data	path_tracing(t_scene scene, t_vec vec,
 	int				depth_pt;
 	t_vec			norm;
 	int				i;
-	int				p = 500;
+	int				p = 400;
 	double			k;
 
 	point_data = raymarching(scene, vec, accuracy, point);
@@ -69,12 +68,13 @@ t_point_data	path_tracing(t_scene scene, t_vec vec,
 			if (point_data2.obj && is_light(scene, point_data2.obj->ind))
 			{
 				scene.ignore = 0;
-				k += 1.0 / (depth_pt/ 2);
+				k += 1.0 / (depth_pt);
 				break ;
 			}
 			point_data2 = raymarching(scene, rand_vec(norm), accuracy, point);
 		}	
 	}
-	point_data.color = vec_dotdec(point_data.obj->color, k / p * 2);
+	point_data.color = vec_dotdec(point_data.obj->color, k / p * 4);
+	
 	return (point_data);
 }
