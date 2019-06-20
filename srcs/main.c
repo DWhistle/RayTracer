@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/06/19 13:15:04 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/06/20 20:17:47 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 
 #define WIN_X   500
 #define WIN_Y   500
-#define WIN_W   100
-#define WIN_H   100
+#define WIN_W   500
+#define WIN_H   500
 
 int    print_error(int errnum)
 {
@@ -187,7 +187,7 @@ int     render(SDL_Window *window)
 	circle2.r = 100;
 	circle2.point = new_vec3(0, 0, 400);
 	plane.norm = new_vec3(0, 0, 1);
-	plane.point = new_vec3(0, 0, 500);
+	plane.point = new_vec3(0, 0, 1500);
 	plane2.norm = vec_norm(new_vec3(-1, -1, 0));
 	plane2.point = new_vec3(210, 0, 0);
 	plane3.norm = vec_norm(new_vec3(1, -0.5, 0));
@@ -203,22 +203,22 @@ int     render(SDL_Window *window)
 	cylinder.r = 50;
 	scene.objs[0].obj = &circle;
 	scene.objs[0].type = SPHERE;
-	scene.objs[0].color = new_vec3(200, 0, 0);
+	scene.objs[0].color = new_vec3(0, 0, 256);
 	scene.objs[0].reflection = 0;
 	scene.objs[0].ind = 0;
 	scene.objs[1].obj = &circle2;
 	scene.objs[1].type = SPHERE;
-	scene.objs[1].color = new_vec2(200, 0);
+	scene.objs[1].color = new_vec3(0, 0, 256);
 	scene.objs[1].reflection = 0.9;
 	scene.objs[1].ind = 1;
 	scene.objs[3].obj = &plane;	
 	scene.objs[3].type = PLANE;
-	scene.objs[3].color = new_vec2(200, 200);
+	scene.objs[3].color = new_vec2(20, 20);
 	scene.objs[3].reflection = 0;
 	scene.objs[3].ind = 3;
 	scene.objs[4].obj = &plane2;
 	scene.objs[4].type = PLANE;
-	scene.objs[4].color = new_vec3(200, 200, 0);
+	scene.objs[4].color = new_vec3(20, 300, 0);
 	scene.objs[4].reflection = 0.8;
 	scene.objs[4].ind = 4;
 	scene.objs[2].obj = &cylinder;	
@@ -228,22 +228,22 @@ int     render(SDL_Window *window)
 	scene.objs[2].ind = 2;
 	scene.objs[8].obj = &plane3;	
 	scene.objs[8].type = PLANE;
-	scene.objs[8].color = new_vec2(200, 200);
+	scene.objs[8].color = new_vec2(0, 200);
 	scene.objs[8].reflection = 0;
 	scene.objs[8].ind = 8;
 	scene.objs[7].obj = &plane4;	
 	scene.objs[7].type = PLANE;
-	scene.objs[7].color = new_vec2(200, 200);
+	scene.objs[7].color = new_vec2(200, 0);
 	scene.objs[7].reflection = 0;
 	scene.objs[7].ind = 7;
 	scene.objs[6].obj = &plane5;	
 	scene.objs[6].type = PLANE;
-	scene.objs[6].color = new_vec2(200, 200);
+	scene.objs[6].color = new_vec2(100, 200);
 	scene.objs[6].reflection = 0;
 	scene.objs[6].ind = 6;
 	scene.objs[5].obj = &plane6;	
 	scene.objs[5].type = PLANE;
-	scene.objs[5].color = new_vec2(200, 200);
+	scene.objs[5].color = new_vec2(200, 100);
 	scene.objs[5].reflection = 0;
 	scene.objs[5].ind = 5;
 	scene.number_lights = 3;
@@ -252,7 +252,7 @@ int     render(SDL_Window *window)
 	scene.lights[1] = l1;
 	scene.lights[2] = l2;
 	t_accuracy accuracy;
-	accuracy.delta = 0.001;
+	accuracy.delta = 0.1;
 	accuracy.depth_march = 2000;
 	accuracy.depth_pt = 10;
 	accuracy.depth_ref = 0;
@@ -303,8 +303,7 @@ int     main(int argc, char **argv)
         return (print_error(2));
     else
     {
-		while(i--)
-    		render(window);
+    	render(window);
     }
     main_loop(window);
     SDL_DestroyWindow(window);

@@ -51,7 +51,7 @@ t_point_data	path_tracing(t_scene scene, t_vec vec,
 	int				depth_pt;
 	t_vec			norm;
 	int				i;
-	int				p = 400;
+	int				p = 1;
 	double			k;
 
 	point_data = raymarching(scene, vec, accuracy, point);

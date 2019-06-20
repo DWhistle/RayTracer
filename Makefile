@@ -44,7 +44,8 @@ FILES := main \
 		 ft_opencl_func \
 		 ft_opencl_params \
 		 quaternion_1 \
-		 quaternion_2
+		 quaternion_2 \
+		 light
 
 
 HEADERS = $(INCDIR1)/SDL2/SDL.h $(INCDIR1)/ft_libui.h $(INCDIR1)/ft_window.h

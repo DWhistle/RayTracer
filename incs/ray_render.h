@@ -18,4 +18,6 @@ t_point_data    raymarching(t_scene objs, t_vec vec, t_accuracy accuracy, t_vec 
 t_vec           get_normal(t_vec point, t_obj obj);
 double          light_render(t_scene objs, t_point_data point_data, t_vec n);
 double          update_r(double r, t_obj new_obj, t_vec point, t_scene objs);
+t_vec           lightt(t_scene objs, t_vec vec,
+							t_accuracy accuracy, t_vec point);
 #endif
