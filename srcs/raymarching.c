@@ -8,7 +8,7 @@ double			update_r(double r, t_obj new_obj, t_vec point, t_scene objs)
 {
 	double len;
 
-	len = 0;
+	len = -1;
 	if (objs.ignore && objs.ignore->ind == new_obj.ind)
 		return (r);
 	if (new_obj.type == SPHERE)
@@ -19,6 +19,8 @@ double			update_r(double r, t_obj new_obj, t_vec point, t_scene objs)
 		len = len_cylinder(point, new_obj.obj);
 	else if (new_obj.type == CONE)
 		len = len_cone(point, new_obj.obj);
+	else if (new_obj.type == TOR)
+		len = len_tor(point, new_obj.obj);
 	if (r == -1 || len < r)
 		r = len;
 	return (r);
@@ -29,6 +31,10 @@ t_vec			get_normal(t_vec point, t_obj obj)
 	t_cylinder	*cylinder;
 	double		k;
 	t_vec		vec;
+	double len;
+	t_vec p;
+	t_vec p2;
+	t_tor *tor;
 
 	if (obj.type == SPHERE)
 		return (vec_norm(vec_sub(point, ((t_sphere*)obj.obj)->point)));
@@ -40,6 +46,23 @@ t_vec			get_normal(t_vec point, t_obj obj)
 		vec = vec_sub(point, cylinder->point);
 		k = vec_dotvec(vec, cylinder->vec);
 		return (vec_norm(vec_sub(vec, vec_dotdec(cylinder->vec, k))));
+	}
+	else if (obj.type == TOR)
+	{
+		tor = (t_tor*)obj.obj;
+		len = len_plane(point, &(tor->plane));
+		p = vec_sum(point, vec_dotdec(vec_dotdec(tor->plane.norm, -1), len));
+		p2 = vec_sum(point, vec_dotdec(tor->plane.norm, len));
+		vec = vec_sub(tor->plane.point, p);
+		if (vec_sqrdist(vec_sub(tor->plane.point, p)) < vec_sqrdist(vec_sub(tor->plane.point, p2)))
+			vec = vec_sub(tor->plane.point, p);
+		else
+		{
+			vec = vec_sub(tor->plane.point, p2);
+			p = p2;
+		}
+		p = vec_sum(p, vec_dotdec(vec_norm(vec), vec_len(vec) - tor->R));
+		return(vec_norm(vec_sub(point, p)));
 	}
 	return (new_vec0());
 }

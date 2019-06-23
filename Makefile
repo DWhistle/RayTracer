@@ -18,6 +18,7 @@ OBJDIR = objs/
 INCDIR1 = incs/
 INCDIR2 = libs/SDL/include
 LIBDIR = libs/libft
+LIBUIDIR = libs/libui
 SDLDIR = libs/SDL/lib
 SDLIMGDIR = libs/SDL/SDL2_image/.libs
 LIBS = ft SDL2 SDL2_image
@@ -35,9 +36,7 @@ FILES := main \
 		 vec_mul \
 		 vec_sum \
 		 vector \
-		 path_tracing \
 		 ray_tracing \
-		 reflaction \
 		 antialiasing \
 		 len_obj \
 		 ft_opencl_files \
@@ -45,7 +44,9 @@ FILES := main \
 		 ft_opencl_params \
 		 quaternion_1 \
 		 quaternion_2 \
-		 light
+		 light \
+		 reflaction \
+		 transparency
 
 
 HEADERS = $(INCDIR1)/SDL2/SDL.h $(INCDIR1)/ft_libui.h $(INCDIR1)/ft_window.h
@@ -57,7 +58,7 @@ FULL_OBJS = $(addprefix $(OBJDIR), $(OBJS))
 FULL_LIBS = $(addprefix -l, $(LIBS))
 FRAMEWORK = -framework OpenGL -framework Cocoa -framework OpenCL
 #  -framework iconv
-LIBFLAGS = -L$(LIBDIR) -lft -L $(SDLDIR) -lSDL2  -L $(SDLIMGDIR) -lSDL2_image
+LIBFLAGS = -L$(LIBDIR) -L$(LIBUIDIR) -lft -L $(SDLDIR) -lSDL2  -L $(SDLIMGDIR) -lSDL2_image
 PATH_SDL = $(addsuffix /libs/SDL, $(shell pwd))
 SDL =  $(PATH_SDL)/SDL2/build
 
@@ -73,6 +74,7 @@ $(OBJDIR):
 
 $(LIBDIR): $(OBJDIR)
 	make -C $(LIBDIR)
+	make -C $(LIBUIDIR)
 
 $(OBJDIR)%.o: $(SRCDIR)%.c
 	$(CC) $(CCFLAGS) -c -o $@ $<

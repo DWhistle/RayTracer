@@ -22,6 +22,8 @@ void	ray_tracing(t_scene scene, int **pixel,
 				color.arr[1] = 255;
 			if (color.arr[2] > 255)
 				color.arr[2] = 255;
+			scene.color[x + screen->w * y] = vec_sum(scene.color[x + screen->w * y], color);
+			color = vec_dotdec(scene.color[x + screen->w * y], 1.0 / accuracy.depth_pt);
 			(*pixel)[x + screen->w * y] = (int)(color.arr[0]) * 256 *
 			256 + (int)(color.arr[1]) * 256 + (int)(color.arr[2]);
 		}

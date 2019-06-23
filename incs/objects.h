@@ -14,6 +14,7 @@ enum
 	PLANE = 2,
 	CYLINDER = 3,
 	CONE = 4,
+	TOR = 5,
 	DIRECT = 1,
 	AMBIENT = 2,
 	POINT = 3
@@ -31,6 +32,7 @@ typedef struct s_obj2
 	int		ind;
 	double	reflection;
 	t_vec	color;
+	double	refraction;
 }               t_obj2;
 
 typedef struct s_obj
@@ -40,6 +42,7 @@ typedef struct s_obj
 	int		ind;
 	double	reflection;
 	t_vec	color;
+	double	refraction;
 }               t_obj;
 
 typedef struct	s_cylinder
@@ -70,8 +73,11 @@ typedef struct	s_plane
 
 typedef struct	s_light
 {
+	int		type;
 	double	intensity;
-	int		ind;
+	double	r;
+	t_vec	point;
+	t_vec	vec;
 }				t_light;
 
 typedef struct	s_scene
@@ -82,6 +88,7 @@ typedef struct	s_scene
 	t_vec		cam;
 	t_light		*lights;
 	t_obj		*ignore;
+	t_vec		*color;
 }				t_scene;
 
 typedef struct	s_point_data
@@ -121,6 +128,13 @@ typedef struct	s_segment
 	t_vec		a;
 	t_vec		b;
 }				t_segment;
+
+typedef struct	s_tor
+{
+	t_plane		plane;
+	double		R;
+	double		r;
+}				t_tor;
 
 
 #endif
