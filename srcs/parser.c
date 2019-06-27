@@ -363,7 +363,7 @@ t_list *json_operator(t_parser *json)
 		json->i++;
 	}
 
-	return NULL;
+	return json->objects;
 }
 
 char *read_file(int fd){
@@ -403,13 +403,13 @@ t_list *parse_json(char *config_file)
 	json->i = 0;
 	json->objects = NULL;
 	close(fd);
-	json_operator(json);
-	return(NULL);
+	return json_operator(json);
 }
 
 
 int main(int ac, char **av)
 {
-	t_list *json = parse_json(av[1]);
+	t_list *json1 = parse_json(av[1]);
+	printf("%p\n", json1->next);
 	// convert_objects(json);
 }
