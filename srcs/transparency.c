@@ -1,5 +1,4 @@
 #include "ray_render.h"
-#include <quat.h>
 
 t_vec			rot(double angle, t_vec u, t_vec v)
 {

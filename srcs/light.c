@@ -70,6 +70,7 @@ t_vec   lightt(t_scene objs, t_vec vec,
     double i;
     double n_dot_l;
     t_vec li;
+    t_vec hw_vec;
 
     point_data = get_point(objs, vec, accuracy);
     if (!point_data.obj)
@@ -88,9 +89,17 @@ t_vec   lightt(t_scene objs, t_vec vec,
                 li = vec_sub(rand_point(objs.lights[objs.number_lights].point,\
                 objs.lights[objs.number_lights].r), point_data.point);
             accuracy.max_dist = vec_len(li);
-            n_dot_l = vec_dotvec(point_data.norm, li);
-            if (n_dot_l > 0 && !get_shadow(objs, vec_norm(li), accuracy, point_data))
-                i += objs.lights[objs.number_lights].intensity * (n_dot_l / vec_len(li));
+            if (!get_shadow(objs, vec_norm(li), accuracy, point_data))
+            {
+                n_dot_l = vec_dotvec(point_data.norm, vec_norm(li));
+                if (n_dot_l > 0)
+                    i += objs.lights[objs.number_lights].intensity * (n_dot_l);
+                hw_vec = vec_norm(vec_sum(vec_dotdec(li, 1), vec_norm(vec_dotdec(vec, -1))));
+                n_dot_l = vec_dotvec(hw_vec, point_data.norm);
+                //n_dot_l = vec_dotvec(get_ref_vec(point_data, vec_dotdec(li, -1)), vec_norm(vec_dotdec(vec, -1)));
+                if (n_dot_l > 0)
+                    i += objs.lights[objs.number_lights].intensity * pow(n_dot_l, 128);
+            }
         }
     }
     point_data.color = vec_dotdec(point_data.color, i);

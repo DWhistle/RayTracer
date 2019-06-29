@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/06/23 14:43:01 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/06/29 17:27:42 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "ft_opencl_func.h"
 #include "libft.h"
 #include <stdio.h>
+#include "parser.h"
 
 #define WIN_X   500
 #define WIN_Y   500
@@ -181,46 +182,46 @@ int     render(SDL_Window *window)
 	l.intensity = 0.0;
 	l2.type = POINT;
 	l2.intensity = 0.4;
-	l2.point = new_vec3(100, 0, 500);
-	l2.r = 35;
+	l2.point = new_vec3(-100, 0, 500);
+	l2.r = 10;
 	l1.type = POINT;
-	l1.intensity = 0.5;
+	l1.intensity = 0.4;
 	l1.point = new_vec3(100, 0, 100);
-	l1.r = 35;
+	l1.r = 45;
 	circle.r = 60;
 	circle.point = new_vec3(0, -160, 400);
 	circle2.r = 100;
 	circle2.point = new_vec3(0, 0, 400);
-	plane.norm = new_vec3(0, 0, -1);
+	plane.norm = vec_norm(new_vec3(0, -1, -1));
 	plane.point = new_vec3(0, 0, 700);
 	plane2.norm = vec_norm(new_vec3(-1, -1, 0));
 	plane2.point = new_vec3(210, 0, 0);
 	plane3.norm = vec_norm(new_vec3(1, -0.5, 0));
 	plane3.point = new_vec3(-210, 0, 0);
 	plane4.norm = vec_norm(new_vec3(0, 0, 1));
-	plane4.point = new_vec3(0, 0, -1);
+	plane4.point = new_vec3(0, 0, -5);
 	plane5.norm = vec_norm(new_vec3(0, 1, 0));
 	plane5.point = new_vec3(0, -210, 0);
 	plane6.norm = vec_norm(new_vec3(0, -1, 0));
 	plane6.point = new_vec3(0, 210, 0);
-	plane7.norm = vec_norm(new_vec3(0, 1, -1));
+	plane7.norm = vec_norm(new_vec3(0, 1, 1));
 	plane7.point = new_vec3(0, 0, 200);
-	cylinder.point = new_vec3(0, -170, 550);
+	cylinder.point = new_vec3(0, 170, 550);
 	cylinder.vec = vec_norm(new_vec3(2, 0, 1));
 	cylinder.r = 50;
-	tor.R = 50;
-	tor.r = 17;
+	tor.R = 20;
+	tor.r = 10;
 	tor.plane = plane7;
 	scene.objs[0].obj = &circle;
 	scene.objs[0].type = SPHERE;
-	scene.objs[0].color = new_vec3(0, 0, 256);
+	scene.objs[0].color = new_vec3(180, 120, 256);
 	scene.objs[0].reflection = 0;
 	scene.objs[0].ind = 0;
 	scene.objs[0].refraction = 0;
 	scene.objs[1].obj = &tor;
 	scene.objs[1].type = TOR;
 	scene.objs[1].color = new_vec3(0, 0, 255);
-	scene.objs[1].reflection = 0;
+	scene.objs[1].reflection = 0.9;
 	scene.objs[1].ind = 1;
 	scene.objs[1].refraction = 0;
 	scene.objs[3].obj = &plane;	
@@ -259,12 +260,6 @@ int     render(SDL_Window *window)
 	scene.objs[6].reflection = 0;
 	scene.objs[6].ind = 6;
 	scene.objs[6].refraction = 0;
-	scene.objs[9].obj = &plane7;	
-	scene.objs[9].type = PLANE;
-	scene.objs[9].color = new_vec2(100, 200);
-	scene.objs[9].reflection = 0;
-	scene.objs[9].ind = 9;
-	scene.objs[9].refraction = 0;
 	scene.objs[5].obj = &plane6;	
 	scene.objs[5].type = PLANE;
 	scene.objs[5].color = new_vec2(200, 100);
@@ -276,13 +271,13 @@ int     render(SDL_Window *window)
 	scene.lights[0] = l; 
 	scene.lights[1] = l1;
 	scene.lights[2] = l2;
-	t_accuracy accuracy;
+	t_accuracy accuracy;	
 	accuracy.delta = 0.1;
-	accuracy.depth_march = 2000;
+	accuracy.depth_march = 200;
 	accuracy.depth_pt = 1;
 	accuracy.depth_ref = 0;
 	accuracy.max_dist = 10000;
-	accuracy.rpp = 9;
+	accuracy.rpp = 1;
 	scene.ignore = 0;
 	scene.color = ft_memalloc(sizeof(t_vec) * screen->h * screen->w);
 	srand(time(NULL));
@@ -322,9 +317,13 @@ int     main(int argc, char **argv)
     SDL_Window      *window;
 
     (void)argc;
-    (void)argv;
+	(void)argv;
 	int i;
 	i = 2;
+	
+	t_list *json = parse_json(argv[1]);
+	printf("%p", (void*)json);
+	return(0);
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         return (print_error(1));
     else

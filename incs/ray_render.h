@@ -4,6 +4,7 @@
 # include "SDL2/SDL.h"
 # include "libft.h"
 # include <math.h>
+#include <quat.h>
 
 t_point_data   	path_tracing(t_scene scene, t_vec vec, t_accuracy accuracy, t_vec point);
 void            ray_tracing(t_scene scene, int **pixel, t_accuracy accuracy, SDL_Surface *screen);
@@ -24,4 +25,7 @@ t_vec    lightt(t_scene objs, t_vec vec,
 t_vec   transparency(t_vec vec, t_point_data point);
 t_point_data	crate_point_data(t_vec norm,
 				t_obj *obj, t_vec point, t_vec color);
-#endif
+t_vec			rot(double angle, t_vec u, t_vec v);
+double			len_mobius(t_vec point, t_mobius *mobius);
+t_vec			get_ref_vec(t_point_data point_data, t_vec vec);
+#endif	

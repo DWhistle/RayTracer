@@ -1,4 +1,4 @@
-#ifndef OBJECT_H
+	#ifndef OBJECT_H
 # define OBJECT_H
 
 #ifndef __OPENCL_C_VERSION__
@@ -15,6 +15,7 @@ enum
 	CYLINDER = 3,
 	CONE = 4,
 	TOR = 5,
+	MOBIUS = 6,
 	DIRECT = 1,
 	AMBIENT = 2,
 	POINT = 3
@@ -136,5 +137,12 @@ typedef struct	s_tor
 	double		r;
 }				t_tor;
 
+typedef struct	s_mobius
+{
+	t_plane		plane;
+	double		R;
+	t_vec 		vec;
+	t_vec		norm;
+}				t_mobius;
 
 #endif

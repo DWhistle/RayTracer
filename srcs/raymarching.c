@@ -21,6 +21,8 @@ double			update_r(double r, t_obj new_obj, t_vec point, t_scene objs)
 		len = len_cone(point, new_obj.obj);
 	else if (new_obj.type == TOR)
 		len = len_tor(point, new_obj.obj);
+	else if (new_obj.type == MOBIUS)
+		len = len_mobius(point, new_obj.obj);
 	if (r == -1 || len < r)
 		r = len;
 	return (r);
@@ -35,6 +37,8 @@ t_vec			get_normal(t_vec point, t_obj obj)
 	t_vec p;
 	t_vec p2;
 	t_tor *tor;
+	double a;
+	t_mobius *mobius;
 
 	if (obj.type == SPHERE)
 		return (vec_norm(vec_sub(point, ((t_sphere*)obj.obj)->point)));
@@ -63,6 +67,28 @@ t_vec			get_normal(t_vec point, t_obj obj)
 		}
 		p = vec_sum(p, vec_dotdec(vec_norm(vec), vec_len(vec) - tor->R));
 		return(vec_norm(vec_sub(point, p)));
+	}
+	else if (obj.type == MOBIUS)
+	{
+		mobius = obj.obj;
+		len = len_plane(point, &(mobius->plane));
+		p = vec_sum(point, vec_dotdec(vec_dotdec(mobius->plane.norm, -1), len));
+		p2 = vec_sum(point, vec_dotdec(mobius->plane.norm, len));
+		vec = vec_sub(mobius->plane.point, p);
+		if (vec_sqrdist(vec_sub(mobius->plane.point, p)) < vec_sqrdist(vec_sub(mobius->plane.point, p2)))
+			vec = vec_sub(mobius->plane.point, p);
+		else
+		{
+			vec = vec_sub(mobius->plane.point, p2);
+			p = p2;
+		}
+		p = vec_sum(p, vec_dotdec(vec_norm(vec), vec_len(vec) - mobius->R));
+		vec = vec_norm(vec_sub(mobius->plane.point, p));
+		a = vec_dotvec(vec, mobius->vec);
+		
+		a = cos(acos(a) / 2);
+		vec = rot(a, vec_mul(vec, mobius->norm), vec);
+		return(vec_norm(vec));
 	}
 	return (new_vec0());
 }
