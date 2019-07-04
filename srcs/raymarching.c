@@ -28,7 +28,7 @@ double			update_r(double r, t_obj new_obj, t_vec point, t_scene objs)
 	return (r);
 }
 
-t_vec			get_normal(t_vec point, t_obj obj)
+t_vec			get_normal(t_vec point, t_obj obj, t_vec po)
 {
 	t_cylinder	*cylinder;
 	double		k;
@@ -44,6 +44,8 @@ t_vec			get_normal(t_vec point, t_obj obj)
 		return (vec_norm(vec_sub(point, ((t_sphere*)obj.obj)->point)));
 	else if (obj.type == PLANE)
 		return (((t_plane*)obj.obj)->norm);
+	if (obj.type == CONE)
+		return (vec_norm(vec_sub(po, point)));
 	else if (obj.type == CYLINDER)
 	{
 		cylinder = (t_cylinder*)obj.obj;
@@ -111,6 +113,7 @@ t_point_data	raymarching(t_scene objs, t_vec vec,
 	double	r;
 	int		counter;
 	t_vec	next_point;
+	t_vec	prew_point;
 
 	next_point = point;
 	while (accuracy.depth_march-- &&
@@ -123,8 +126,9 @@ t_point_data	raymarching(t_scene objs, t_vec vec,
 			r = update_r(r, objs.objs[counter], next_point, objs);
 			if (r < accuracy.delta && r != -1)
 				return (crate_point_data(get_normal(next_point,
-			objs.objs[counter]), objs.objs + counter, next_point, new_vec0()));
+			objs.objs[counter], prew_point), objs.objs + counter, next_point, new_vec0()));
 		}
+		prew_point = next_point;
 		next_point = vec_sum(next_point, vec_dotdec(vec, r));
 	}
 	return (crate_point_data(new_vec0(), 0, new_vec0(), new_vec0()));

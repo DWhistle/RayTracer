@@ -49,7 +49,7 @@ FILES := main \
 		 transparency \
 		 parser \
 		 get_next_line \
-		 converter
+		 #converter
 
 
 HEADERS = $(INCDIR1)/SDL2/SDL.h $(INCDIR1)/ft_libui.h $(INCDIR1)/ft_window.h
