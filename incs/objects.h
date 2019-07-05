@@ -90,6 +90,11 @@ typedef struct	s_scene
 	t_light		*lights;
 	t_obj		*ignore;
 	t_vec		*color;
+	int			ce;
+	int			bm;
+	int			neg;
+	int			ster;
+	int			sepia;
 }				t_scene;
 
 typedef struct	s_point_data

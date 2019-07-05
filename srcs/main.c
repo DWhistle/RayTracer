@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/06/29 17:27:42 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/06/30 16:11:00 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -321,9 +321,9 @@ int     main(int argc, char **argv)
 	int i;
 	i = 2;
 	
-	t_list *json = parse_json(argv[1]);
-	printf("%p", (void*)json);
-	return(0);
+	//t_list *json = parse_json(argv[1]);
+	//printf("%p", (void*)json);
+	//return(0);
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         return (print_error(1));
     else

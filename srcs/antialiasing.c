@@ -16,6 +16,7 @@ t_vec	antialiasing(t_scene scene, double x, double y, t_accuracy accuracy)
 		d_y = 0;
 		while (y + d_y < y + 1)
 		{
+			printf("%f\n", d_x);
 			color_1 = vec_sum(color_1, lightt(scene,
 			vec_norm(new_vec3((x + d_x), (y + d_y), 600)), accuracy));
 			d_y += 1.0 / accuracy.rpp;
