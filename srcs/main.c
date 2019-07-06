@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/06/30 16:11:00 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/07/05 17:29:20 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ int     render(SDL_Window *window)
 	t_plane plane6;
 	t_plane plane7;
 	t_cylinder cylinder;
-	t_tor	tor;
+	t_cone	tor;
 	t_scene scene;
 	scene.cam = new_vec3(0, 0, 0);
 	scene.number_objs = 9;
@@ -209,9 +209,9 @@ int     render(SDL_Window *window)
 	cylinder.point = new_vec3(0, 170, 550);
 	cylinder.vec = vec_norm(new_vec3(2, 0, 1));
 	cylinder.r = 50;
-	tor.R = 20;
-	tor.r = 10;
-	tor.plane = plane7;
+	tor.angle = -2;
+	tor.vec = new_vec3(1, 0, 0);
+	tor.point = new_vec3(0, 0, 400);
 	scene.objs[0].obj = &circle;
 	scene.objs[0].type = SPHERE;
 	scene.objs[0].color = new_vec3(180, 120, 256);
@@ -219,7 +219,7 @@ int     render(SDL_Window *window)
 	scene.objs[0].ind = 0;
 	scene.objs[0].refraction = 0;
 	scene.objs[1].obj = &tor;
-	scene.objs[1].type = TOR;
+	scene.objs[1].type = CONE;
 	scene.objs[1].color = new_vec3(0, 0, 255);
 	scene.objs[1].reflection = 0.9;
 	scene.objs[1].ind = 1;
@@ -318,12 +318,7 @@ int     main(int argc, char **argv)
 
     (void)argc;
 	(void)argv;
-	int i;
-	i = 2;
 	
-	//t_list *json = parse_json(argv[1]);
-	//printf("%p", (void*)json);
-	//return(0);
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         return (print_error(1));
     else

@@ -7,11 +7,22 @@ double	len_circle(t_vec point, t_sphere *sphere)
 
 double	len_cone(t_vec point, t_cone *cone)
 {
-	double q;
-	
-	q = vec_len(vec_sub(cone->point, point));
-	return (vec_dotvec(cone->vec, new_vec2(q, point.arr[2])));
-}
+	t_vec vec;
+	t_vec vec1;
+	double f;
+	double s;	
+
+	vec = vec_sub(point, cone->point);
+	vec = vec_mul(cone->vec, vec);
+	vec = vec_norm(rot(cone->angle, vec_norm(vec), cone->vec));
+	f = fabs(vec_dotvec(vec_sub(cone->point, point), vec));
+	vec1 = vec_norm(rot(-cone->angle, vec_norm(vec), cone->vec));
+	s = fabs(vec_dotvec(vec_sub(cone->point, point), vec1));
+	if (f < s)
+		return (f);
+	else
+		return (s);
+}	
 
 double	len_cylinder(t_vec point, t_cylinder *cylinder)
 {
@@ -100,3 +111,5 @@ double	len_mobius(t_vec point, t_mobius *mobius)
 	segment.b = vec_sum(p, vec_dotdec(vec_norm(vec), -10));
 	return (len_segment(segment, point));
 }
+
+

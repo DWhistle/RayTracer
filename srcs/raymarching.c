@@ -44,6 +44,10 @@ t_vec			get_normal(t_vec point, t_obj obj)
 		return (vec_norm(vec_sub(point, ((t_sphere*)obj.obj)->point)));
 	else if (obj.type == PLANE)
 		return (((t_plane*)obj.obj)->norm);
+	if (obj.type == CONE)
+	{
+		return (vec_norm(vec_sub(po, point)));
+	}
 	else if (obj.type == CYLINDER)
 	{
 		cylinder = (t_cylinder*)obj.obj;

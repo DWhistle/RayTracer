@@ -85,7 +85,6 @@ void	ray_tracing(t_scene scene, int **pixel,
 		x = screen->w;
 		while (x--)
 		{
-			printf("%d\n", x + screen->w * y);
 			color = antialiasing(scene, x - screen->w / 2,
 			y - screen->h / 2, accuracy);
 			if (color.arr[0] > 255)
