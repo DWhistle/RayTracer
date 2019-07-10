@@ -7,31 +7,28 @@ double	len_circle(t_vec point, t_sphere *sphere)
 
 double	len_cone(t_vec point, t_cone *cone)
 {
-	t_vec vec;
-	t_vec vec1;
 	double f;
-	double s;	
 
-	vec = vec_sub(point, cone->point);
-	vec = vec_mul(cone->vec, vec);
-	vec = vec_norm(rot(cone->angle, vec_norm(vec), cone->vec));
-	f = fabs(vec_dotvec(vec_sub(cone->point, point), vec));
-	vec1 = vec_norm(rot(-cone->angle, vec_norm(vec), cone->vec));
-	s = fabs(vec_dotvec(vec_sub(cone->point, point), vec1));
-	if (f < s)
-		return (f);
-	else
-		return (s);
+	point = vec_sub(point, cone->point);
+	point = rot(-0.5, new_vec2(1, 1), point);
+	f = vec_len(new_vec2(point.arr[0], point.arr[1]));
+	return (vec_dotvec(new_vec2(0.7, 0.1), new_vec2(f, point.arr[2])));
+
 }	
 
 double	len_cylinder(t_vec point, t_cylinder *cylinder)
 {
-	double	k;
 	t_vec	vec;
 
-	vec = vec_sub(point, cylinder->point);
-	k = vec_dotvec(vec, cylinder->vec);
-	return (vec_len(vec_sub(vec, vec_dotdec(cylinder->vec, k))) - cylinder->r);
+	point = vec_sub(point, cylinder->point);
+	point = rot(1, new_vec2(1, 0), point);
+	vec = new_vec2(point.arr[0], point.arr[2]);
+	vec = new_vec2(fabs(vec_len(vec)), fabs(point.arr[1]));
+	vec = vec_sub(vec, new_vec2(cylinder->r, 100));
+	double k = fmin(fmax(vec.arr[0], vec.arr[1]),0.0);
+	vec.arr[0] = fmax(vec.arr[0], 0.0);
+	vec.arr[1] = fmax(vec.arr[1], 0.0);
+	return (k + vec_len(vec));
 }
 
 double	len_plane(t_vec point, t_plane *plane)
@@ -41,24 +38,12 @@ double	len_plane(t_vec point, t_plane *plane)
 
 double	len_tor(t_vec point, t_tor *tor)
 {
-	double len;
-	t_vec p;
-	t_vec p2;
 	t_vec vec;
 
-	len = len_plane(point, &(tor->plane));
-	p = vec_sum(point, vec_dotdec(vec_dotdec(tor->plane.norm, -1), len));
-	p2 = vec_sum(point, vec_dotdec(tor->plane.norm, len));
-	vec = vec_sub(tor->plane.point, p);
-	if (vec_sqrdist(vec_sub(tor->plane.point, p)) < vec_sqrdist(vec_sub(tor->plane.point, p2)))
-		vec = vec_sub(tor->plane.point, p);
-	else
-	{
-		vec = vec_sub(tor->plane.point, p2);
-		p = p2;
-	}
-	p = vec_sum(p, vec_dotdec(vec_norm(vec), vec_len(vec) - tor->R));
-	return (vec_len(vec_sub(point, p)) - tor->r);
+	point = vec_sub(point, tor->plane.point);
+	point = rot(1, new_vec2(1, 0), point);
+	vec = new_vec2(vec_len(new_vec2(point.arr[0], point.arr[2])) - tor->R, point.arr[1]);
+	return (vec_len(vec) - tor->r);
 }
 
 double	len_segment(t_segment segment, t_vec point)

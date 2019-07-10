@@ -6,11 +6,11 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/05 17:29:20 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/07/10 21:18:41 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/libft.h"
+#include "../incs/libft.h"	
 #include "SDL2/SDL.h"
 #include <OpenGL/gl.h>
 #include "objects.h"
@@ -170,7 +170,7 @@ int     render(SDL_Window *window)
 	t_plane plane6;
 	t_plane plane7;
 	t_cylinder cylinder;
-	t_cone	tor;
+	t_tor	tor;
 	t_scene scene;
 	scene.cam = new_vec3(0, 0, 0);
 	scene.number_objs = 9;
@@ -186,7 +186,7 @@ int     render(SDL_Window *window)
 	l2.r = 10;
 	l1.type = POINT;
 	l1.intensity = 0.4;
-	l1.point = new_vec3(100, 0, 100);
+	l1.point = new_vec3(100, 0, 200);
 	l1.r = 45;
 	circle.r = 60;
 	circle.point = new_vec3(0, -160, 400);
@@ -205,13 +205,13 @@ int     render(SDL_Window *window)
 	plane6.norm = vec_norm(new_vec3(0, -1, 0));
 	plane6.point = new_vec3(0, 210, 0);
 	plane7.norm = vec_norm(new_vec3(0, 1, 1));
-	plane7.point = new_vec3(0, 0, 200);
-	cylinder.point = new_vec3(0, 170, 550);
+	plane7.point = new_vec3(0, 0, 300);
+	cylinder.point = new_vec3(0, 0, 550);
 	cylinder.vec = vec_norm(new_vec3(2, 0, 1));
 	cylinder.r = 50;
-	tor.angle = -2;
-	tor.vec = new_vec3(1, 0, 0);
-	tor.point = new_vec3(0, 0, 400);
+	tor.r = 30;
+	tor.plane = plane7;
+	tor.R = 90;
 	scene.objs[0].obj = &circle;
 	scene.objs[0].type = SPHERE;
 	scene.objs[0].color = new_vec3(180, 120, 256);
@@ -219,7 +219,7 @@ int     render(SDL_Window *window)
 	scene.objs[0].ind = 0;
 	scene.objs[0].refraction = 0;
 	scene.objs[1].obj = &tor;
-	scene.objs[1].type = CONE;
+	scene.objs[1].type = TOR;
 	scene.objs[1].color = new_vec3(0, 0, 255);
 	scene.objs[1].reflection = 0.9;
 	scene.objs[1].ind = 1;

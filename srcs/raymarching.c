@@ -28,73 +28,26 @@ double			update_r(double r, t_obj new_obj, t_vec point, t_scene objs)
 	return (r);
 }
 
-t_vec			get_normal(t_vec point, t_obj obj)
+t_vec			get_normal(t_vec point, t_obj obj, t_scene objs)
 {
-	t_cylinder	*cylinder;
-	double		k;
+	double e = 0.1;
 	t_vec		vec;
-	double len;
-	t_vec p;
-	t_vec p2;
-	t_tor *tor;
-	double a;
-	t_mobius *mobius;
 
 	if (obj.type == SPHERE)
 		return (vec_norm(vec_sub(point, ((t_sphere*)obj.obj)->point)));
 	else if (obj.type == PLANE)
 		return (((t_plane*)obj.obj)->norm);
-	if (obj.type == CONE)
+	else 
 	{
-		return (vec_norm(vec_sub(po, point)));
+		vec.arr[0] = update_r(-1, obj, vec_sum(point, new_vec3(e, 0, 0)), objs)\
+			- update_r(-1, obj, vec_sum(point, new_vec3(e, 0, 0)), objs);
+		vec.arr[1] = update_r(-1, obj, vec_sum(point, new_vec3(0, e, 0)), objs)\
+			- update_r(-1, obj, vec_sum(point, new_vec3(0, e, 0)), objs);
+		vec.arr[2] = update_r(-1, obj, vec_sum(point, new_vec3(0, 0, e)), objs)\
+			- update_r(-1, obj, vec_sum(point, new_vec3(0, 0, e)), objs);
+		//printf("%f\n", vec_len(vec_norm(vec_dotdec(vec, 1.0/ (2.0 * e)))));
+		return(vec_norm(vec_dotdec(vec, 1.0/ (2.0 * e))));
 	}
-	else if (obj.type == CYLINDER)
-	{
-		cylinder = (t_cylinder*)obj.obj;
-		vec = vec_sub(point, cylinder->point);
-		k = vec_dotvec(vec, cylinder->vec);
-		return (vec_norm(vec_sub(vec, vec_dotdec(cylinder->vec, k))));
-	}
-	else if (obj.type == TOR)
-	{
-		tor = (t_tor*)obj.obj;
-		len = len_plane(point, &(tor->plane));
-		p = vec_sum(point, vec_dotdec(vec_dotdec(tor->plane.norm, -1), len));
-		p2 = vec_sum(point, vec_dotdec(tor->plane.norm, len));
-		vec = vec_sub(tor->plane.point, p);
-		if (vec_sqrdist(vec_sub(tor->plane.point, p)) < vec_sqrdist(vec_sub(tor->plane.point, p2)))
-			vec = vec_sub(tor->plane.point, p);
-		else
-		{
-			vec = vec_sub(tor->plane.point, p2);
-			p = p2;
-		}
-		p = vec_sum(p, vec_dotdec(vec_norm(vec), vec_len(vec) - tor->R));
-		return(vec_norm(vec_sub(point, p)));
-	}
-	else if (obj.type == MOBIUS)
-	{
-		mobius = obj.obj;
-		len = len_plane(point, &(mobius->plane));
-		p = vec_sum(point, vec_dotdec(vec_dotdec(mobius->plane.norm, -1), len));
-		p2 = vec_sum(point, vec_dotdec(mobius->plane.norm, len));
-		vec = vec_sub(mobius->plane.point, p);
-		if (vec_sqrdist(vec_sub(mobius->plane.point, p)) < vec_sqrdist(vec_sub(mobius->plane.point, p2)))
-			vec = vec_sub(mobius->plane.point, p);
-		else
-		{
-			vec = vec_sub(mobius->plane.point, p2);
-			p = p2;
-		}
-		p = vec_sum(p, vec_dotdec(vec_norm(vec), vec_len(vec) - mobius->R));
-		vec = vec_norm(vec_sub(mobius->plane.point, p));
-		a = vec_dotvec(vec, mobius->vec);
-		
-		a = cos(acos(a) / 2);
-		vec = rot(a, vec_mul(vec, mobius->norm), vec);
-		return(vec_norm(vec));
-	}
-	return (new_vec0());
 }
 
 t_point_data	crate_point_data(t_vec norm,
@@ -127,7 +80,7 @@ t_point_data	raymarching(t_scene objs, t_vec vec,
 			r = update_r(r, objs.objs[counter], next_point, objs);
 			if (r < accuracy.delta && r != -1)
 				return (crate_point_data(get_normal(next_point,
-			objs.objs[counter]), objs.objs + counter, next_point, new_vec0()));
+			objs.objs[counter], objs), objs.objs + counter, next_point, new_vec0()));
 		}
 		next_point = vec_sum(next_point, vec_dotdec(vec, r));
 	}
