@@ -30,8 +30,9 @@ double			update_r(double r, t_obj new_obj, t_vec point, t_scene objs)
 
 t_vec			get_normal(t_vec point, t_obj obj, t_scene objs)
 {
-	double e = 0.1;
+	double e = 0.01;
 	t_vec		vec;
+	double	k;
 
 	if (obj.type == SPHERE)
 		return (vec_norm(vec_sub(point, ((t_sphere*)obj.obj)->point)));
@@ -39,14 +40,11 @@ t_vec			get_normal(t_vec point, t_obj obj, t_scene objs)
 		return (((t_plane*)obj.obj)->norm);
 	else 
 	{
-		vec.arr[0] = update_r(-1, obj, vec_sum(point, new_vec3(e, 0, 0)), objs)\
-			- update_r(-1, obj, vec_sum(point, new_vec3(e, 0, 0)), objs);
-		vec.arr[1] = update_r(-1, obj, vec_sum(point, new_vec3(0, e, 0)), objs)\
-			- update_r(-1, obj, vec_sum(point, new_vec3(0, e, 0)), objs);
-		vec.arr[2] = update_r(-1, obj, vec_sum(point, new_vec3(0, 0, e)), objs)\
-			- update_r(-1, obj, vec_sum(point, new_vec3(0, 0, e)), objs);
-		//printf("%f\n", vec_len(vec_norm(vec_dotdec(vec, 1.0/ (2.0 * e)))));
-		return(vec_norm(vec_dotdec(vec, 1.0/ (2.0 * e))));
+		k = update_r(-1, obj, point, objs);
+		vec.arr[0] = update_r(-1, obj, vec_sum(point, new_vec3(e, 0, 0)), objs);
+		vec.arr[1] = update_r(-1, obj, vec_sum(point, new_vec3(0, e, 0)), objs);
+		vec.arr[2] = update_r(-1, obj, vec_sum(point, new_vec3(0, 0, e)), objs);
+		return(vec_norm(vec));
 	}
 }
 

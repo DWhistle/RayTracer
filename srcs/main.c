@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/10 21:18:41 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/07/10 21:45:23 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,7 +272,7 @@ int     render(SDL_Window *window)
 	scene.lights[1] = l1;
 	scene.lights[2] = l2;
 	t_accuracy accuracy;	
-	accuracy.delta = 0.1;
+	accuracy.delta = 0.0001;
 	accuracy.depth_march = 200;
 	accuracy.depth_pt = 1;
 	accuracy.depth_ref = 0;
