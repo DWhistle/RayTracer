@@ -16,7 +16,7 @@ double			update_r(double r, t_obj new_obj, t_vec point, t_scene objs)
 	else if (new_obj.type == PLANE)
 		len = len_plane(point, new_obj.obj);
 	else if (new_obj.type == CYLINDER)
-		len = len_cylinder(point, new_obj.obj);
+		len = fabs(len_cylinder(point, new_obj.obj)) - 50;
 	else if (new_obj.type == CONE)
 		len = len_cone(point, new_obj.obj);
 	else if (new_obj.type == TOR)
@@ -28,24 +28,26 @@ double			update_r(double r, t_obj new_obj, t_vec point, t_scene objs)
 	return (r);
 }
 
-t_vec			get_normal(t_vec point, t_obj obj, t_scene objs)
+t_vec			get_normal(t_vec point, t_obj obj, t_scene objs, double k)
 {
-	double e = 0.01;
+	double e = 0.1;
 	t_vec		vec;
-	double	k;
 
-	if (obj.type == SPHERE)
-		return (vec_norm(vec_sub(point, ((t_sphere*)obj.obj)->point)));
-	else if (obj.type == PLANE)
-		return (((t_plane*)obj.obj)->norm);
-	else 
-	{
-		k = update_r(-1, obj, point, objs);
-		vec.arr[0] = update_r(-1, obj, vec_sum(point, new_vec3(e, 0, 0)), objs);
-		vec.arr[1] = update_r(-1, obj, vec_sum(point, new_vec3(0, e, 0)), objs);
-		vec.arr[2] = update_r(-1, obj, vec_sum(point, new_vec3(0, 0, e)), objs);
-		return(vec_norm(vec));
-	}
+	//if (obj.type == SPHERE)
+	//	return (vec_norm(vec_sub(point, ((t_sphere*)obj.obj)->point)));
+	//else if (obj.type == PLANE)
+	//	return (((t_plane*)obj.obj)->norm);
+	//else 
+	//{
+		vec.arr[0] = (update_r(-1, obj, vec_sum(point, new_vec3(e, -e, -e)), objs) - k);
+		vec.arr[1] = (update_r(-1, obj, vec_sum(point, new_vec3(-e, e, -e)), objs) - k);
+		vec.arr[2] = (update_r(-1, obj, vec_sum(point, new_vec3(-e, -e, e)), objs) - k);
+		vec.arr[3] = (update_r(-1, obj, vec_sum(point, new_vec3(e, e, e)), objs) - k);
+		return(vec_norm(vec_sum(vec_dotdec(new_vec3(e, -e, -e), vec.arr[0]),
+						vec_sum(vec_dotdec(new_vec3(-e, e, -e), vec.arr[1]),
+						vec_sum(vec_dotdec(new_vec3(-e, -e, e), vec.arr[2]),
+						vec_dotdec(new_vec3(e, e, e), vec.arr[3]))))));
+	//}
 }
 
 t_point_data	crate_point_data(t_vec norm,
@@ -78,7 +80,7 @@ t_point_data	raymarching(t_scene objs, t_vec vec,
 			r = update_r(r, objs.objs[counter], next_point, objs);
 			if (r < accuracy.delta && r != -1)
 				return (crate_point_data(get_normal(next_point,
-			objs.objs[counter], objs), objs.objs + counter, next_point, new_vec0()));
+			objs.objs[counter], objs, r), objs.objs + counter, next_point, new_vec0()));
 		}
 		next_point = vec_sum(next_point, vec_dotdec(vec, r));
 	}

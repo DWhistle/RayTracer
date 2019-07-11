@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/10 21:45:23 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/07/11 21:28:03 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 
 #define WIN_X   500
 #define WIN_Y   500
-#define WIN_W   800
-#define WIN_H   800
+#define WIN_W   600
+#define WIN_H   600
 int    print_error(int errnum)
 {
     if (errnum == 1)
@@ -170,7 +170,7 @@ int     render(SDL_Window *window)
 	t_plane plane6;
 	t_plane plane7;
 	t_cylinder cylinder;
-	t_tor	tor;
+	t_cone	tor;
 	t_scene scene;
 	scene.cam = new_vec3(0, 0, 0);
 	scene.number_objs = 9;
@@ -189,9 +189,9 @@ int     render(SDL_Window *window)
 	l1.point = new_vec3(100, 0, 200);
 	l1.r = 45;
 	circle.r = 60;
-	circle.point = new_vec3(0, -160, 400);
+	circle.point = new_vec3(0, 0, 3000);
 	circle2.r = 100;
-	circle2.point = new_vec3(0, 0, 400);
+	circle2.point = new_vec3(0, 0, 100);
 	plane.norm = vec_norm(new_vec3(0, -1, -1));
 	plane.point = new_vec3(0, 0, 700);
 	plane2.norm = vec_norm(new_vec3(-1, -1, 0));
@@ -205,13 +205,13 @@ int     render(SDL_Window *window)
 	plane6.norm = vec_norm(new_vec3(0, -1, 0));
 	plane6.point = new_vec3(0, 210, 0);
 	plane7.norm = vec_norm(new_vec3(0, 1, 1));
-	plane7.point = new_vec3(0, 0, 300);
-	cylinder.point = new_vec3(0, 0, 550);
+	plane7.point = new_vec3(0, 0, 200);
+	cylinder.point = new_vec3(0, 0, 400);
 	cylinder.vec = vec_norm(new_vec3(2, 0, 1));
-	cylinder.r = 50;
-	tor.r = 30;
-	tor.plane = plane7;
-	tor.R = 90;
+	cylinder.r = 30;
+	tor.vec = vec_norm(new_vec3(2, 0, 1));
+	tor.angle = 0;
+	tor.point = new_vec3(200, 0, 200);
 	scene.objs[0].obj = &circle;
 	scene.objs[0].type = SPHERE;
 	scene.objs[0].color = new_vec3(180, 120, 256);
@@ -219,7 +219,7 @@ int     render(SDL_Window *window)
 	scene.objs[0].ind = 0;
 	scene.objs[0].refraction = 0;
 	scene.objs[1].obj = &tor;
-	scene.objs[1].type = TOR;
+	scene.objs[1].type = CONE;
 	scene.objs[1].color = new_vec3(0, 0, 255);
 	scene.objs[1].reflection = 0.9;
 	scene.objs[1].ind = 1;
@@ -272,7 +272,7 @@ int     render(SDL_Window *window)
 	scene.lights[1] = l1;
 	scene.lights[2] = l2;
 	t_accuracy accuracy;	
-	accuracy.delta = 0.0001;
+	accuracy.delta = 0.01;
 	accuracy.depth_march = 200;
 	accuracy.depth_pt = 1;
 	accuracy.depth_ref = 0;

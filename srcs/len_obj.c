@@ -1,49 +1,105 @@
 #include "ray_render.h"
 
+double clamp(double f, double s, double t)
+{
+	if (f < s)
+		return (s);
+	else if (f > t)
+		return (t);
+	else
+		return (f);
+}
+
+t_vec vec_mult(t_vec f, t_vec s)
+{
+	return (new_vec4(
+		f.arr[0] * s.arr[0],
+		f.arr[1] * s.arr[1],
+		f.arr[2] * s.arr[2],
+		f.arr[3] * s.arr[3]
+	));
+}
+
+double vec_len2(t_vec p)
+{
+	p = vec_mult(p, p);
+	p = vec_mult(p, p);
+	float a = p.arr[0]  + p.arr[1] + p.arr[2];
+	return pow(a, 1.0/4.0);
+}
+
 double	len_circle(t_vec point, t_sphere *sphere)
 {
-	return (vec_len(vec_sub(point, sphere->point)) - sphere->r);
+	t_vec p = vec_sub(point, sphere->point);
+	point.arr[0] = p.arr[1];
+	point.arr[1] = p.arr[2];
+	point.arr[2] = p.arr[0];
+	return (vec_len(point) - sphere->r);
 }
 
 double	len_cone(t_vec point, t_cone *cone)
 {
+	t_vec	vec;
+	t_vec	veck1;
+	t_vec	veck2;
+	t_vec	ca;
+	t_vec	cb;
+	double s;
+
 	double f;
 
 	point = vec_sub(point, cone->point);
-	point = rot(-0.5, new_vec2(1, 1), point);
-	f = vec_len(new_vec2(point.arr[0], point.arr[1]));
-	return (vec_dotvec(new_vec2(0.7, 0.1), new_vec2(f, point.arr[2])));
+	point = rot(1, new_vec2(1, 0), point);
 
+	vec = new_vec2(vec_len(new_vec2(point.arr[0], point.arr[2])), point.arr[1]);
+	veck1 = new_vec2(20, 10);
+	veck2 = new_vec2(20 - 10, 2.0 * 10);
+	ca = new_vec2(vec.arr[0] - fmin(vec.arr[0], (vec.arr[1] < 0) ? 10 : 20), fabs(vec.arr[1]) - 10);
+	cb = vec_sub(vec, veck1);
+	cb = vec_sum(cb, vec_dotdec(veck2, clamp(vec_dotvec(vec_sub(veck1, vec), veck2) / vec_sqrdist(veck2), 0.0, 1.0)));
+	s = (cb.arr[0] < 0 && ca.arr[1] < 0) ? -1.0 : 1.0;
+	return (s * sqrt(fmin(vec_sqrdist(ca), vec_sqrdist(cb))));
+
+	
+	f = vec_len(new_vec2(point.arr[0], point.arr[1]));
+	return (vec_dotvec(vec_norm(new_vec2(0.7, 0.1)), new_vec2(f, point.arr[2])));
 }	
+
+float onion(float d, float h )
+{
+    return fabsf(d)-h;
+}
 
 double	len_cylinder(t_vec point, t_cylinder *cylinder)
 {
 	t_vec	vec;
 
 	point = vec_sub(point, cylinder->point);
-	point = rot(1, new_vec2(1, 0), point);
+	point = rot(-1, new_vec2(1, 0), point);
+
 	vec = new_vec2(point.arr[0], point.arr[2]);
-	vec = new_vec2(fabs(vec_len(vec)), fabs(point.arr[1]));
-	vec = vec_sub(vec, new_vec2(cylinder->r, 100));
+	vec = new_vec2(vec_len(vec) - 2 * cylinder->r + 0, fabs(point.arr[1]) - 50);
 	double k = fmin(fmax(vec.arr[0], vec.arr[1]),0.0);
 	vec.arr[0] = fmax(vec.arr[0], 0.0);
 	vec.arr[1] = fmax(vec.arr[1], 0.0);
-	return (k + vec_len(vec));
+	return (fabs(k + vec_len(vec)) - 2);
 }
 
 double	len_plane(t_vec point, t_plane *plane)
 {
-	return (fabs(vec_dotvec(point, plane->norm) - vec_dotvec(plane->point, plane->norm)));
+	point = vec_sub(point, plane->point);
+	return (vec_dotvec(point, plane->norm));
 }
 
 double	len_tor(t_vec point, t_tor *tor)
 {
-	t_vec vec;
+	double k;
 
 	point = vec_sub(point, tor->plane.point);
-	point = rot(1, new_vec2(1, 0), point);
-	vec = new_vec2(vec_len(new_vec2(point.arr[0], point.arr[2])) - tor->R, point.arr[1]);
-	return (vec_len(vec) - tor->r);
+	point = rot(0, new_vec2(1, 0), point);
+	point.arr[0] = fabs(point.arr[0]);
+	k = (-1 * point.arr[0] > point.arr[1]) ? vec_dotvec(new_vec2(point.arr[0], point.arr[1]), new_vec2(-1, 1)) : vec_len(new_vec2(point.arr[0], point.arr[1]));
+	return (sqrt(vec_dotvec(point, point) + tor->R * tor->R - 2 * tor->R * k) - tor->r);
 }
 
 double	len_segment(t_segment segment, t_vec point)
