@@ -19,6 +19,7 @@
 #include "libft.h"
 #include <stdio.h>
 #include "parser.h"
+#include "ftui.h"
 
 #define WIN_X   500
 #define WIN_Y   500
@@ -149,17 +150,12 @@ void	render_cl(t_scene scene, int **pixels, t_accuracy accuracy, SDL_Surface *sc
 	free(obj);
 }
 
-int     render(SDL_Window *window)
+int     render(void *window)
 {
-	SDL_Surface		*screen;
-	SDL_Rect		rect;
+	t_rect			screen;
+	int				*pixels;
 
-	rect.x = 100;
-	rect.y = 100;
-	rect.w = 100;
-	rect.h = 100;
-	screen = SDL_GetWindowSurface(window);
-	
+	pixels = ft_get_window_pixels(window, &screen);
 	t_sphere circle;
 	t_sphere circle2;
 	t_plane plane;
@@ -279,16 +275,17 @@ int     render(SDL_Window *window)
 	accuracy.max_dist = 10000;
 	accuracy.rpp = 1;
 	scene.ignore = 0;
-	scene.color = ft_memalloc(sizeof(t_vec) * screen->h * screen->w);
+	scene.color = ft_memalloc(sizeof(t_vec) * screen.h * screen.w);
 	srand(time(NULL));
 	//render_cl(scene, (int**)&(screen->pixels), accuracy, screen);
 	int i = 1;
 	while (i--)
 	{
-		ray_tracing(scene, (int**)&(screen->pixels), accuracy, screen);
+		ray_tracing(scene, (int**)&(pixels), accuracy, &screen);
 		accuracy.depth_pt++;
 	}
-	SDL_UpdateWindowSurface(window);
+	//ft_set_window_pixels(window, pixels, &screen);
+	//SDL_UpdateWindowSurface(window);
 	free(scene.objs);
 	free(scene.lights);
     return (0);
@@ -312,27 +309,54 @@ int		main_loop(SDL_Window *window)
 	return (0);
 }
 
+void	ft_key_func(void *wnd, int n, void *param)
+{
+	(void)param;
+	if (n == 21) // клавиша r
+	{
+		render(wnd);
+	}
+	if (n == FTUI_KEY_ESCAPE)
+	{
+		ft_set_window_quit(wnd, 1);
+	}
+}
+
+void	ft_render(void *wnd, int n, void* param)
+{
+	t_point size;
+
+	size = ft_get_window_size(wnd);
+	(void)wnd;
+	(void)n;
+	(void)param;
+}
+
 int     main(int argc, char **argv)
 {
-    SDL_Window      *window;
-
-    (void)argc;
+	(void)argc;
 	(void)argv;
-	
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-        return (print_error(1));
-    else
-        window = SDL_CreateWindow("Test", WIN_X, WIN_Y, WIN_W, WIN_H,
-        		SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
-    if (window == NULL)
-        return (print_error(2));
-    else
-    {
-    	render(window);
-    }
-    main_loop(window);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+
+    //if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    //    return (print_error(1));
+    //else
+    //    window = SDL_CreateWindow("Test", WIN_X, WIN_Y, WIN_W, WIN_H,
+    //    		SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+    //if (window == NULL)
+    //    return (print_error(2));
+    //else
+    //{
+    //	render(window);
+    //}
+    //main_loop(window);
+    //SDL_DestroyWindow(window);
+    //SDL_Quit();
+	t_list	*list = ft_libui_init();
+	t_rect	r = ft_new_rect(WIN_X, WIN_Y, WIN_W, WIN_H);
+	add_window((void**)&list, r, 0x00000000, "Ray Tracer v1.0");
+	set_event_function(list->content, FT_EVENT_RENDER, ft_render, ft_get_window_pixels(list->content, NULL));
+	set_event_function(list->content, FT_EVENT_KEYPRESS, ft_key_func, NULL);
+	ft_mainloop(list);
     return (0);
 }
 

@@ -18,7 +18,7 @@ static int		set_window_event(t_window *wnd, t_event_type eventtype,
 			t_windowevent_func func, void *param)
 {
 	if (eventtype == FT_EVENT_DEFAULT)
-		wnd->windowfunc = func;
+		wnd->defaultfunc = func;
 	else if (eventtype == FT_EVENT_WINDOWFUNC)
 		wnd->windowfunc = func;
 	else if (eventtype == FT_EVENT_BEFORECLOSE)

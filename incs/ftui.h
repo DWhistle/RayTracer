@@ -82,6 +82,7 @@ void			ft_set_window_size(void *wnd, int w, int h);
 void			ft_set_window_color(void *wnd, unsigned int color);
 void			ft_set_window_title(void *wnd, char const *title);
 void			ft_set_window_quit(void *wnd, int quit);
+void			ft_set_window_pixels(void *wnd, int *pxls, t_rect *rect);
 t_point			ft_get_window_position(void *wnd);
 t_point			ft_get_window_size(void *wnd);
 unsigned int	ft_get_window_color(void *wnd);

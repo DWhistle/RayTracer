@@ -9,26 +9,43 @@ include_directories(libs/SDL2/include)
 find_library(GL_LIB GL
         PATH
         /)
+
+find_library(CL_LIB OpenCL
+        PATH
+        /)
+
 find_library(SDL_LIB SDL2
         PATH
         libs/SDL2/lib)
+
 find_library(FT_LIB ft
         PATH
         libs/libft)
 
+find_library(UI_LIB ui
+        PATH
+        libs/libui)
+
 add_compile_options(-Wall -Wextra -Werror)
-link_libraries(${SDL_LIB} ${FT_LIB})
+link_libraries(${SDL_LIB} ${FT_LIB} ${CL_LIB} ${UI_LIB})
 
 add_executable(rtv1
-       # srcs/parser.c
-        srcs/ray_tracing.c
-        srcs/antialiasing.c
-        srcs/path_tracing.c
+        srcs/main.c
         srcs/raymarching.c
-        srcs/reflaction.c
-        srcs/len_obj.c
-        srcs/vector.c
-        srcs/sphere.c
         srcs/vec_mul.c
         srcs/vec_sum.c
-        srcs/main.c)
+        srcs/vector.c
+        srcs/ray_tracing.c
+        srcs/antialiasing.c
+        srcs/len_obj.c
+        srcs/ft_opencl_files.c
+        srcs/ft_opencl_func.c
+        srcs/ft_opencl_params.c
+        srcs/quaternion_1.c
+        srcs/quaternion_2.c
+        srcs/light.c
+        srcs/reflaction.c
+        srcs/transparency.c
+        srcs/parser.c
+        srcs/get_next_line.c
+        )

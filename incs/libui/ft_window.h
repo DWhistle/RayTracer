@@ -43,6 +43,7 @@ typedef	struct			s_window {
 	t_windowevent_func	mousedown;
 	t_windowevent_func	mouseup;
 	t_windowevent_func	beforeclose;
+	t_windowevent_func	defaultfunc;
 	t_windowevent_func	windowfunc;
 	t_windowevent_func	renderfunc;
 	t_windowevent_func	tickfunc;

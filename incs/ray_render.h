@@ -5,9 +5,10 @@
 # include "libft.h"
 # include <math.h>
 #include <quat.h>
+# include "ftui.h"
 
 t_point_data   	path_tracing(t_scene scene, t_vec vec, t_accuracy accuracy, t_vec point);
-void            ray_tracing(t_scene scene, int **pixel, t_accuracy accuracy, SDL_Surface *screen);
+void            ray_tracing(t_scene scene, int **pixel, t_accuracy accuracy, t_rect *screen);
 t_vec           antialiasing(t_scene scene, double x, double y, t_accuracy accuracy);
 double          len_circle(t_vec point, t_sphere *sphere);
 double          len_cone(t_vec point, t_cone *cone);
