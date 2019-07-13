@@ -19,7 +19,7 @@ t_point_data    ray_render(t_scene scene, t_vec point, t_accuracy accuracy);
 t_point_data    raymarching(t_scene objs, t_vec vec, t_accuracy accuracy, t_vec point);
 t_vec			get_normal(t_vec point, t_obj obj, t_scene objs, double k);
 double          light_render(t_scene objs, t_point_data point_data, t_vec n);
-double          update_r(double r, t_obj new_obj, t_vec point, t_scene objs);
+double          update_r(double r, t_obj *o, t_obj new_obj, t_vec point, t_scene objs);
 t_vec    lightt(t_scene objs, t_vec vec,
 							t_accuracy accuracy);
 t_vec   transparency(t_vec vec, t_point_data point);
