@@ -1,4 +1,5 @@
 #include "ray_render.h"
+#include "ftui.h"
 
 t_vec	cartoon(t_vec color)
 {
@@ -72,7 +73,7 @@ int		*motion_blur(int *pixels, int w, int h)
 }
 
 void	ray_tracing(t_scene scene, int **pixel,
-					t_accuracy accuracy, SDL_Surface *screen)
+					t_accuracy accuracy, t_rect *screen)
 {
 	int			x;
 	int			y;
@@ -85,8 +86,8 @@ void	ray_tracing(t_scene scene, int **pixel,
 		x = screen->w;
 		while (x--)
 		{
-			color = antialiasing(scene, x - screen->w / 2,
-			y - screen->h / 2, accuracy);
+			color = antialiasing(scene, x - screen->w / 2.0,
+			y - screen->h / 2.0, accuracy);
 			if (color.arr[0] > 255)
 			{
 				color.arr[1] += color.arr[0] - 255;
@@ -106,8 +107,8 @@ void	ray_tracing(t_scene scene, int **pixel,
 				color.arr[0] = 255;
 			scene.color[x + screen->w * y] = vec_sum(scene.color[x + screen->w * y], color);
 			color = vec_dotdec(scene.color[x + screen->w * y], 1.0 / accuracy.depth_pt);
-			(*pixel)[x + screen->w * y] = (int)(color.arr[0]) * 256 *
-			256 + (int)(color.arr[1]) * 256 + (int)(color.arr[2]);
+			(*pixel)[x + screen->w * y] = (int)(color.arr[0]) << 16 |
+					(int)(color.arr[1]) << 8 | (int)(color.arr[2]) | 0xff << 24;
 		}
 	}
 }

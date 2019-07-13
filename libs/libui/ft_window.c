@@ -106,3 +106,13 @@ int			*ft_get_window_pixels(void *wnd, t_rect *rect)
 	}
 	return (w->sdl_surface->pixels);
 }
+
+void		ft_set_window_pixels(void *wnd, int *pxls, t_rect *rect)
+{
+	t_window	*w;
+
+	w = (t_window*)wnd;
+	if (!wnd)
+		return ;
+	ft_memcpy(w->sdl_surface->pixels, pxls, sizeof(int) * rect->w * rect->h);
+}

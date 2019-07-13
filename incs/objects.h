@@ -16,6 +16,8 @@ enum
 	CONE = 4,
 	TOR = 5,
 	MOBIUS = 6,
+	BOX = 7,
+	CROSS = 8,
 	DIRECT = 1,
 	AMBIENT = 2,
 	POINT = 3
@@ -149,5 +151,18 @@ typedef struct	s_mobius
 	t_vec 		vec;
 	t_vec		norm;
 }				t_mobius;
+
+typedef struct	s_box
+{
+	t_vec		point;
+	t_vec		options;
+}				t_box;
+
+typedef struct	s_cross
+{
+	t_vec		point;
+	t_vec		options;
+}				t_cross;
+
 
 #endif

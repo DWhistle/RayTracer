@@ -153,4 +153,58 @@ double	len_mobius(t_vec point, t_mobius *mobius)
 	return (len_segment(segment, point));
 }
 
+double len_box(t_vec point, t_box *box)
+{
+	t_vec d;
 
+	point = vec_sub(point, box->point);
+	//point = rot(-1, new_vec2(1, 1), point);
+
+	d = new_vec3(fabs(point.arr[0]), fabs(point.arr[1]), fabs(point.arr[2]));
+	d = vec_sub(d, box->options);
+	d = new_vec3(fmax(d.arr[0], 0), fmax(d.arr[1], 0), fmax(d.arr[2], 0));
+	return(vec_len(d) + fmin(fmax(d.arr[0], fmax(d.arr[1], d.arr[2])), 0));
+}
+
+double len_cross (t_vec point, t_cross *cross)
+{
+	double da;
+	double db;
+	double dc;
+	t_box	box;
+
+	//point = vec_sub(point, cross->point);
+	//point = rot(1, new_vec2(1, 1), point);
+	box.point = new_vec0();
+	box.options = vec_dotdec(cross->options, 1.0/3.0);
+	da = len_box(new_vec2(point.arr[0], point.arr[1]), &box);
+	db = len_box(new_vec2(point.arr[1], point.arr[2]), &box);
+	dc = len_box(new_vec2(point.arr[2], point.arr[0]), &box);
+	return (fmin(da, fmin(db, dc)));
+}
+
+double map(t_vec point, t_cross *cross)
+{
+	t_box	box;
+
+	box.point = new_vec0();
+	box.options = cross->options;
+
+	point = vec_sub(point, cross->point);
+	point = rot(-1, new_vec2(1, 0), point);
+	double d = len_box(point, &box);
+	double s = 1;
+	for (int m = 0; m < 1; m++)
+	{
+		t_vec a = vec_dotdec(point, s);
+		a.arr[0] = fabs(1 - fabs(fmod(a.arr[0], 2) - 1) * 3);
+		a.arr[1] = fabs(1 - fabs(fmod(a.arr[1], 2) - 1) * 3);
+		a.arr[2] = fabs(1 - fabs(fmod(a.arr[2], 2) - 1) * 3);
+		s *= 3;
+		cross->options = a;
+		double c = (len_cross(point, cross) - 1)/s;
+		if (c > d)
+			d = c;
+	}
+	return(d);
+}

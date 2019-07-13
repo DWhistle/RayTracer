@@ -38,20 +38,20 @@ int				add_window(void **libui, t_rect rect,
 void			*ft_libui_init(void)
 {
 	t_list		*list;
-	t_rect		w_r;
+	// t_rect		w_r;
 
 	if (SDL_Init(SDL_INIT_VIDEO))
 		ft_putendl(SDL_GetError());
 	list = NULL;
-	w_r.x = SDL_WINDOWPOS_UNDEFINED;
-	w_r.y = SDL_WINDOWPOS_UNDEFINED;
-	w_r.w = 300;
-	w_r.h = 768;
-	add_window((void**)&list, w_r, 0x909090ff, "test1");
-	w_r.x = 200;
-	w_r.w = 1024;
-	w_r.h = 768;
-	add_window((void**)&list, w_r, 0xffffffff, "test2");
+	// w_r.x = SDL_WINDOWPOS_UNDEFINED;
+	// w_r.y = SDL_WINDOWPOS_UNDEFINED;
+	// w_r.w = 300;
+	// w_r.h = 768;
+	// add_window((void**)&list, w_r, 0x909090ff, "test1");
+	// w_r.x = 200;
+	// w_r.w = 1024;
+	// w_r.h = 768;
+	// add_window((void**)&list, w_r, 0xffffffff, "test2");
 	return (list);
 }
 

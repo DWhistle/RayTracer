@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/13 16:43:03 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/07/13 20:22:46 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "libft.h"
 #include <stdio.h>
 #include "parser.h"
+#include "ftui.h"
 
 #define WIN_X   500
 #define WIN_Y   500
@@ -149,17 +150,12 @@ void	render_cl(t_scene scene, int **pixels, t_accuracy accuracy, SDL_Surface *sc
 	free(obj);
 }
 
-int     render(SDL_Window *window)
+int     render(void *window)
 {
-	SDL_Surface		*screen;
-	SDL_Rect		rect;
+	t_rect			screen;
+	int				*pixels;
 
-	rect.x = 100;
-	rect.y = 100;
-	rect.w = 100;
-	rect.h = 100;
-	screen = SDL_GetWindowSurface(window);
-	
+	pixels = ft_get_window_pixels(window, &screen);
 	t_sphere circle;
 	t_sphere circle2;
 	t_plane plane;
@@ -172,6 +168,9 @@ int     render(SDL_Window *window)
 	t_cylinder cylinder;
 	t_cone	tor;
 	t_scene scene;
+	t_cross	box;
+	box.point = new_vec3(0, 0, 300);
+	box.options = new_vec3(60, 60, 60);
 	scene.cam = new_vec3(0, 0, 0);
 	scene.number_objs = 9;
 	scene.objs = malloc(sizeof(t_obj) * scene.number_objs);
@@ -179,10 +178,10 @@ int     render(SDL_Window *window)
 	t_light l1;
 	t_light l2;
 	l.type = AMBIENT;
-	l.intensity = 0.0;
+	l.intensity = 0.2;
 	l2.type = POINT;
 	l2.intensity = 0.4;
-	l2.point = new_vec3(-100, 0, 500);
+	l2.point = new_vec3(-100, 0, 300);
 	l2.r = 10;
 	l1.type = POINT;
 	l1.intensity = 0.4;
@@ -191,7 +190,7 @@ int     render(SDL_Window *window)
 	circle.r = 60;
 	circle.point = new_vec3(0, 0, 3000);
 	circle2.r = 100;
-	circle2.point = new_vec3(0, 0, 100);
+	circle2.point = new_vec3(0, 0, 1000);
 	plane.norm = vec_norm(new_vec3(0, -1, -1));
 	plane.point = new_vec3(0, 0, 700);
 	plane2.norm = vec_norm(new_vec3(-1, -1, 0));
@@ -206,7 +205,7 @@ int     render(SDL_Window *window)
 	plane6.point = new_vec3(0, 210, 0);
 	plane7.norm = vec_norm(new_vec3(0, 1, 1));
 	plane7.point = new_vec3(0, 0, 200);
-	cylinder.point = new_vec3(0, 0, 400);
+	cylinder.point = new_vec3(0, 0, 4000);
 	cylinder.vec = vec_norm(new_vec3(2, 0, 1));
 	cylinder.r = 30;
 	tor.vec = vec_norm(new_vec3(2, 0, 1));
@@ -218,8 +217,8 @@ int     render(SDL_Window *window)
 	scene.objs[0].reflection = 0;
 	scene.objs[0].ind = 0;
 	scene.objs[0].refraction = 0;
-	scene.objs[1].obj = &tor;
-	scene.objs[1].type = CONE;
+	scene.objs[1].obj = &box;
+	scene.objs[1].type = CROSS;
 	scene.objs[1].color = new_vec3(0, 0, 255);
 	scene.objs[1].reflection = 0.9;
 	scene.objs[1].ind = 1;
@@ -279,16 +278,18 @@ int     render(SDL_Window *window)
 	accuracy.max_dist = 10000;
 	accuracy.rpp = 1;
 	scene.ignore = 0;
-	scene.color = ft_memalloc(sizeof(t_vec) * screen->h * screen->w);
+	scene.color = ft_memalloc(sizeof(t_vec) * screen.h * screen.w);
 	srand(time(NULL));
 	//render_cl(scene, (int**)&(screen->pixels), accuracy, screen);
 	int i = 1;
 	while (i--)
 	{
-		ray_tracing(scene, (int**)&(screen->pixels), accuracy, screen);
+		ray_tracing(scene, (int**)&(pixels), accuracy, &screen);
+		printf("%f\n", 0.111);
 		accuracy.depth_pt++;
 	}
-	SDL_UpdateWindowSurface(window);
+	//ft_set_window_pixels(window, pixels, &screen);
+	//SDL_UpdateWindowSurface(window);
 	free(scene.objs);
 	free(scene.lights);
     return (0);
@@ -312,27 +313,54 @@ int		main_loop(SDL_Window *window)
 	return (0);
 }
 
+void	ft_key_func(void *wnd, int n, void *param)
+{
+	(void)param;
+	if (n == 21) // клавиша r
+	{
+		render(wnd);
+	}
+	if (n == FTUI_KEY_ESCAPE)
+	{
+		ft_set_window_quit(wnd, 1);
+	}
+}
+
+void	ft_render(void *wnd, int n, void* param)
+{
+	t_point size;
+
+	size = ft_get_window_size(wnd);
+	(void)wnd;
+	(void)n;
+	(void)param;
+}
+
 int     main(int argc, char **argv)
 {
-    SDL_Window      *window;
-
-    (void)argc;
+	(void)argc;
 	(void)argv;
-	
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-        return (print_error(1));
-    else
-        window = SDL_CreateWindow("Test", WIN_X, WIN_Y, WIN_W, WIN_H,
-        		SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
-    if (window == NULL)
-        return (print_error(2));
-    else
-    {
-    	render(window);
-    }
-    main_loop(window);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+
+    //if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    //    return (print_error(1));
+    //else
+    //    window = SDL_CreateWindow("Test", WIN_X, WIN_Y, WIN_W, WIN_H,
+    //    		SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+    //if (window == NULL)
+    //    return (print_error(2));
+    //else
+    //{
+    //	render(window);
+    //}
+    //main_loop(window);
+    //SDL_DestroyWindow(window);
+    //SDL_Quit();
+	t_list	*list = ft_libui_init();
+	t_rect	r = ft_new_rect(WIN_X, WIN_Y, WIN_W, WIN_H);
+	add_window((void**)&list, r, 0x00000000, "Ray Tracer v1.0");
+	set_event_function(list->content, FT_EVENT_RENDER, ft_render, ft_get_window_pixels(list->content, NULL));
+	set_event_function(list->content, FT_EVENT_KEYPRESS, ft_key_func, NULL);
+	ft_mainloop(list);
     return (0);
 }
 

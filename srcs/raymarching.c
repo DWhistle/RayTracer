@@ -23,6 +23,10 @@ double			update_r(double r, t_obj *o, t_obj new_obj, t_vec point, t_scene objs)
 		len = len_tor(point, new_obj.obj);
 	else if (new_obj.type == MOBIUS)
 		len = len_mobius(point, new_obj.obj);
+	else if (new_obj.type == BOX)
+		len = len_box(point, new_obj.obj);
+	else if (new_obj.type == CROSS)
+		len = map(point, new_obj.obj);
 	if (r == -1 || len < r)
 	{
 		r = len;
@@ -33,7 +37,7 @@ double			update_r(double r, t_obj *o, t_obj new_obj, t_vec point, t_scene objs)
 
 t_vec			get_normal(t_vec point, t_obj obj, t_scene objs, double k)
 {
-	double e = 0.1;
+	double e = 0.000005;
 	t_vec		vec;
 	t_obj		o;
 
@@ -83,10 +87,10 @@ t_point_data	raymarching(t_scene objs, t_vec vec,
 		while (counter--)
 		{
 			r = update_r(r, &o, objs.objs[counter], next_point, objs);
-		}
-		if (r < accuracy.delta)
+			if (r < accuracy.delta)
 			return (crate_point_data(get_normal(next_point,
 			o, objs, r), objs.objs + counter, next_point, new_vec0()));
+		}
 		next_point = vec_sum(next_point, vec_dotdec(vec, r));
 	}
 	return (crate_point_data(new_vec0(), 0, new_vec0(), new_vec0()));
