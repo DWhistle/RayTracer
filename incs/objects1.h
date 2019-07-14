@@ -1,4 +1,4 @@
-	#ifndef OBJECT_H
+#ifndef OBJECT_H
 # define OBJECT_H
 
 #ifndef __OPENCL_C_VERSION__
@@ -14,8 +14,6 @@ enum
 	PLANE = 2,
 	CYLINDER = 3,
 	CONE = 4,
-	TOR = 5,
-	MOBIUS = 6,
 	DIRECT = 1,
 	AMBIENT = 2,
 	POINT = 3
@@ -33,7 +31,6 @@ typedef struct s_obj2
 	int		ind;
 	double	reflection;
 	t_vec	color;
-	double	refraction;
 }               t_obj2;
 
 typedef struct s_obj
@@ -43,7 +40,6 @@ typedef struct s_obj
 	int		ind;
 	double	reflection;
 	t_vec	color;
-	double	refraction;
 }               t_obj;
 
 typedef struct	s_cylinder
@@ -74,33 +70,23 @@ typedef struct	s_plane
 
 typedef struct	s_light
 {
-	int		type;
 	double	intensity;
-	double	r;
-	t_vec	point;
-	t_vec	vec;
+	int		ind;
 }				t_light;
 
 typedef struct	s_scene
 {
-	t_obj		*objs;
 	int			number_objs;
 	int			number_lights;
 	t_vec		cam;
-	t_light		*lights;
-	t_obj		*ignore;
-	t_vec		*color;
-	int			ce;
-	int			bm;
-	int			neg;
-	int			ster;
-	int			sepia;
+	__global t_light		*lights;
+	__global t_obj2		*ignore;
 }				t_scene;
 
 typedef struct	s_point_data
 {
 	t_vec norm;
-	t_obj *obj;
+	__global t_obj2 *obj;
 	t_vec point;
 	t_vec color;
 }				t_point_data;
@@ -135,19 +121,5 @@ typedef struct	s_segment
 	t_vec		b;
 }				t_segment;
 
-typedef struct	s_tor
-{
-	t_plane		plane;
-	double		R;
-	double		r;
-}				t_tor;
-
-typedef struct	s_mobius
-{
-	t_plane		plane;
-	double		R;
-	t_vec 		vec;
-	t_vec		norm;
-}				t_mobius;
 
 #endif

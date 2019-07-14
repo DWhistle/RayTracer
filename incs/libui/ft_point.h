@@ -1,21 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_types.h                                         :+:      :+:    :+:   */
+/*   ft_point.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgreenfe <hgreenfe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/19 18:27:35 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/06/04 20:55:18 by kmeera-r         ###   ########.fr       */
+/*   Created: 2019/06/09 17:37:35 by hgreenfe          #+#    #+#             */
+/*   Updated: 2019/06/09 17:37:35 by hgreenfe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_TYPES_H
-# define FT_TYPES_H
+#ifndef FT_POINT_H
+# define FT_POINT_H
+# include "ftui.h"
 
-//#define INT_MIN 0x80000000
-//#define INT_MAX 0x7fffffff
-
-typedef	double ft_decimal;
-
-#endif //FT_TYPES_H
+#endif
