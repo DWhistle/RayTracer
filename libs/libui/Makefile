@@ -6,7 +6,7 @@
 #    By: hgreenfe <hgreenfe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/17 20:30:06 by hgreenfe          #+#    #+#              #
-#    Updated: 2019/07/14 16:00:55 by hgreenfe         ###   ########.fr        #
+#    Updated: 2019/07/14 16:17:08 by hgreenfe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ LIBUIDIR = ./
 LIBDIR = ../libft/
 
 INCDIR1 = incs/
-INCSDL = $(LIBUIDIR)/SDL/include
+INCSDL = SDL/SDL2/include
 
 PATH_SDL := $(addsuffix /SDL, $(shell pwd))
 SDL :=  $(PATH_SDL)/SDL2/build/.libs
@@ -118,10 +118,3 @@ fclean: clean
 	$(RM) $(RMFLAGS) $(NAME)
 
 re: fclean all
-
-
-
-
-
-
-
