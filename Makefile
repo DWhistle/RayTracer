@@ -19,7 +19,7 @@ INCDIR1 = incs/
 LIBDIR = libs/libft
 LIBUIDIR = libs/libui
 INCDIR2 = $(LIBUIDIR)/incs
-SDLDIR = $(LIBUIDIR)/SDL/lib
+SDLDIR = $(LIBUIDIR)/SDL/SDL2/build/.lib
 LIBS = ft ui
  #SDL2_image
 # used applications
