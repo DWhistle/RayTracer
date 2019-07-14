@@ -16,9 +16,9 @@ MY_DIR = $(shell pwd)
 SRCDIR = srcs/
 OBJDIR = objs/
 INCDIR1 = incs/
-INCDIR2 = libs/SDL/include
 LIBDIR = libs/libft
 LIBUIDIR = libs/libui
+INCDIR2 = $(LIBUIDIR)/incs
 SDLDIR = $(LIBUIDIR)/SDL/lib
 LIBS = ft ui
  #SDL2_image
