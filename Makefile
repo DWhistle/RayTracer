@@ -11,8 +11,8 @@
 # **************************************************************************** #
 
 # used variables
-
-NAME = RT
+NAME=RT
+MY_DIR = $(shell pwd)
 SRCDIR = srcs/
 OBJDIR = objs/
 INCDIR1 = incs/
@@ -86,8 +86,11 @@ $(LIBDIR): $(OBJDIR)
 $(OBJDIR)%.o: $(SRCDIR)%.c
 	$(CC) $(CCFLAGS) -c -o $@ $<
 
-$(SDL):
-	cd $(PATH_SDL)/SDL2; ./configure --prefix=$(PATH_SDL)
+sdl_config:
+	touch sdl_config
+	cd $(PATH_SDL)/SDL2; ./autogen.sh && ./configure --prefix=$(PATH_SDL); cd $(MY_DIR)
+
+$(SDL): sdl_config
 	make -sC $(PATH_SDL)/SDL2 install
 
 $(NAME):  $(LIBDIR) $(SDL) $(FULL_OBJS)
@@ -98,7 +101,7 @@ clean: clean_sdl
 	make -C $(LIBUI) clean
 	$(RM) $(RMFLAGS) $(FULL_OBJS)
 
-clean_sdl:
+clean_sdl: sdl_config
 	echo $(PATH_SDL)
 	make -C $(PATH_SDL)/SDL2 clean
 	
