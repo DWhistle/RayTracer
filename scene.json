@@ -4,6 +4,12 @@
     "negative":0,
     "stereoscopy":0,
     "sepia":0,
+    "color":
+    {
+      "x":180,
+      "y":120,
+      "z":256
+    },
     "sphere1":
     {
       "color":

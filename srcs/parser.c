@@ -1,16 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/19 15:49:37 by bturcott          #+#    #+#             */
-/*   Updated: 2019/06/29 17:30:17 by kmeera-r         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "parser.h"
+
 
 t_json *create_json_obj(void)
 {
@@ -20,12 +10,11 @@ t_json *create_json_obj(void)
 		return (NULL);
 	if (!(obj->key = (char **)malloc(sizeof(char *) * (MAX_FIELDS + 1))))
 		return (NULL);
-	if (!(obj->value = malloc(sizeof(void *) * (MAX_FIELDS + 1))))
+	if (!(obj->value = malloc(sizeof(t_values) * (MAX_FIELDS + 1))))
 		return (NULL);
 	if (!(obj->type = (int *)malloc(sizeof(int) * (MAX_FIELDS + 1))))
 		return (NULL);
 	obj->key[MAX_FIELDS] = NULL;
-	obj->value[MAX_FIELDS] = NULL;
 	return(obj);
 }
 
@@ -36,7 +25,19 @@ int escape(t_parser *json)
 	return (0);
 }
 
-void parse_key(t_parser *json, char **key)
+
+void print_values(t_values val, int type){
+	if (type == FLOAT)
+		printf("%f   is a value\n", val.float_value);
+	else if (type == INT)
+		printf("%d   is a value\n", val.int_value);
+	else if (type == STRING)
+		printf("%s   is a value\n", val.string_value);
+	else if (type == JSON)
+		printf("JSON %p\n", (void*)&val);
+	printf("================\n");
+}
+int parse_key(t_parser *json, char **key)
 {
 	int temp;
 
@@ -53,86 +54,51 @@ void parse_key(t_parser *json, char **key)
                     {
 					    *key = ft_strsub(json->f,\
 					    temp + 1, json->i - temp - 1);
-					    return ;
+						//printf("%s\n", *key);
+					    return (1);
                     }
 				}
 			}
 		json->i++;
 	}
-}
-
-int parse_int_array(t_parser *json, void **value, int len)
-{
-	int i;
-	int *array;
-
-	i = 0;
-	if (!(array = (int *)ft_memalloc(sizeof(int) * (len + 1))))
-		return (-1);
-	
-	while (json->f[json->i] != ']')
-	{
-		if (json->f[json->i] && ft_isdigit(json->f[json->i]))
-		{
-			array[i] = ft_atoi(json->f + json->i);
-			while (json->f[json->i] && ft_isdigit(json->f[json->i]))
-				json->i++;
-			i++;
-		}
-		if (json->f[json->i] != ']')
-			json->i++;
-	}
-	array[i] = INT_EOF;
-	*value = array; //TODO types
 	return (0);
 }
 
-void sanitize_string_array(char **array)
+int parse_float(t_parser *json, t_values *value)
 {
-    int i;
-    char *temp;
+    double ret;
+    double precision;
 
-    i = 0;
-    while (array[i])
-    {
-        temp = ft_strtrim(array[i]);
-        free(array[i]);
-        array[i] = ft_strsub(temp, 1, ft_strlen(temp) - 2);
-        free(temp);
-        i++;
-    }
-}
-
-void parse_char_array(t_parser *json, void **value)
-{
-    int before;
-    char *temp;
-
-    before = json->i;
-    while (json->f[json->i] && json->f[json->i] != ']' && !escape(json))
+    precision = 0.1;
+    ret = 0.0;
+    //printf("%c\n", json->f[json->i]);
+    while (json->f[json->i] && !ft_isdigit(json->f[json->i]) && json->f[json->i] != '-')
         json->i++;
-    //printf("%d      %d\n", json->i, before);
-    //printf("%c, %c\n", json->f[json->i], json->)
-    temp = ft_strsub(json->f, before + 1, json->i - before - 1);
-  // printf("%d\n", json->quant);
-    *value = ft_strsplit(temp, ',');
-    sanitize_string_array(*value);
-//    for (int i = 0; ((char**)(*value))[i]; i++)
-//        printf("%s ", ((char**)(*value))[i]);
-    free(temp);
-	return ;
+    //printf("%c\n", json->f[json->i]);
+    ret = ft_atoi(json->f + json->i);
+	precision = (ret > 0) ? precision : -precision;
+    //printf("%f\n\n", *ret);
+    while (json->f[json->i] && json->f[json->i] != '.')
+        json->i++;
+    while (json->f[++json->i] && ft_isdigit(json->f[json->i])) {
+        ret += (json->f[json->i] - 48) * precision;
+        precision *= 0.1;
+    }
+    //printf("%f\n\n", ret);
+    (*value).float_value = ret;
+	return (1);
 }
 
-int parse_int(t_parser *json, void **value)
+int parse_int(t_parser *json, t_values *value)
 {
-	int *val;
 	
-	if (!(val = ft_memalloc(sizeof(int))))
-		return (0);
-	val[0] = ft_atoi(json->f + json->i);
-	while (ft_isdigit(json->f[json->i]))
-		json->i++;
-	*value = val;
+	// if (!(val = ft_memalloc(sizeof(int))))
+	// 	return (0);
+	// val[0] = ft_atoi(json->f + json->i);
+	// while (ft_isdigit(json->f[json->i]))
+	// 	json->i++;
+	(*value).int_value = ft_atoi(json->f + json->i);
+	//rintf("%d\n", (*value).int_value);
 	return (1);
 }
 
@@ -150,176 +116,71 @@ int is_float(t_parser *json)
     return (0);
 }
 
-int *scan_array(t_parser *json)
+
+
+int parse_value(t_parser *json, t_values *value, int **type, int i)
 {
-	int i;
-	int params[2];
-	
-	i = json->i;
-	params[0] = 1;
-	params[1] = sizeof(int);
-	while (json->f[json->i] && json->f[json->i] != ']')
-	{
-		json->i++;
-		if (json->f[json->i] == '"' && (params[1] = sizeof(char)))
-			while (json->f[json->i] && json->f[json->i] != '"' && !escape(json))
-				json->i++;
-		if (json->f[json->i] == ',')
-			params[0]++;
-	}
-	json->i = i;
-	return ((int []){params[0], params[1]});
-}
-
-void parse_float(t_parser *json, void **value)
-{
-    float *ret;
-    float precision;
-
-    precision = 0.1;
-    ret = malloc(sizeof(float));
-    *ret = 0.1;
-    //printf("%c\n", json->f[json->i]);
-    while (json->f[json->i] && !ft_isdigit(json->f[json->i]))
-        json->i++;
-    //printf("%c\n", json->f[json->i]);
-    *ret = ft_atoi(json->f + json->i);
-    //printf("%f\n\n", *ret);
-    while (json->f[json->i] && json->f[json->i] != '.')
-        json->i++;
-    while (json->f[++json->i] && ft_isdigit(json->f[json->i])) {
-        *ret += (json->f[json->i] - 48) * precision;
-        precision *= 0.1;
-    }
-    //printf("%f\n\n", *ret);
-    *value = ret;
-}
-
-float parse_float_to_array(t_parser *json)
-{
-    float value;
-    float precision;
-
-    precision = 0.1;
-    value = 0.1;
-
-    while (json->f[json->i] && !ft_isdigit(json->f[json->i]))
-        json->i++;
-    value = ft_atoi(json->f + json->i);
-   // printf("%f\n", value);
-    while (json->f[json->i] && json->f[json->i] != '.')
-        json->i++;
-    while (json->f[++json->i] && ft_isdigit(json->f[json->i])) {
-        value += (json->f[json->i] - 48) * precision;
-        precision *= 0.1;
-    }
-    return (value);
-}
-
-void parse_float_array(t_parser *json, void **value, int len)
-{
-    float *array;
-    int i;
-
-    i = 0;
-    array = (float *)ft_memalloc(sizeof(float) * (len + 1));
-
-    while (json->f[json->i] && json->f[json->i] != ']')
+	while (json->f[json->i])
     {
-        json->i++;
-        if (json->f[json->i] && ft_isdigit(json->f[json->i])) {
-            array[i] = parse_float_to_array(json);
-            //printf("%f\n", array[i]);
-            i++;
+        if (json->f[json->i] == '{')
+        {
+            ((*type)[i]) = JSON;
+            value[i].json_value = create_json_obj();
+           // printf("MAKE JSOOOOOOOOON\n");
+            return(make_json(json, value[i].json_value));
         }
-
+        else if (json->f[json->i] == '"' && ((*type)[i] = STRING))
+            return (parse_key(json, &(value[i].string_value)));
+        // else if (json->f[json->i] == '[')
+        //     parse_array(json, value, type);
+         else if (ft_isdigit(json->f[json->i]) || json->f[json->i] == '-')
+         {
+            if (is_float(json) && ((*type)[i] = FLOAT))
+                return (parse_float(json, &(value[i])));
+            else if (((*type)[i] = INT))
+                return (parse_int(json, &(value[i])));
+        }
+        json->i++;
     }
-    array[i] = FLOAT_EOF;
-    // for (int m = 0; array[m] != -60000000.0; m++)
-    //     printf("%f ", array[m]);
-    *value = array;
-}
-/*
-** params[0] - array length
-** params[1] - array type(1 for char, 4 for int)
-*/
-
-int parse_array(t_parser *json, void **value, int **type)
-{
-	int *params;
-	
-	params = scan_array(json);
-	if (params[1] == sizeof(int) && ((*type)[json->quant] = ARRAY_INT))
-    {
-	    if (is_float(json))
-	        parse_float_array(json, value, params[0]);
-		else
-		    parse_int_array(json, value, params[0]);
-    }
-	else if (params[1] == sizeof(char) && ((*type)[json->quant] = ARRAY_STRING))
-		parse_char_array(json, value);
-	else
-		value = NULL;
-	return (1);
-}
-
-int parse_value(t_parser *json, void **value, int **type)
-{
-	//printf("char == %c %d\n", json->f[json->i], json->i);
-	while (json->f[json->i] && json->f[json->i] != '{' && !ft_isdigit(json->f[json->i]) 
-	&& json->f[json->i] != '[' && json->f[json->i] != '"')
-		json->i++;
-	//printf("char == %c %d\n", json->f[json->i], json->i);
-	if (!json->f[json->i])
-		return (-1);
-	else if (json->f[json->i] == '{')
-	{
-        //printf("json!!!!!!!!!!!!!!!\n");
-        ((*type)[json->quant]) = JSON;
-		*value = create_json_obj();
-		make_json(json, *value);
-	}
-	else if (json->f[json->i] == '"' && ((*type)[json->quant] = STRING))
-		parse_key(json, (char **)value);
-	else if (json->f[json->i] == '[')
-		parse_array(json, value, type);
-	else if (ft_isdigit(json->f[json->i]))
-    {
-	    if (is_float(json) && ((*type)[json->quant] = FLOAT))
-            parse_float(json, value);
-	    else if (((*type)[json->quant] = INT))
-	        parse_int(json, value);
-    }
-
 	return (1);	
 }
 
+
+
 int make_json(t_parser *json, t_json *obj)
 {
-	json->quant = 0;
+	int i;   
+	
+	i = 0;
 	while (json->f[json->i] && json->f[json->i] != '}')
 	{
-		if (json->quant > MAX_FIELDS)
+		if (i > MAX_FIELDS)
 			return(-1);
-		parse_key(json, &obj->key[json->quant]);
-		// printf("%d\n", json->i);
-
+		parse_key(json, &obj->key[i]);
+        printf("%s   is a key\n", obj->key[i]);
 		while (json->f[json->i] && json->f[json->i] != ':')
 			json->i++;
-		if (parse_value(json, &obj->value[json->quant], &obj->type) == -1)
+		if (parse_value(json, obj->value, &obj->type, i) == -1)
 			return (1);
-        // printf("key == %s  ", obj->key[json->quant]);
-		// printf("value == %d\n", ((int *)(obj->value[json->quant]))[0]);
-		if (json->f[json->i] && json->f[json->i] != '}')
+			//printf("%p\n", obj->value[i]);
+		print_values(obj->value[i], obj->type[i]);
+        
+        //printf("%c\n", json->f[json->i]);
+		while (json->f[json->i] && json->f[json->i] != ',' && json->f[json->i] != '}')
 			json->i++;
-		//printf("make\n");
-		json->quant++;
+		//printf("\nsymbol at %d %c\n", json->i,json->f[json->i]);
+		i++;
 	}
-	obj->type[json->quant] = 0;
-	obj->value[json->quant] = NULL;
-	obj->key[json->quant] = NULL;
+	// printf("\ncycle left\n");
+	 json->i += (json->f[json->i]) ? 1 : 0;
+	// printf("%s\n\n", json->f + json->i);
+	// printf("%d\n\n", json->i);
+	obj->type[i] = 0;
+	obj->key[i] = NULL;
 	return (1);
 }
+
+
 
 t_list *json_operator(t_parser *json)
 {
@@ -329,35 +190,18 @@ t_list *json_operator(t_parser *json)
 	{
 		if (json->f[json->i] == '{')
 		{
-			json->i++;
-			if (!(obj = create_json_obj()))
+		    json->i++;
+		    if (!(obj = create_json_obj()))
 				return (NULL);
-			//printf("json!!!!\n");
-			make_json(json, obj);
-            //printf("%p\n", json1->value);
-           // printf("%d\n", ((int* )json1->value[1])[0]);
-//			for (int i = 0; obj->type[i]; i++)
-//				if (obj->type[i] == ARRAY_INT)
-//				{
-//
-//						printf("type == %d  key == %s ", obj->type[i], obj->key[i]);
-//						printf("inarr:  ");
-//					for(int j = 0; ((int*)obj->value[i])[j] != -2147483648; j++)
-//						printf("%d ", ((int *)obj->value[i])[j]);
-//						printf("\n");
-//				}
-//			    else if (obj->type[i] == ARRAY_STRING)
-//                    for (int k = 0; ((char**)(obj->value[i]))[k]; k++)
-//                        printf("%s ", ((char**)(obj->value[i]))[k]);
-//				else
-//					printf("type == %d  key == %s  value == %d\n", obj->type[i], obj->key[i], ((int *)obj->value[i])[0]);
-			ft_lstadd(&json->objects, ft_lstnew((void *)obj, sizeof(t_json)));
-			printf("+list\n");
-		}
+		    make_json(json, obj);
+			//printf("%d\n", obj->value[5].json_value->value[0].json_value->value[1].int_value);
+		    ft_lstadd(&json->objects, ft_lstnew((void *)obj, sizeof(t_json)));
+            //printf("%p\n", obj->value[0].json_value->value[0]);
+			//printf("+list\n");
 		
-		json->i++;
+		}
+		json->i += (json->f[json->i]) ? 1 : 0;
 	}
-
 	return json->objects;
 }
 
@@ -379,6 +223,7 @@ char *read_file(int fd){
 	}
 	return (file);
 }
+
 
 t_list *parse_json(char *config_file)
 {

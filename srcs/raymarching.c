@@ -37,7 +37,7 @@ double			update_r(double r, t_obj *o, t_obj new_obj, t_vec point, t_scene objs)
 
 t_vec			get_normal(t_vec point, t_obj obj, t_scene objs, double k)
 {
-	double e = 0.000005;
+	double e = 0.0005;
 	t_vec		vec;
 	t_obj		o;
 

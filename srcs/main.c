@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/13 20:22:46 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/07/17 12:43:30 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,8 +169,8 @@ int     render(void *window)
 	t_cone	tor;
 	t_scene scene;
 	t_cross	box;
-	box.point = new_vec3(0, 0, 300);
-	box.options = new_vec3(60, 60, 60);
+	box.point = new_vec3(0, 0, 15);
+	box.options = new_vec3(1, 1, 1);
 	scene.cam = new_vec3(0, 0, 0);
 	scene.number_objs = 9;
 	scene.objs = malloc(sizeof(t_obj) * scene.number_objs);
@@ -338,23 +338,12 @@ void	ft_render(void *wnd, int n, void* param)
 
 int     main(int argc, char **argv)
 {
+	t_scene	*scene;
+	t_list	*json1;
+	
 	(void)argc;
-	(void)argv;
-
-    //if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    //    return (print_error(1));
-    //else
-    //    window = SDL_CreateWindow("Test", WIN_X, WIN_Y, WIN_W, WIN_H,
-    //    		SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
-    //if (window == NULL)
-    //    return (print_error(2));
-    //else
-    //{
-    //	render(window);
-    //}
-    //main_loop(window);
-    //SDL_DestroyWindow(window);
-    //SDL_Quit();
+    json1 = parse_json(argv[1]);
+	scene = convert_objects(json1->content);
 	t_list	*list = ft_libui_init();
 	t_rect	r = ft_new_rect(WIN_X, WIN_Y, WIN_W, WIN_H);
 	add_window((void**)&list, r, 0x00000000, "Ray Tracer v1.0");

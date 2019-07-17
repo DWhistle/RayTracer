@@ -186,6 +186,9 @@ double len_cross (t_vec point, t_cross *cross)
 double map(t_vec point, t_cross *cross)
 {
 	t_box	box;
+	double da;
+	double db;
+	double dc;
 
 	box.point = new_vec0();
 	box.options = cross->options;
@@ -197,12 +200,15 @@ double map(t_vec point, t_cross *cross)
 	for (int m = 0; m < 1; m++)
 	{
 		t_vec a = vec_dotdec(point, s);
-		a.arr[0] = fabs(1 - fabs(fmod(a.arr[0], 2) - 1) * 3);
-		a.arr[1] = fabs(1 - fabs(fmod(a.arr[1], 2) - 1) * 3);
-		a.arr[2] = fabs(1 - fabs(fmod(a.arr[2], 2) - 1) * 3);
+		a.arr[0] = fabs(1.0 - fabs(fmod(a.arr[0], 2.0) - 1.0) * 3);
+		a.arr[1] = fabs(1.0 - fabs(fmod(a.arr[1], 2.0) - 1.0) * 3);
+		a.arr[2] = fabs(1.0 - fabs(fmod(a.arr[2], 2.0) - 1.0) * 3);
 		s *= 3;
 		cross->options = a;
-		double c = (len_cross(point, cross) - 1)/s;
+		da = fmax(a.arr[0], a.arr[1]);
+		db = fmax(a.arr[1], a.arr[2]);
+		dc = fmax(a.arr[2], a.arr[0]);
+		double c = ((fmin(da, fmin(db, dc))) - 1.0)/s;
 		if (c > d)
 			d = c;
 	}

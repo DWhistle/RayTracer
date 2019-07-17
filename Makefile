@@ -27,7 +27,7 @@ LIBS = ft SDL2
 # used applications
 
 CC = gcc
-CCFLAGS = -g -Wall -Wextra -Werror -pedantic-errors -I $(INCDIR1) -I $(INCDIR2) -O
+CCFLAGS = -g -Wall -Wextra -Werror -pedantic-errors -I $(INCDIR1) -I $(INCDIR2) -O 
 RM = rm
 RMFLAGS = -rf
 
@@ -51,6 +51,7 @@ FILES := main \
 		 transparency \
 		 parser \
 		 get_next_line \
+		 converter
 		 #converter
 
 
