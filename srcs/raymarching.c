@@ -4,10 +4,18 @@
 #include <stdio.h>
 #include "SDL2/SDL.h"
 
+t_vec			moving(t_obj obj, t_vec point)
+{
+	point = vec_sub(point, obj->point);
+	point = rot(obj->angle, obj->rot_vec, point);
+	return (point);
+}
+
 double			update_r(double r, t_obj *o, t_obj new_obj, t_vec point, t_scene objs)
 {
 	double len;
 
+	point = moving(new_obj, point);
 	len = -1;
 	if (objs.ignore && objs.ignore->ind == new_obj.ind)
 		return (r);
@@ -29,6 +37,7 @@ double			update_r(double r, t_obj *o, t_obj new_obj, t_vec point, t_scene objs)
 		len = map(point, new_obj.obj);
 	if (r == -1 || len < r)
 	{
+		//r = max(len, point.arr[1]);
 		r = len;
 		*o = new_obj;
 	}
@@ -37,25 +46,16 @@ double			update_r(double r, t_obj *o, t_obj new_obj, t_vec point, t_scene objs)
 
 t_vec			get_normal(t_vec point, t_obj obj, t_scene objs, double k)
 {
-	double e = 0.0005;
+	double e = 0.0053;
 	t_vec		vec;
 	t_obj		o;
 
-	//if (obj.type == SPHERE)
-	//	return (vec_norm(vec_sub(point, ((t_sphere*)obj.obj)->point)));
-	//else if (obj.type == PLANE)
-	//	return (((t_plane*)obj.obj)->norm);
-	//else 
-	//{
-		vec.arr[0] = (update_r(-1, &o, obj, vec_sum(point, new_vec3(e, -e, -e)), objs) - k);
-		vec.arr[1] = (update_r(-1, &o, obj, vec_sum(point, new_vec3(-e, e, -e)), objs) - k);
-		vec.arr[2] = (update_r(-1, &o, obj, vec_sum(point, new_vec3(-e, -e, e)), objs) - k);
-		vec.arr[3] = (update_r(-1, &o, obj, vec_sum(point, new_vec3(e, e, e)), objs) - k);
-		return(vec_norm(vec_sum(vec_dotdec(new_vec3(e, -e, -e), vec.arr[0]),
-						vec_sum(vec_dotdec(new_vec3(-e, e, -e), vec.arr[1]),
-						vec_sum(vec_dotdec(new_vec3(-e, -e, e), vec.arr[2]),
-						vec_dotdec(new_vec3(e, e, e), vec.arr[3]))))));
-	//}
+	k = 0;
+		vec.arr[0] = (update_r(-1, &o, obj, vec_sum(point, new_vec3(e, 0, 0)), objs) - update_r(-1, &o, obj, vec_sub(point, new_vec3(e, 0, 0)), objs));
+		vec.arr[1] = (update_r(-1, &o, obj, vec_sum(point, new_vec3(0, e, 0)), objs) - update_r(-1, &o, obj, vec_sub(point, new_vec3(0, e, 0)), objs));
+		vec.arr[2] = (update_r(-1, &o, obj, vec_sum(point, new_vec3(0, 0, e)), objs) - update_r(-1, &o, obj, vec_sub(point, new_vec3(0, 0, e)), objs));
+		vec.arr[3] = 0;
+		return(vec_norm(vec));
 }
 
 t_point_data	crate_point_data(t_vec norm,

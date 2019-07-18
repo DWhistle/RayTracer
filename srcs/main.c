@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/17 12:43:30 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/07/17 15:40:21 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ int     render(void *window)
 	t_cone	tor;
 	t_scene scene;
 	t_cross	box;
-	box.point = new_vec3(0, 0, 15);
+	box.point = new_vec3(0, 0, 15000);
 	box.options = new_vec3(1, 1, 1);
 	scene.cam = new_vec3(0, 0, 0);
 	scene.number_objs = 9;
@@ -178,18 +178,18 @@ int     render(void *window)
 	t_light l1;
 	t_light l2;
 	l.type = AMBIENT;
-	l.intensity = 0.2;
+	l.intensity = 0.02;
 	l2.type = POINT;
 	l2.intensity = 0.4;
-	l2.point = new_vec3(-100, 0, 300);
+	l2.point = new_vec3(-100, 0, -300);
 	l2.r = 10;
 	l1.type = POINT;
 	l1.intensity = 0.4;
 	l1.point = new_vec3(100, 0, 200);
 	l1.r = 45;
-	circle.r = 60;
-	circle.point = new_vec3(0, 0, 3000);
-	circle2.r = 100;
+	circle.r = 2;
+	circle.point = new_vec3(0, -4, 10);
+	circle2.r = 1;
 	circle2.point = new_vec3(0, 0, 1000);
 	plane.norm = vec_norm(new_vec3(0, -1, -1));
 	plane.point = new_vec3(0, 0, 700);

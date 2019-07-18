@@ -30,8 +30,8 @@ Kernel configured for up to 4 processors.
 Processor type: x86_64h (Intel x86-64h Haswell)
 Processors active: 0 1 2 3
 Primary memory available: 8.00 gigabytes
-Default processor set: 268 tasks, 1223 threads, 4 processors
-Load average: 2.21, Mach factor: 1.83
+Default processor set: 278 tasks, 1473 threads, 4 processors
+Load average: 3.37, Mach factor: 1.19
 /bin/machine           = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
@@ -1048,7 +1048,7 @@ configure:16657: checking for _strrev
 configure:16657: gcc -o conftest -g -O2 -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "__strrev", referenced from:
-      _main in conftest-47a405.o
+      _main in conftest-d185a6.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:16657: $? = 1
@@ -1160,7 +1160,7 @@ configure:16657: checking for _strupr
 configure:16657: gcc -o conftest -g -O2 -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "__strupr", referenced from:
-      _main in conftest-7d87a8.o
+      _main in conftest-d87501.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:16657: $? = 1
@@ -1272,7 +1272,7 @@ configure:16657: checking for _strlwr
 configure:16657: gcc -o conftest -g -O2 -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "__strlwr", referenced from:
-      _main in conftest-a72202.o
+      _main in conftest-2eb34a.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:16657: $? = 1
@@ -1411,7 +1411,7 @@ configure:16657: checking for itoa
 configure:16657: gcc -o conftest -g -O2 -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "_itoa", referenced from:
-      _main in conftest-e7e7aa.o
+      _main in conftest-5929e0.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:16657: $? = 1
@@ -1526,7 +1526,7 @@ configure:16657: checking for _ltoa
 configure:16657: gcc -o conftest -g -O2 -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "__ltoa", referenced from:
-      _main in conftest-18b775.o
+      _main in conftest-eb5c45.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:16657: $? = 1
@@ -1641,7 +1641,7 @@ configure:16657: checking for _uitoa
 configure:16657: gcc -o conftest -g -O2 -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "__uitoa", referenced from:
-      _main in conftest-979b7a.o
+      _main in conftest-3a4587.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:16657: $? = 1
@@ -1756,7 +1756,7 @@ configure:16657: checking for _ultoa
 configure:16657: gcc -o conftest -g -O2 -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "__ultoa", referenced from:
-      _main in conftest-baecbe.o
+      _main in conftest-36e554.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:16657: $? = 1
@@ -1879,7 +1879,7 @@ configure:16657: checking for _i64toa
 configure:16657: gcc -o conftest -g -O2 -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "__i64toa", referenced from:
-      _main in conftest-1fc74a.o
+      _main in conftest-74873b.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:16657: $? = 1
@@ -1996,7 +1996,7 @@ configure:16657: checking for _ui64toa
 configure:16657: gcc -o conftest -g -O2 -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "__ui64toa", referenced from:
-      _main in conftest-7c912f.o
+      _main in conftest-d61867.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:16657: $? = 1
@@ -2147,7 +2147,7 @@ configure:16657: checking for _stricmp
 configure:16657: gcc -o conftest -g -O2 -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "__stricmp", referenced from:
-      _main in conftest-cd497d.o
+      _main in conftest-4e9e15.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:16657: $? = 1
@@ -2279,7 +2279,7 @@ configure:16657: checking for _strnicmp
 configure:16657: gcc -o conftest -g -O2 -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "__strnicmp", referenced from:
-      _main in conftest-d52737.o
+      _main in conftest-b15118.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:16657: $? = 1
@@ -2430,7 +2430,7 @@ configure:16657: checking for fopen64
 configure:16657: gcc -o conftest -g -O2 -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "_fopen64", referenced from:
-      _main in conftest-7fe245.o
+      _main in conftest-a1164a.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:16657: $? = 1
@@ -2561,7 +2561,7 @@ configure:16657: checking for fseeko64
 configure:16657: gcc -o conftest -g -O2 -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "_fseeko64", referenced from:
-      _main in conftest-cf330d.o
+      _main in conftest-bb2f38.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:16657: $? = 1
@@ -2713,7 +2713,7 @@ configure:16657: checking for getauxval
 configure:16657: gcc -o conftest -g -O2 -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "_getauxval", referenced from:
-      _main in conftest-705c30.o
+      _main in conftest-77ba72.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:16657: $? = 1
@@ -4332,7 +4332,7 @@ conftest.c:153:19: warning: implicit declaration of function 'sem_timedwait' is 
 1 warning generated.
 Undefined symbols for architecture x86_64:
   "_sem_timedwait", referenced from:
-      _main in conftest-ce4a33.o
+      _main in conftest-73d646.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:22914: $? = 1
@@ -4659,7 +4659,7 @@ configure:22981: checking for pthread_set_name_np
 configure:23001: gcc -o conftest -g -O2 -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos  -D_THREAD_SAFE  -Iinclude -I/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/include -idirafter /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/SDL/SDL2/src/video/khronos   conftest.c  -lm -liconv  >&5
 Undefined symbols for architecture x86_64:
   "_pthread_set_name_np", referenced from:
-      _main in conftest-e278c3.o
+      _main in conftest-4e56ba.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:23001: $? = 1

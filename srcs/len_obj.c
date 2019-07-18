@@ -25,19 +25,20 @@ double vec_len2(t_vec p)
 	p = vec_mult(p, p);
 	p = vec_mult(p, p);
 	float a = p.arr[0]  + p.arr[1] + p.arr[2];
-	return pow(a, 1.0/4.0);
+	return (pow(a, 1.0/4.0));
 }
 
-double	len_circle(t_vec point, t_sphere *sphere)
+double	len_circle(t_vec point, t_vec param)
 {
-	t_vec p = vec_sub(point, sphere->point);
+	
 	point.arr[0] = p.arr[1];
 	point.arr[1] = p.arr[2];
 	point.arr[2] = p.arr[0];
+	p = rot(1, new_vec3(0, 0, 1), p);
 	return (vec_len(point) - sphere->r);
 }
 
-double	len_cone(t_vec point, t_cone *cone)
+double	len_cone(t_vec point, t_vec param)
 {
 	t_vec	vec;
 	t_vec	veck1;
@@ -70,13 +71,12 @@ float onion(float d, float h )
     return fabsf(d)-h;
 }
 
-double	len_cylinder(t_vec point, t_cylinder *cylinder)
+double	len_cylinder(t_vec point, t_vec param)
 {
 	t_vec	vec;
-
-	point = vec_sub(point, cylinder->point);
+	
 	point = rot(-1, new_vec2(1, 0), point);
-
+	
 	vec = new_vec2(point.arr[0], point.arr[2]);
 	vec = new_vec2(vec_len(vec) - 2 * cylinder->r + 0, fabs(point.arr[1]) - 50);
 	double k = fmin(fmax(vec.arr[0], vec.arr[1]),0.0);
@@ -85,13 +85,13 @@ double	len_cylinder(t_vec point, t_cylinder *cylinder)
 	return (fabs(k + vec_len(vec)) - 2);
 }
 
-double	len_plane(t_vec point, t_plane *plane)
+double	len_plane(t_vec point, t_vec param)
 {
 	point = vec_sub(point, plane->point);
-	return (vec_dotvec(point, plane->norm));
+	return (fmax(vec_dotvec(point, plane->norm), -point.arr[0] - 100));
 }
 
-double	len_tor(t_vec point, t_tor *tor)
+double	len_tor(t_vec point, t_vec param)
 {
 	double k;
 
@@ -123,7 +123,7 @@ double	len_segment(t_segment segment, t_vec point)
 	}
 }
 
-double	len_mobius(t_vec point, t_mobius *mobius)
+double	len_mobius(t_vec point, t_vec param)
 {
 	double len;
 	t_vec p;
@@ -153,7 +153,7 @@ double	len_mobius(t_vec point, t_mobius *mobius)
 	return (len_segment(segment, point));
 }
 
-double len_box(t_vec point, t_box *box)
+double len_box(t_vec point, t_vec param)
 {
 	t_vec d;
 
