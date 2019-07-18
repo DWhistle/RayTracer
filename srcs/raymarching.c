@@ -2,43 +2,20 @@
 #include "ray_render.h"
 #include "libft.h"
 #include <stdio.h>
-#include "SDL2/SDL.h"
-
-t_vec			moving(t_obj obj, t_vec point)
-{
-	point = vec_sub(point, obj->point);
-	point = rot(obj->angle, obj->rot_vec, point);
-	return (point);
-}
 
 double			update_r(double r, t_obj *o, t_obj new_obj, t_vec point, t_scene objs)
 {
 	double len;
 
-	point = moving(new_obj, point);
+	point = vec_sub(point, new_obj.point);
+	point = rot(new_obj.angle, new_obj.rot_vec, point);
 	len = -1;
 	if (objs.ignore && objs.ignore->ind == new_obj.ind)
 		return (r);
-	if (new_obj.type == SPHERE)
-		len = len_circle(point, new_obj.obj);
-	else if (new_obj.type == PLANE)
-		len = len_plane(point, new_obj.obj);
-	else if (new_obj.type == CYLINDER)
-		len = fabs(len_cylinder(point, new_obj.obj)) - 50;
-	else if (new_obj.type == CONE)
-		len = len_cone(point, new_obj.obj);
-	else if (new_obj.type == TOR)
-		len = len_tor(point, new_obj.obj);
-	else if (new_obj.type == MOBIUS)
-		len = len_mobius(point, new_obj.obj);
-	else if (new_obj.type == BOX)
-		len = len_box(point, new_obj.obj);
-	else if (new_obj.type == CROSS)
-		len = map(point, new_obj.obj);
+	len = new_obj.len(point, new_obj.param);
 	if (r == -1 || len < r)
 	{
-		//r = max(len, point.arr[1]);
-		r = len;
+		r = len - new_obj.rad;
 		*o = new_obj;
 	}
 	return (r);

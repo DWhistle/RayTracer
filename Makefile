@@ -35,6 +35,7 @@ FILES := main \
 		 raymarching \
 		 vec_mul \
 		 vec_sum \
+		 vec_math \
 		 vector \
 		 ray_tracing \
 		 antialiasing \

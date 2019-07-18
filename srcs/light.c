@@ -1,8 +1,4 @@
-#include <math.h>
 #include "ray_render.h"
-#include "libft.h"
-#include <stdio.h>
-#include "SDL2/SDL.h"
 
 t_vec			rand_point(t_vec point, double r)
 {

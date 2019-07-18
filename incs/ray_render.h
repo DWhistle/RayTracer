@@ -4,7 +4,7 @@
 # include "SDL2/SDL.h"
 # include "libft.h"
 # include <math.h>
-#include <quat.h>
+#  include <quat.h>
 # include "ftui.h"
 
 t_point_data   	path_tracing(t_scene scene, t_vec vec, t_accuracy accuracy, t_vec point);

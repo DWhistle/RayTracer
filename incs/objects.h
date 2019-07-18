@@ -18,6 +18,11 @@ enum
 	MOBIUS = 6,
 	BOX = 7,
 	CROSS = 8,
+	HEXAGONAL_PRISM = 9,
+	TRIANGULAR_PRISM = 10,
+	CAPSULE = 11,
+	ELLIPSOID = 12,
+	OCTAHEDRON = 13,
 	DIRECT = 1,
 	AMBIENT = 2,
 	POINT = 3
@@ -25,54 +30,20 @@ enum
 
 typedef t_vec4 t_vec;
 
-typedef struct s_obj2
-{
-	int		type;
-	t_vec	point;
-	t_vec	vec;
-	double	r;
-	double	angle;
-	int		ind;
-	double	reflection;
-	t_vec	color;
-	double	refraction;
-}               t_obj2;
-
 typedef struct s_obj
 {
 	int		type;
-	void	*obj;
+	double	angle;
+	t_vec	rot_vec;
+	t_vec	point;
+	double	rad;
+	void	(*len)();
 	int		ind;
 	double	reflection;
 	t_vec	color;
 	double	refraction;
+	t_vec	param;
 }               t_obj;
-
-typedef struct	s_cylinder
-{
-	double	r;
-	t_vec	vec;
-	t_vec	point;
-}				t_cylinder;
-
-typedef struct	s_sphere
-{
-	double	r;
-	t_vec	point;
-}				t_sphere;
-
-typedef struct	s_cone
-{
-	double 	angle;
-	t_vec	vec;
-	t_vec	point;
-}				t_cone;
-
-typedef struct	s_plane
-{
-	t_vec	point;
-	t_vec	norm;
-}				t_plane;
 
 typedef struct	s_light
 {
