@@ -11,18 +11,16 @@
 # **************************************************************************** #
 
 # used variables
-
 NAME = RT
+MY_DIR = $(shell pwd)
 SRCDIR = srcs/
 OBJDIR = objs/
 INCDIR1 = incs/
-INCDIR2 = libs/SDL/include
 LIBDIR = libs/libft
 LIBUIDIR = libs/libui
-SDLDIR = libs/SDL/lib
-SDLIMGDIR =
- #libs/SDL/SDL2_image/.libs
-LIBS = ft SDL2
+INCDIR2 = $(LIBUIDIR)/incs
+SDLDIR = $(LIBUIDIR)/SDL/SDL2/build/.libs
+LIBS = ft ui
  #SDL2_image
 # used applications
 
@@ -64,11 +62,7 @@ FULL_OBJS = $(addprefix $(OBJDIR), $(OBJS))
 FULL_LIBS = $(addprefix -l, $(LIBS))
 FRAMEWORK = -framework OpenGL -framework Cocoa -framework OpenCL
 #  -framework iconv
-LIBFLAGS = -L$(LIBDIR) -lft -L$(LIBUIDIR) -lui -L $(SDLDIR) -lSDL2
- #-L $(SDLIMGDIR) -lSDL2_image
-PATH_SDL = $(addsuffix /libs/SDL, $(shell pwd))
-SDL =  $(PATH_SDL)/SDL2/build
-
+LIBFLAGS = -L$(LIBDIR) -lft -L$(LIBUIDIR) -lui -L$(SDLDIR) -lSDL2
 
 # vpath %.c $(SRCDIR)/
 # vpath %.o $(OBJDIR)/
@@ -87,25 +81,18 @@ $(LIBDIR): $(OBJDIR)
 $(OBJDIR)%.o: $(SRCDIR)%.c
 	$(CC) $(CCFLAGS) -c -o $@ $<
 
-$(SDL):
-	cd $(PATH_SDL)/SDL2; ./configure --prefix=$(PATH_SDL)
-	make -sC $(PATH_SDL)/SDL2 install
 
 $(NAME):  $(LIBDIR) $(SDL) $(FULL_OBJS)
 	$(CC) $(CCFLAGS) -o $(NAME) $(FRAMEWORK) $(LIBFLAGS) $(FULL_OBJS)
 
-clean: clean_sdl
+clean:
 	make -C $(LIBDIR) clean
-	make -C $(LIBUI) clean
+	make -C $(LIBUIDIR) clean
 	$(RM) $(RMFLAGS) $(FULL_OBJS)
 
-clean_sdl:
-	echo $(PATH_SDL)
-	make -C $(PATH_SDL)/SDL2 clean
-	
 fclean: clean
 	make -C $(LIBDIR) fclean
-	make -C $(LIBUI) fclean
+	make -C $(LIBUIDIR) fclean
 	$(RM) $(RMFLAGS) $(NAME)
 
 re: fclean all
