@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 18:25:23 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/18 13:28:23 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/07/25 12:04:46 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,9 @@ t_vec4					vec_sub(t_vec4 v1, t_vec4 v2);
 int						vec_equ(t_vec4 v1, t_vec4 v2, ft_decimal eps);
 int						vec_ident(t_vec4 v1, t_vec4 v2);
 ft_decimal				vec_len(t_vec4 vec);
-t_vec					vec_fabs(t_vec vec);
+t_vec4					vec_fabs(t_vec4 vec);
+t_vec4					vec_fabs(t_vec4 vec);
+t_vec4					vec_fmin(t_vec4 vec, double n);
+t_vec4					vec_fmax(t_vec4 vec, double n);
 
 #endif

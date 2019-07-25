@@ -1,7 +1,7 @@
 #include "../incs/vector.h"
 #include <math.h>
 
-t_vec vec_fabs(t_vec vec)
+t_vec4 vec_fabs(t_vec4 vec)
 {
     vec.arr[0] = fabs(vec.arr[0]);
     vec.arr[1] = fabs(vec.arr[1]);
@@ -10,7 +10,7 @@ t_vec vec_fabs(t_vec vec)
     return (vec);
 }
 
-t_vec vec_fmin(t_vec vec, double n)
+t_vec4 vec_fmin(t_vec4 vec, double n)
 {
     vec.arr[0] = fmin(vec.arr[0], n);
     vec.arr[1] = fmin(vec.arr[1], n);
@@ -19,7 +19,7 @@ t_vec vec_fmin(t_vec vec, double n)
     return (vec);
 }
 
-t_vec vec_fmax(t_vec vec, double n)
+t_vec4 vec_fmax(t_vec4 vec, double n)
 {
     vec.arr[0] = fmax(vec.arr[0], n);
     vec.arr[1] = fmax(vec.arr[1], n);

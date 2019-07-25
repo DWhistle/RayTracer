@@ -68,6 +68,7 @@ t_vec   lightt(t_scene objs, t_vec vec,
     t_vec li;
     t_vec hw_vec;
 
+
     point_data = get_point(objs, vec, accuracy);
     if (!point_data.obj)
             return (new_vec0());
@@ -89,12 +90,12 @@ t_vec   lightt(t_scene objs, t_vec vec,
             {
                 n_dot_l = vec_dotvec(point_data.norm, vec_norm(li));
                 if (n_dot_l > 0)
-                    i += objs.lights[objs.number_lights].intensity * (n_dot_l);
+                    i += objs.lights[objs.number_lights].intensity * (n_dot_l) / (vec_len(li));
                 hw_vec = vec_norm(vec_sum(vec_dotdec(li, 1), vec_norm(vec_dotdec(vec, -1))));
                 n_dot_l = vec_dotvec(hw_vec, point_data.norm);
-                //n_dot_l = vec_dotvec(get_ref_vec(point_data, vec_dotdec(li, -1)), vec_norm(vec_dotdec(vec, -1)));
+                n_dot_l = vec_dotvec(get_ref_vec(point_data, vec_dotdec(li, -1)), vec_norm(vec_dotdec(vec, -1)));
                 if (n_dot_l > 0)
-                    i += objs.lights[objs.number_lights].intensity * pow(n_dot_l, 128);
+                    i += objs.lights[objs.number_lights].intensity * pow(n_dot_l, 128) / (vec_len(li));
             }
         }
     }

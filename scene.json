@@ -4,214 +4,79 @@
     "negative":0,
     "stereoscopy":0,
     "sepia":0,
-    "color":
-    {
-      "x":180,
-      "y":120,
-      "z":256
-    },
     "sphere1":
     {
       "color":
       {
-        "x":180,
-        "y":120,
-        "z":256
+        "x":180.0,
+        "y":120.0,
+        "z":256.0
       },
-      "radius":60,
-      "reflection":0,
-      "refraction":0,
+      "rot_vec":
+      {
+        "x":1.0,
+        "y":0.0,
+        "z":0.0
+      },
+      "radius":60.0,
+      "angle": 0.0,
+      "rad":0.0,      
+      "reflection":0.0,
+      "refraction":0.0,
       "point":
       {
-        "x":0,
-        "y":-160,
-        "z":400
+        "x":0.0,
+        "y":0.0,
+        "z":300.0
       }
     },
-    "tor":
+    "box":
     {
       "color":
       {
-        "x":0,
-        "y":0,
-        "z":255
+        "x":180.0,
+        "y":120.0,
+        "z":256.0
       },
-      "radius1":20,
-      "radius2":10,
-      "reflection":0,
-      "refraction":0,
-      "norm":
+      "rot_vec":
       {
-        "x":0,
-        "y":1,
-        "z":1
+        "x":1.0,
+        "y":0.0,
+        "z":0.0
       },
+      "param":
+      {
+        "x":100.0,
+        "y":100.0,
+        "z":100.0
+      },
+      "angle": 1.0,
+      "rad":0.0,      
+      "reflection":0.0,
+      "refraction":0.0,
       "point":
       {
-        "x":0,
-        "y":0,
-        "z":200
+        "x":100.0,
+        "y":0.0,
+        "z":500.0
       }
     },
-    "plane1":
+    "light":
     {
-      "color":
-      {
-        "x":80,
-        "y":80,
-        "z":0
-      },
-      "reflection":0,
-      "refraction":0,
-      "norm":
-      {
-        "x":0,
-        "y":-1,
-        "z":-1
-      },
+      "intensity": 80.0,
       "point":
       {
-        "x":0,
-        "y":0,
-        "z":700
-      }
-    },
-    "plane2":
-    {
-      "color":
-      {
-        "x":20,
-        "y":300,
-        "z":0
+        "x":100.0,
+        "y":0.0,
+        "z":0.0
       },
-      "reflection":0,
-      "refraction":0,
-      "norm":
+      "type":3,
+      "radius":10,
+      "vec":
       {
-        "x":-1,
-        "y":-1,
-        "z":0
-      },
-      "point":
-      {
-        "x":210,
-        "y":0,
-        "z":0
-      }
-    },
-    "plane3":
-    {
-      "color":
-      {
-        "x":0,
-        "y":200,
-        "z":0
-      },
-      "reflection":0,
-      "refraction":0,
-      "norm":
-      {
-        "x":1,
-        "y":-0.5,
-        "z":0
-      },
-      "point":
-      {
-        "x":0,
-        "y":0,
-        "z":-210
-      }
-    },
-    "plane4":
-    {
-      "color":
-      {
-        "x":200,
-        "y":0,
-        "z":0
-      },
-      "reflection":0,
-      "refraction":0,
-      "norm":
-      {
-        "x":0,
-        "y":0,
-        "z":1
-      },
-      "point":
-      {
-        "x":0,
-        "y":0,
-        "z":-5
-      }
-    },
-    "plane5":
-    {
-      "color":
-      {
-        "x":100,
-        "y":200,
-        "z":0
-      },
-      "reflection":0,
-      "refraction":0,
-      "norm":
-      {
-        "x":0,
-        "y":1,
-        "z":0
-      },
-      "point":
-      {
-        "x":0,
-        "y":-210,
-        "z":0
-      }
-    },
-    "plane6":
-    {
-      "color":
-      {
-        "x":200,
-        "y":100,
-        "z":0
-      },
-      "reflection":0,
-      "refraction":0,
-      "norm":
-      {
-        "x":0,
-        "y":-1,
-        "z":0
-      },
-      "point":
-      {
-        "x":0,
-        "y":210,
-        "z":0
-      }
-    },
-    "cylinder": 
-    {
-      "color":
-      {
-        "x":200,
-        "y":0,
-        "z":0
-      },
-      "reflection":0,
-      "refraction":0,
-      "vector":
-      {
-        "x":2,
-        "y":0,
-        "z":1
-      },
-      "point":
-      {
-        "x":0,
-        "y":170,
-        "z":550
+        "x":0.0,
+        "y":0.0,
+        "z":0.0
       }
     }
   }

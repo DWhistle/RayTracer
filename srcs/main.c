@@ -6,11 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2019/07/17 15:40:21 by kmeera-r         ###   ########.fr       */
-=======
-/*   Updated: 2019/07/14 15:54:27 by hgreenfe         ###   ########.fr       */
->>>>>>> f52a1c3ce2cc747c1be7e663385367521b5d5f16
+/*   Updated: 2019/07/25 14:26:45 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +35,15 @@ int    print_error(int errnum)
     return (0);
 }
 
-int     render(void *window, t_scene *scene, t_accuracy *accuracy)
+int     render(void *window, t_scene *scene)
 {
-	t_rect			screen;
-	int				*pixels;
+	t_rect				screen;
+	int					*pixels;
+	static t_accuracy	accuracy =  {1, 200, 1, 0, 10000, 0.01};
 
 	pixels = ft_get_window_pixels(window, &screen);
 	srand(time(NULL));
-	ray_tracing(*scene, (int**)&(pixels), *accuracy, &screen);
+	ray_tracing(*scene, (int**)&(pixels), accuracy, &screen);
 	accuracy.depth_pt++;
     return (0);
 }
@@ -60,7 +57,6 @@ int		main_loop(SDL_Window *window)
 	window = 0;
 	while (!quit)
 	{
-		render
 		while (SDL_PollEvent(&event) != 0)
 		{
 			if (event.type == SDL_QUIT)
@@ -72,10 +68,12 @@ int		main_loop(SDL_Window *window)
 
 void	ft_key_func(void *wnd, int n, void *param)
 {
-	(void)param;
 	if (n == 21) // клавиша r
 	{
-		render(wnd);
+		param = ft_get_window_input_param(wnd);
+		printf("\ny =========== %p\n", (void*)((t_scene*)param)->objs);
+		//return;
+		render(wnd, (t_scene*)param);
 	}
 	if (n == FTUI_KEY_ESCAPE)
 	{
@@ -95,7 +93,7 @@ void	ft_render(void *wnd, int n, void* param)
 
 int     main(int argc, char **argv)
 {
-	t_scene	*scene;
+	void		*scene;
 	t_list	*json1;
 	
 	(void)argc;
@@ -103,9 +101,15 @@ int     main(int argc, char **argv)
 	scene = convert_objects(json1->content);
 	t_list	*list = ft_libui_init();
 	t_rect	r = ft_new_rect(WIN_X, WIN_Y, WIN_W, WIN_H);
+	printf("\ny =========== %p\n", (void*)((t_scene*)scene)->objs);
+	printf("\ny =========== %p\n", (void*)((t_scene*)scene)->objs);
+	printf("\ny =========== %p\n", (void*)((t_scene*)scene)->objs);
+	printf("\ny =========== %p\n", (void*)((t_scene*)scene)->objs);
+	printf("\ny =========== %p\n", (void*)((t_scene*)scene)->objs);
+	printf("\ny =========== %p\n", (void*)((t_scene*)scene)->objs);
 	add_window((void**)&list, r, 0x00000000, "Ray Tracer v1.0");
 	set_event_function(list->content, FT_EVENT_RENDER, ft_render, ft_get_window_pixels(list->content, NULL));
-	set_event_function(list->content, FT_EVENT_KEYPRESS, ft_key_func, NULL);
+	set_event_function(list->content, FT_EVENT_KEYPRESS, ft_key_func, scene);
 	ft_mainloop(list);
     return (0);
 }

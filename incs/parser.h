@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 16:14:59 by bturcott          #+#    #+#             */
-/*   Updated: 2019/07/17 11:11:56 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/07/25 15:45:17 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,6 @@ typedef struct s_json_parser{
 void *convert_objects(t_json *j);
 int make_json(t_parser *json, t_json *obj);
 t_list *parse_json(char *config_file);
-char	**gate_names_obj(t_json *j);
+int     gate_names_obj(t_json *j, char*** names, int (*check_names)());
 
 #endif

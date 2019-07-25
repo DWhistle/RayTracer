@@ -37,7 +37,7 @@ typedef struct s_obj
 	t_vec	rot_vec;
 	t_vec	point;
 	double	rad;
-	void	(*len)();
+	double	(*len)();
 	int		ind;
 	double	reflection;
 	t_vec	color;
@@ -107,33 +107,5 @@ typedef struct	s_segment
 	t_vec		a;
 	t_vec		b;
 }				t_segment;
-
-typedef struct	s_tor
-{
-	t_plane		plane;
-	double		R;
-	double		r;
-}				t_tor;
-
-typedef struct	s_mobius
-{
-	t_plane		plane;
-	double		R;
-	t_vec 		vec;
-	t_vec		norm;
-}				t_mobius;
-
-typedef struct	s_box
-{
-	t_vec		point;
-	t_vec		options;
-}				t_box;
-
-typedef struct	s_cross
-{
-	t_vec		point;
-	t_vec		options;
-}				t_cross;
-
 
 #endif

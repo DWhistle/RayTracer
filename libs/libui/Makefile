@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hgreenfe <hgreenfe@student.42.fr>          +#+  +:+       +#+         #
+#    By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/17 20:30:06 by hgreenfe          #+#    #+#              #
-#    Updated: 2019/07/14 16:21:41 by hgreenfe         ###   ########.fr        #
+#    Updated: 2019/07/25 11:32:34 by kmeera-r         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,7 +81,7 @@ all: $(NAME)
 
 sdl_config:
 	touch sdl_config
-	cd $(PATH_SDL)/SDL2; ./autogen.sh && ./configure --prefix=$(PATH_SDL); cd $(MY_DIR)
+	cd $(PATH_SDL)/SDL2; ./configure --prefix=$(PATH_SDL); cd $(MY_DIR)
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
