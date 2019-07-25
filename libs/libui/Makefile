@@ -6,7 +6,7 @@
 #    By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/17 20:30:06 by hgreenfe          #+#    #+#              #
-#    Updated: 2019/07/25 11:32:34 by kmeera-r         ###   ########.fr        #
+#    Updated: 2019/07/25 20:01:17 by hgreenfe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,7 +81,7 @@ all: $(NAME)
 
 sdl_config:
 	touch sdl_config
-	cd $(PATH_SDL)/SDL2; ./configure --prefix=$(PATH_SDL); cd $(MY_DIR)
+	$(PATH_SDL)/SDL2/configure --prefix=$(PATH_SDL)
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
@@ -115,6 +115,7 @@ clean_sdl: sdl_config
 
 fclean: clean
 	make -C $(LIBDIR) fclean
+	$(RM) $(RMFLAGS) sdl_config
 	$(RM) $(RMFLAGS) $(NAME)
 
 re: fclean all
