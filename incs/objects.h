@@ -3,6 +3,7 @@
 
 #ifndef __OPENCL_C_VERSION__
 #include "vector.h"
+#include "quat.h"
 #endif
 #define MAX_Z 800
 #define E 0.0001
@@ -33,8 +34,7 @@ typedef t_vec4 t_vec;
 typedef struct s_obj
 {
 	int		type;
-	double	angle;
-	t_vec	rot_vec;
+	t_quat	rot_quat;
 	t_vec	point;
 	double	rad;
 	double	(*len)();
@@ -54,22 +54,6 @@ typedef struct	s_light
 	t_vec	vec;
 }				t_light;
 
-typedef struct	s_scene
-{
-	t_obj		*objs;
-	int			number_objs;
-	int			number_lights;
-	t_vec		cam;
-	t_light		*lights;
-	t_obj		*ignore;
-	t_vec		*color;
-	int			ce;
-	int			bm;
-	int			neg;
-	int			ster;
-	int			sepia;
-}				t_scene;
-
 typedef struct	s_point_data
 {
 	t_vec norm;
@@ -77,6 +61,25 @@ typedef struct	s_point_data
 	t_vec point;
 	t_vec color;
 }				t_point_data;
+
+typedef struct	s_scene
+{
+	t_obj		*objs;
+	int			w;
+	int			h;
+	int			number_objs;
+	int			number_lights;
+	t_vec		cam;
+	t_light		*lights;
+	t_obj		*ignore;
+	t_vec		*color;
+	t_point_data		*points_data;
+	int			ce;
+	int			bm;
+	int			neg;
+	int			ster;
+	int			sepia;
+}				t_scene;
 
 typedef struct	s_accuracy
 {

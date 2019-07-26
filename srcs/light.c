@@ -60,19 +60,17 @@ int     get_shadow(t_scene objs, t_vec vec,
 }
 
 t_vec   lightt(t_scene objs, t_vec vec,
-							t_accuracy accuracy)
+							t_accuracy accuracy, t_point_data *point_data)
 {
-    t_point_data point_data;
     double i;
     double n_dot_l;
     t_vec li;
     t_vec hw_vec;
 
-
-    point_data = get_point(objs, vec, accuracy);
-    if (!point_data.obj)
+    if (accuracy.depth_pt == 1)
+        *point_data = get_point(objs, vec, accuracy);
+    if (!point_data->obj)
             return (new_vec0());
-    //return (point_data.obj->color);
     i = 0.0;
     while (objs.number_lights--)
     {
@@ -80,25 +78,25 @@ t_vec   lightt(t_scene objs, t_vec vec,
             i += objs.lights[objs.number_lights].intensity;
         else
         {
+            
             if (objs.lights[objs.number_lights].type == DIRECT)
                 li = objs.lights[objs.number_lights].vec;
             else
                 li = vec_sub(rand_point(objs.lights[objs.number_lights].point,\
-                objs.lights[objs.number_lights].r), point_data.point);
+                objs.lights[objs.number_lights].r), point_data->point);
             accuracy.max_dist = vec_len(li);
-            if (!get_shadow(objs, vec_norm(li), accuracy, point_data))
+            if (!get_shadow(objs, vec_norm(li), accuracy, *point_data))
             {
-                n_dot_l = vec_dotvec(point_data.norm, vec_norm(li));
+                n_dot_l = vec_dotvec(point_data->norm, vec_norm(li));
                 if (n_dot_l > 0)
                     i += objs.lights[objs.number_lights].intensity * (n_dot_l) / (vec_len(li));
                 hw_vec = vec_norm(vec_sum(vec_dotdec(li, 1), vec_norm(vec_dotdec(vec, -1))));
-                n_dot_l = vec_dotvec(hw_vec, point_data.norm);
-                n_dot_l = vec_dotvec(get_ref_vec(point_data, vec_dotdec(li, -1)), vec_norm(vec_dotdec(vec, -1)));
+                n_dot_l = vec_dotvec(hw_vec, point_data->norm);
+                n_dot_l = vec_dotvec(get_ref_vec(*point_data, vec_dotdec(li, -1)), vec_norm(vec_dotdec(vec, -1)));
                 if (n_dot_l > 0)
                     i += objs.lights[objs.number_lights].intensity * pow(n_dot_l, 128) / (vec_len(li));
             }
         }
     }
-    point_data.color = vec_dotdec(point_data.color, i);
-    return (point_data.color);
+    return(vec_dotdec(point_data->color, i));
 }

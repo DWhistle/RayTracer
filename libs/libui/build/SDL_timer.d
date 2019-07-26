@@ -1,0 +1,22 @@
+build/SDL_timer.lo: \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/src/timer/SDL_timer.c \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/src/timer/../SDL_internal.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/src/timer/../dynapi/SDL_dynapi.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/src/timer/../dynapi/SDL_dynapi_overrides.h \
+  include/SDL_config.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/include/SDL_platform.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/include/begin_code.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/include/close_code.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/include/SDL_timer.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/include/SDL_stdinc.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/include/SDL_config.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/include/SDL_error.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/src/timer/SDL_timer_c.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/include/SDL_atomic.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/include/SDL_cpuinfo.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/src/timer/../thread/SDL_systhread.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/include/SDL_thread.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/include/SDL_mutex.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/src/timer/../thread/SDL_thread_c.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/src/timer/../thread/pthread/SDL_systhread_c.h \
+  /Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL/SDL2/src/timer/../thread/../SDL_error_c.h

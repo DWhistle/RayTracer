@@ -50,14 +50,14 @@ void    get_sphere(t_json *json, t_obj *object)
 
 void    get_cone(t_json *json, t_obj *object)
 {
-    object->type = SPHERE;
+    object->type = CONE;
     object->len = len_cone;
-    object->param = get_vec(query_attribute(json, "param").json_value);
+    object->param = vec_norm(get_vec(query_attribute(json, "param").json_value));
 }
 
 void    get_cylinder(t_json *json, t_obj *object)
 {
-    object->type = SPHERE;
+    object->type = CYLINDER;
     object->len = len_cylinder;
     object->param = new_vec0();
     object->param = get_vec(query_attribute(json, "param").json_value);
@@ -65,15 +65,15 @@ void    get_cylinder(t_json *json, t_obj *object)
 
 void    get_plane(t_json *json, t_obj *object)
 {
-    object->type = SPHERE;
+    object->type = PLANE;
     object->len = len_plane;
     object->param = new_vec0();
-    object->param = get_vec(query_attribute(json, "param").json_value);
+    object->param = vec_norm(get_vec(query_attribute(json, "param").json_value));
 }
 
 void    get_tor(t_json *json, t_obj *object)
 {
-    object->type = SPHERE;
+    object->type = TOR;
     object->len = len_tor;
     object->param = new_vec0();
     object->param = get_vec(query_attribute(json, "param").json_value);
@@ -81,7 +81,7 @@ void    get_tor(t_json *json, t_obj *object)
 
 void    get_hexagonal_prism(t_json *json, t_obj *object)
 {
-    object->type = SPHERE;
+    object->type = HEXAGONAL_PRISM;
     object->len = len_hexagonal_prism;
     object->param = new_vec0();
     object->param = get_vec(query_attribute(json, "param").json_value);
@@ -89,7 +89,7 @@ void    get_hexagonal_prism(t_json *json, t_obj *object)
 
 void    get_triangular_prism(t_json *json, t_obj *object)
 {
-    object->type = SPHERE;
+    object->type = TRIANGULAR_PRISM;
     object->len = len_triangular_prism;
     object->param = new_vec0();
     object->param = get_vec(query_attribute(json, "param").json_value);
@@ -97,7 +97,7 @@ void    get_triangular_prism(t_json *json, t_obj *object)
 
 void    get_capsule(t_json *json, t_obj *object)
 {
-    object->type = SPHERE;
+    object->type = CAPSULE;
     object->len = len_capsule;
     object->param = new_vec0();
     object->param = get_vec(query_attribute(json, "param").json_value);
@@ -105,7 +105,7 @@ void    get_capsule(t_json *json, t_obj *object)
 
 void    get_ellipsoid(t_json *json, t_obj *object)
 {
-    object->type = SPHERE;
+    object->type = ELLIPSOID;
     object->len = len_ellipsoid;
     object->param = new_vec0();
     object->param = get_vec(query_attribute(json, "param").json_value);
@@ -113,7 +113,7 @@ void    get_ellipsoid(t_json *json, t_obj *object)
 
 void    get_octahedron(t_json *json, t_obj *object)
 {
-    object->type = SPHERE;
+    object->type = OCTAHEDRON;
     object->len = len_octahedron;
     object->param = new_vec0();
     object->param = get_vec(query_attribute(json, "param").json_value);
@@ -121,7 +121,7 @@ void    get_octahedron(t_json *json, t_obj *object)
 
 void    get_box(t_json *json, t_obj *object)
 {
-    object->type = SPHERE;
+    object->type = BOX;
     object->len = len_box;
     object->param = new_vec0();
     object->param = get_vec(query_attribute(json, "param").json_value);
@@ -136,8 +136,8 @@ void    get_obj(t_json *obj, char *name, t_obj *object)
     object->reflection = query_attribute(json, "reflection").float_value;
     object->refraction = query_attribute(json, "refraction").float_value;
     object->color = get_vec(query_attribute(json, "color").json_value);
-    object->angle = query_attribute(json, "angle").float_value;
-    object->rot_vec = get_vec(query_attribute(json, "rot_vec").json_value);
+    object->rot_quat = create_quat(vec_norm(get_vec(query_attribute(json, "rot_vec").json_value)),\
+                        query_attribute(json, "angle").float_value);
     object->point = get_vec(query_attribute(json, "point").json_value);
     object->rad = query_attribute(json, "rad").float_value;
     if (ft_strncmp(name, "sphere", 6) == 0)
@@ -196,11 +196,15 @@ t_scene *get_scene(t_json *obj)
     scene = (t_scene*)ft_memalloc(sizeof(t_scene));
     scene->cam = new_vec3(0, 0, 0);
     scene->ignore = NULL;
+    scene->w = query_attribute(obj, "w").int_value;
+    scene->h = query_attribute(obj, "h").int_value;
     scene->bm = query_attribute(obj, "blur motion").int_value;
     scene->ce = query_attribute(obj, "cartoon effect").int_value;
     scene->neg = query_attribute(obj, "negative").int_value;
     scene->sepia = query_attribute(obj, "sepia").int_value;
     scene->ster = query_attribute(obj, "stereoscopy").int_value;
+    scene->color = ft_memalloc(sizeof(t_vec) * scene->w * scene->w);
+    scene->points_data = ft_memalloc(sizeof(t_point_data) * scene->w * scene->h);
     return (scene);
 }
 

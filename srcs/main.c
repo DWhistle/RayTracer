@@ -39,7 +39,7 @@ int     render(void *window, t_scene *scene)
 {
 	t_rect				screen;
 	int					*pixels;
-	static t_accuracy	accuracy =  {1, 200, 1, 0, 10000, 0.01};
+	static t_accuracy	accuracy =  {1, 200, 1, 0, 1000, 0.1};
 
 	pixels = ft_get_window_pixels(window, &screen);
 	srand(time(NULL));
@@ -48,31 +48,13 @@ int     render(void *window, t_scene *scene)
     return (0);
 }
 
-int		main_loop(SDL_Window *window)
-{
-	int			quit;
-	SDL_Event	event;
 
-	quit = 0;
-	window = 0;
-	while (!quit)
-	{
-		while (SDL_PollEvent(&event) != 0)
-		{
-			if (event.type == SDL_QUIT)
-				quit = 1;
-		}
-	}
-	return (0);
-}
 
 void	ft_key_func(void *wnd, int n, void *param)
 {
 	if (n == 21) // клавиша r
 	{
 		param = ft_get_window_input_param(wnd);
-		printf("\ny =========== %p\n", (void*)((t_scene*)param)->objs);
-		//return;
 		render(wnd, (t_scene*)param);
 	}
 	if (n == FTUI_KEY_ESCAPE)
