@@ -80,7 +80,6 @@ void	ray_tracing(t_scene scene, int **pixel,
 	t_vec		color;
 
 	y = screen->h;
-	accuracy.rpp = (int)(sqrt(accuracy.rpp));
 	while (y--)
 	{
 		x = screen->w;

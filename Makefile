@@ -50,7 +50,9 @@ FILES := main \
 		 transparency \
 		 parser \
 		 get_next_line \
-		 converter
+		 converter \
+		 parser_logic \
+		 parser_utils
 		 #converter
 
 

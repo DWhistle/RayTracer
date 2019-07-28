@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 16:14:59 by bturcott          #+#    #+#             */
-/*   Updated: 2019/07/25 15:45:17 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/07/25 20:50:33 by bturcott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,6 @@ typedef union u_value{
 }             t_values;
 
 
-#define INT 6
-#define ARRAY_INT 2
-#define ARRAY_STRING 4
-#define STRING 1
-#define JSON 3
-#define FLOAT_EOF -60000000.0
-#define INT_EOF -2147483648
-#define FLOAT 7
-
 typedef struct s_json{
    char **key;
    t_values *value;
@@ -65,5 +56,20 @@ void *convert_objects(t_json *j);
 int make_json(t_parser *json, t_json *obj);
 t_list *parse_json(char *config_file);
 int     gate_names_obj(t_json *j, char*** names, int (*check_names)());
+int parse_value(t_parser *json, t_values *value, int **type, int i);
+t_json *create_json_obj(void);
+
+/*
+** logic
+*/
+int parse_key(t_parser *json, char **key);
+int parse_int(t_parser *json, t_values *value);
+int parse_float(t_parser *json, t_values *value);
+
+/*
+** utils
+*/
+int is_float(t_parser *json);
+int escape(t_parser *json);
 
 #endif

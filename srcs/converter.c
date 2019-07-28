@@ -189,6 +189,21 @@ void    get_light(t_json *obj, char *name, t_light *light)
     light->vec = get_vec(query_attribute(json, "vec").json_value);
 }
 
+t_accuracy  get_accuracy(t_json *obj)
+{
+    t_accuracy  accuracy;
+    t_json      *json;
+
+    json = (t_json*)query_attribute(obj, "accuracy").json_value;
+    accuracy.delta = fabs(query_attribute(json, "delta").float_value);
+    accuracy.depth_pt = 0;
+    accuracy.depth_march = query_attribute(json, "depth raymarching").int_value;
+    accuracy.depth_ref = query_attribute(json, "depth reflaction").int_value;
+    accuracy.max_dist = query_attribute(json, "max dist").int_value;
+    accuracy.rpp = query_attribute(json, "antialiasing").int_value;
+    return (accuracy);
+}
+
 t_scene *get_scene(t_json *obj)
 {
     t_scene *scene;
@@ -205,6 +220,7 @@ t_scene *get_scene(t_json *obj)
     scene->ster = query_attribute(obj, "stereoscopy").int_value;
     scene->color = ft_memalloc(sizeof(t_vec) * scene->w * scene->w);
     scene->points_data = ft_memalloc(sizeof(t_point_data) * scene->w * scene->h);
+    scene->accuracy = get_accuracy(obj);
     return (scene);
 }
 

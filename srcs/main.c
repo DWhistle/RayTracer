@@ -39,12 +39,11 @@ int     render(void *window, t_scene *scene)
 {
 	t_rect				screen;
 	int					*pixels;
-	static t_accuracy	accuracy =  {1, 200, 1, 0, 1000, 0.1};
 
 	pixels = ft_get_window_pixels(window, &screen);
 	srand(time(NULL));
-	ray_tracing(*scene, (int**)&(pixels), accuracy, &screen);
-	accuracy.depth_pt++;
+	scene->accuracy.depth_pt++;
+	ray_tracing(*scene, (int**)&(pixels), scene->accuracy, &screen);
     return (0);
 }
 

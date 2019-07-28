@@ -12,7 +12,7 @@ double clamp(double f, double s, double t)
 
 double	len_sphere(t_vec point, t_vec param)
 {
-	return (vec_len(point) - param.arr[0]);
+	return (vec_len(point) - fabs(param.arr[0]));
 }
 
 double	len_cone(t_vec point, t_vec param)
@@ -113,6 +113,24 @@ double len_box(t_vec point, t_vec param)
 
 	d = new_vec3(fabs(point.arr[0]), fabs(point.arr[1]), fabs(point.arr[2]));
 	d = vec_sub(d, param);
-	d = new_vec3(fmax(d.arr[0], 0), fmax(d.arr[1], 0), fmax(d.arr[2], 0));
-	return(vec_len(d) + fmin(fmax(d.arr[0], fmax(d.arr[1], d.arr[2])), 0));
+	return(vec_len(vec_fmax(d, 0.0)) + fmin(fmax(d.arr[0], fmax(d.arr[1], d.arr[2])), 0));
 }
+
+float sdCross(t_vec p)
+{
+  float da = len_box(new_vec2(p.arr[0], p.arr[1]), new_vec2(1.0, 1.0));
+  float db = len_box(new_vec2(p.arr[1], p.arr[2]), new_vec2(1.0, 1.0));
+  float dc = len_box(new_vec2(p.arr[2], p.arr[0]), new_vec2(1.0, 1.0));
+  //printf("da %f db %f dc %f", da, db, dc);
+  return fmin(da,fmin(db,dc));
+}
+
+double map(t_vec point, t_vec param)
+{
+	double	d = len_box(point, param);
+	double	c = sdCross(vec_dotdec(point, 1))/1.0;
+	//printf ("d = %f\n", c);
+	d = fmax(d, -c);
+	return (d);
+}
+

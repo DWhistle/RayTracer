@@ -62,6 +62,16 @@ typedef struct	s_point_data
 	t_vec color;
 }				t_point_data;
 
+typedef struct	s_accuracy
+{
+	int		rpp;
+	int		depth_march;
+	int		depth_pt;
+	int 	depth_ref;
+	int 	max_dist;
+	double	delta;
+}				t_accuracy;
+
 typedef struct	s_scene
 {
 	t_obj		*objs;
@@ -79,17 +89,8 @@ typedef struct	s_scene
 	int			neg;
 	int			ster;
 	int			sepia;
+	t_accuracy	accuracy;
 }				t_scene;
-
-typedef struct	s_accuracy
-{
-	int		rpp;
-	int		depth_march;
-	int		depth_pt;
-	int 	depth_ref;
-	int 	max_dist;
-	double	delta;
-}				t_accuracy;
 
 typedef struct	s_polygon
 {

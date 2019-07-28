@@ -34,4 +34,5 @@ t_point_data	crate_point_data(t_vec norm,
 				t_obj *obj, t_vec point, t_vec color);
 t_vec			rot(t_quat quat, t_vec v);
 t_vec			get_ref_vec(t_point_data point_data, t_vec vec);
+double map(t_vec point, t_vec param);
 #endif	

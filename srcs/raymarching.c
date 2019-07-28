@@ -18,10 +18,14 @@ t_vec			get_normal(t_vec point, t_obj obj)
 	double e = 0.0053;
 	t_vec		vec;
 
+	if (obj.type == SPHERE)
+		printf("fefe\n");
 	vec.arr[0] = (update_r(obj, vec_sum(point, new_vec3(e, 0, 0))) - update_r(obj, vec_sub(point, new_vec3(e, 0, 0))));
 	vec.arr[1] = (update_r(obj, vec_sum(point, new_vec3(0, e, 0))) - update_r(obj, vec_sub(point, new_vec3(0, e, 0))));
 	vec.arr[2] = (update_r(obj, vec_sum(point, new_vec3(0, 0, e))) - update_r(obj, vec_sub(point, new_vec3(0, 0, e))));
 	vec.arr[3] = 0;
+	if (obj.type == SPHERE)
+		vec = vec_dotdec(vec, -1);
 	return(vec_norm(vec));
 }
 
@@ -41,12 +45,14 @@ t_point_data	raymarching(t_scene objs, t_vec vec,
 							t_accuracy accuracy, t_vec point)
 {
 	double	r;
-	double	r1;
+	double r1;
+	t_obj	*obj;
+	double	dist;
 	int		counter;
 	t_vec	next_point;
 
 	next_point = point;
-	
+	dist = 0;
 	while (accuracy.depth_march-- &&
 			vec_len(vec_sub(point, next_point)) < accuracy.max_dist)
 	{
@@ -57,15 +63,30 @@ t_point_data	raymarching(t_scene objs, t_vec vec,
 			if (!objs.ignore || objs.objs[counter].ind != objs.ignore->ind)
 			{
 				r = update_r(objs.objs[counter], next_point);
-				if (r >= 0)
+				if (objs.objs[counter].type == SPHERE)
 				{
-					r1 = fmin(r, r1);
-					if (r1 < accuracy.delta)
-						return (crate_point_data(get_normal(next_point, objs.objs[counter]), objs.objs + counter, next_point, new_vec0()));
+					if (-r > r1)
+					{
+						obj = objs.objs + counter;
+						r1 = -r;
+					}
+				}
+				else
+				{
+					if (r < r1)
+					{
+						obj = objs.objs + counter;
+						r1 = r;
+					}
 				}
 			}
 		}
-		next_point = vec_sum(next_point, vec_dotdec(vec, r1));
+		if (r1 < accuracy.delta)
+		{
+			return (crate_point_data(get_normal(next_point, *obj), objs.objs + 1, next_point, new_vec0()));
+		}
+		dist += r1;
+		next_point = vec_sum(vec_dotdec(vec, dist), point);
 	}
 	return (crate_point_data(new_vec0(), 0, new_vec0(), new_vec0()));
 }
