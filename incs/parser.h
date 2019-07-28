@@ -6,7 +6,7 @@
 /*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 16:14:59 by bturcott          #+#    #+#             */
-/*   Updated: 2019/07/25 20:50:33 by bturcott         ###   ########.fr       */
+/*   Updated: 2019/07/28 14:45:29 by bturcott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "libft.h"
 #include <fcntl.h>
 #include "get_next_line.h"
+#include "ray_render.h"
+#include "objects.h"
 #define MAX_FIELDS 30
 
 #define INT 6
@@ -71,5 +73,16 @@ int parse_float(t_parser *json, t_values *value);
 */
 int is_float(t_parser *json);
 int escape(t_parser *json);
+
+t_values query_attribute(t_json *obj, char *name);
+t_vec get_vec(t_json *json);
+void get_primitives(t_json *json, char *name, t_obj *object);
+void get_intermediates(t_json *json, char *name, t_obj *object);
+void get_extras(t_json *json, char *name, t_obj *object);
+void    get_obj(t_json *obj, char *name, t_obj *object);
+t_vec get_vec(t_json *json);
+t_values query_attribute(t_json *obj, char *name);
+int		check_names_light(char *name);
+int      get_names_obj(t_json *j, char*** names, int (*check_names)());
 
 #endif

@@ -1,12 +1,12 @@
-	# **************************************************************************** #
+# **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+         #
+#    By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 19:22:42 by hgreenfe          #+#    #+#              #
-#    Updated: 2019/05/27 16:56:16 by kmeera-r         ###   ########.fr        #
+#    Updated: 2019/07/28 14:43:43 by bturcott         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,8 +52,12 @@ FILES := main \
 		 get_next_line \
 		 converter \
 		 parser_logic \
-		 parser_utils
-		 #converter
+		 parser_utils \
+		 converter_primitives \
+		 converter_intermediates \
+		 converter_extras \
+		 converter_objects \
+		 converter_utils
 
 
 HEADERS = $(INCDIR1)/SDL2/SDL.h $(INCDIR1)/ft_libui.h $(INCDIR1)/ft_window.h
