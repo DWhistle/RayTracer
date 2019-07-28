@@ -6,7 +6,7 @@
 /*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 19:50:18 by bturcott          #+#    #+#             */
-/*   Updated: 2019/07/25 20:35:12 by bturcott         ###   ########.fr       */
+/*   Updated: 2019/07/28 13:36:39 by bturcott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		parse_float(t_parser *json, t_values *value)
 	&& json->f[json->i] != '-')
 		json->i++;
 	ret = ft_atoi(json->f + json->i);
-	precision = (ret > 0) ? precision : -precision;
+	precision = (json->f[json->i] == '-') ? precision : -precision;
 	while (json->f[json->i] && json->f[json->i] != '.')
 		json->i++;
 	while (json->f[++json->i] && ft_isdigit(json->f[json->i]))
