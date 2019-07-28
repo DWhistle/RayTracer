@@ -43,6 +43,7 @@ typedef struct s_obj
 	t_vec	color;
 	double	refraction;
 	t_vec	param;
+	int		neg;
 }               t_obj;
 
 typedef struct	s_light
@@ -75,6 +76,7 @@ typedef struct	s_accuracy
 typedef struct	s_scene
 {
 	t_obj		*objs;
+	t_obj		*neg_objs;
 	int			w;
 	int			h;
 	int			number_objs;

@@ -140,6 +140,7 @@ void    get_obj(t_json *obj, char *name, t_obj *object)
                         query_attribute(json, "angle").float_value);
     object->point = get_vec(query_attribute(json, "point").json_value);
     object->rad = query_attribute(json, "rad").float_value;
+    object->neg = query_attribute(json, "neg").int_value;
     if (ft_strncmp(name, "sphere", 6) == 0)
         get_sphere(json, object);
     else if (ft_strncmp(name, "cone", 4) == 0)
@@ -195,7 +196,7 @@ t_accuracy  get_accuracy(t_json *obj)
     t_json      *json;
 
     json = (t_json*)query_attribute(obj, "accuracy").json_value;
-    accuracy.delta = fabs(query_attribute(json, "delta").float_value);
+    accuracy.delta = query_attribute(json, "delta").float_value;
     accuracy.depth_pt = 0;
     accuracy.depth_march = query_attribute(json, "depth raymarching").int_value;
     accuracy.depth_ref = query_attribute(json, "depth reflaction").int_value;

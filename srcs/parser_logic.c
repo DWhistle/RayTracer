@@ -23,7 +23,7 @@ int		parse_float(t_parser *json, t_values *value)
 	&& json->f[json->i] != '-')
 		json->i++;
 	ret = ft_atoi(json->f + json->i);
-	precision = (json->f[json->i] == '-') ? precision : -precision;
+	precision = (json->f[json->i] == '-') ? -precision : precision;
 	while (json->f[json->i] && json->f[json->i] != '.')
 		json->i++;
 	while (json->f[++json->i] && ft_isdigit(json->f[json->i]))
