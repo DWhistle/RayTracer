@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/29 21:52:57 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/07/29 22:00:30 by hgreenfe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,29 +47,20 @@ int     render(void *window, t_scene *scene)
     return (0);
 }
 
-
+void	ft_tickfunc(void *wnd, int n, void *param)
+{
+	(void)n;
+	param = ft_get_window_input_param(wnd);
+	render(wnd, (t_scene*)param);
+}
 
 void	ft_key_func(void *wnd, int n, void *param)
 {
-	if (n == 21) // клавиша r
-	{
-		param = ft_get_window_input_param(wnd);
-		render(wnd, (t_scene*)param);
-	}
+	(void)param;
 	if (n == FTUI_KEY_ESCAPE)
 	{
 		ft_set_window_quit(wnd, 1);
 	}
-}
-
-void	ft_render(void *wnd, int n, void* param)
-{
-	t_point size;
-
-	size = ft_get_window_size(wnd);
-	(void)wnd;
-	(void)n;
-	(void)param;
 }
 
 int     main(int argc, char **argv)
@@ -89,8 +80,8 @@ int     main(int argc, char **argv)
 	printf("\ny =========== %p\n", (void*)((t_scene*)scene)->objs);
 	printf("\ny =========== %p\n", (void*)((t_scene*)scene)->objs);
 	add_window((void**)&list, r, 0x00000000, "Ray Tracer v1.0");
-	set_event_function(list->content, FT_EVENT_RENDER, ft_render, ft_get_window_pixels(list->content, NULL));
 	set_event_function(list->content, FT_EVENT_KEYPRESS, ft_key_func, scene);
+	set_event_function(list->content, FT_EVENT_TICKFUNC, ft_tickfunc, NULL);
 	ft_mainloop(list);
     return (0);
 }
