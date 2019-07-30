@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/14 21:03:42 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/06/06 01:08:12 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/07/29 21:52:57 by hgreenfe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int			compile_cl_by_name(t_opencl *cl, const char *name)
 			cl->context, 1, (const char **)&source_str,
 			(const size_t *)&source_size, &ret);
 	if (ret)
-		return (0);	
+		return (0);
 	ret = clBuildProgram(cl->program, 1, &(cl->device_id), NULL, NULL, NULL);
 	if (ret == CL_BUILD_PROGRAM_FAILURE)
 	{

@@ -9,7 +9,15 @@ double			update_r(t_obj new_obj, t_vec point)
 
 	point = vec_sub(point, new_obj.point);
 	point = rot(new_obj.rot_quat, point);
+	if (new_obj.fract > 0)
+	{
+		point.arr[0] = fmod(point.arr[0], new_obj.fract) - new_obj.fract * 0.5;
+		point.arr[1] = fmod(point.arr[1], new_obj.fract) - new_obj.fract * 0.5;
+		point.arr[2] = fmod(point.arr[2], new_obj.fract) - new_obj.fract * 0.5;
+	}
 	len = new_obj.len(point, new_obj.param) - new_obj.rad;
+	if (new_obj.ind == 1)
+		len = fmax(len, -(2*point.arr[0] + point.arr[1]) / 2);
 	return (len);
 }
 
@@ -61,7 +69,6 @@ double			get_dist(int neg, t_obj **obj, t_vec point, t_scene scene)
 		}
 		counter++;
 	}
-	neg = (neg + 1) % 2;
 	return (dist);
 }
 
@@ -91,6 +98,40 @@ t_point_data	raymarching(t_scene objs, t_vec vec,
 			return (crate_point_data(get_normal(new_point, *obj2), obj, new_point, new_vec0()));
 		}
 		dist += r[0];
+		new_point = vec_sum(vec_dotdec(vec, dist), point);
+	}
+	return (crate_point_data(new_vec0(), 0, new_vec0(), new_vec0()));
+}
+
+t_point_data	shadowmarching(t_scene objs, t_vec vec,
+							t_accuracy accuracy, t_vec point)
+{
+	double	r[3];
+	t_obj	*obj;
+	t_obj	*obj2;
+	double	dist;
+	t_vec	new_point;
+
+	dist = 0;
+	obj = 0;
+	new_point = point;
+	r[2] = 1;
+	objs.ignore = 0;
+	while (accuracy.depth_march-- &&
+			dist < accuracy.max_dist)
+	{
+		
+		r[0] = get_dist(0, &obj, new_point, objs);
+		r[1] = get_dist(1, &obj2, new_point, objs);
+		r[0] = fmax(r[0], -r[1]);
+		r[2] = fmin( r[2], 32*r[0] / dist);
+		if (r[0] != -r[1])
+			obj2 = obj;
+		if (r[2] < accuracy.delta)
+		{
+			return (crate_point_data(get_normal(new_point, *obj2), obj, new_point, new_vec0()));
+		}
+		dist += fmax(r[0], accuracy.delta);
 		new_point = vec_sum(vec_dotdec(vec, dist), point);
 	}
 	return (crate_point_data(new_vec0(), 0, new_vec0(), new_vec0()));

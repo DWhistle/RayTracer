@@ -6,12 +6,13 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/24 17:31:11 by bturcott          #+#    #+#             */
-/*   Updated: 2019/07/25 16:24:32 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/07/29 21:52:57 by hgreenfe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ray_render.h"
 #include "parser.h"
+#define PI 3.14159265359
 
 t_values query_attribute(t_json *obj, char *name)
 {
@@ -141,6 +142,7 @@ void    get_obj(t_json *obj, char *name, t_obj *object)
     object->point = get_vec(query_attribute(json, "point").json_value);
     object->rad = query_attribute(json, "rad").float_value;
     object->neg = query_attribute(json, "neg").int_value;
+    object->fract = query_attribute(json, "fract").float_value;
     if (ft_strncmp(name, "sphere", 6) == 0)
         get_sphere(json, object);
     else if (ft_strncmp(name, "cone", 4) == 0)
@@ -222,6 +224,7 @@ t_scene *get_scene(t_json *obj)
     scene->color = ft_memalloc(sizeof(t_vec) * scene->w * scene->w);
     scene->points_data = ft_memalloc(sizeof(t_point_data) * scene->w * scene->h);
     scene->accuracy = get_accuracy(obj);
+    scene->FOW = query_attribute(obj, "FOW").float_value * (PI / 180.0);
     return (scene);
 }
 

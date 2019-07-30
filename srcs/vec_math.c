@@ -1,5 +1,4 @@
 #include "../incs/vector.h"
-#include <math.h>
 
 t_vec4 vec_fabs(t_vec4 vec)
 {

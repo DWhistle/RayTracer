@@ -6,12 +6,15 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 18:25:23 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/25 12:04:46 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/07/30 00:16:08 by hgreenfe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_H
 # define VECTOR_H
+# ifndef __OPENCL_C_VERSION__
+#  include <math.h>
+# endif
 # include "../incs/ft_types.h"
 
 union					u_vec4

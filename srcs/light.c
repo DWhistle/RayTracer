@@ -18,21 +18,10 @@ t_point_data get_point(t_scene objs, t_vec vec,
 							t_accuracy accuracy)
 {
     t_point_data point_data;
-    t_point_data shadow;
 
     point_data = ray_render(objs, vec, accuracy);
-    shadow = point_data;
-    while (1)
-    {
-        if (shadow.obj && shadow.obj->refraction)
-            vec = transparency(vec, shadow);
-        else
-            break;
-        objs.ignore = shadow.obj;
-        shadow = ray_render(objs, vec, accuracy);
-    }
-    if(shadow.obj)
-        point_data.color = shadow.obj->color;
+    if(point_data.obj)
+        point_data.color = point_data.obj->color;
     return(point_data);
 }
 
@@ -44,15 +33,7 @@ int     get_shadow(t_scene objs, t_vec vec,
 
     objs.ignore = point_data.obj;
     point = point_data.point;
-    while (1)
-    {
-        shadow = raymarching(objs, vec, accuracy, point);
-        if (shadow.obj && shadow.obj->refraction)
-            vec = transparency(vec, shadow);
-        else
-            break;
-        objs.ignore = shadow.obj;
-    }
+    shadow = shadowmarching(objs, vec, accuracy, point);
     if (shadow.obj)
         return (1);
     else

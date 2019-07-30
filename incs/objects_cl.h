@@ -1,5 +1,6 @@
-	#ifndef OBJECT_H
-# define OBJECT_H
+	#ifndef OBJECT_CL_H
+# define OBJECT_CL_H
+
 
 #include "vector.h"
 #include "quat.h"
@@ -91,7 +92,6 @@ typedef struct	s_scene
 	int			sepia;
 	t_accuracy	accuracy;
 	int			sec;
-	double		FOW;
 }				t_scene;
 
 typedef struct	s_polygon

@@ -58,7 +58,7 @@ t_point_data	ray_render(t_scene scene, t_vec point, t_accuracy accuracy)
 		point_data.obj && point_data.obj->reflection)
 		{
 			scene.ignore = point_data.obj;
-			point_data = raymarching(scene,
+			point_data = shadowmarching(scene,
 			get_ref_vec(point_data, point), accuracy, point_data.point);
 			points[depth_ref] = point_data;
 		}

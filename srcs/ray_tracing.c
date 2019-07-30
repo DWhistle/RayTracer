@@ -79,14 +79,15 @@ void	ray_tracing(t_scene scene, int **pixel,
 	int			y;
 	t_vec		color;
 
-	y = screen->h;
+	screen = 0;
+	y = scene.h;
 	while (y--)
 	{
-		x = screen->w;
+		x = scene.w;
 		while (x--)
 		{
-			color = antialiasing(scene, (double)x / screen->w - 0.5,
-			(double)y / screen->h - 0.5, accuracy, scene.points_data + x + screen->w * y);
+			color = antialiasing(scene, (double)x / scene.w - 0.5,
+			((double)y - scene.h / 2 ) / scene.w, accuracy, scene.points_data + x + scene.w * y);
 			if (color.arr[0] > 255)
 			{
 				color.arr[1] += color.arr[0] - 255;
@@ -104,9 +105,12 @@ void	ray_tracing(t_scene scene, int **pixel,
 			}
 			if (color.arr[0] > 255)
 				color.arr[0] = 255;
-			scene.color[x + screen->w * y] = vec_sum(scene.color[x + screen->w * y], color);
-			color = vec_dotdec(scene.color[x + screen->w * y], 1.0 / accuracy.depth_pt);
-			(*pixel)[x + screen->w * y] = (int)(color.arr[0]) << 16 |
+			if (accuracy.depth_pt == 1)
+				scene.color[x + scene.w * y] = color;
+			else
+				scene.color[x + scene.w * y] = vec_sum(scene.color[x + scene.w * y], color);
+			color = vec_dotdec(scene.color[x + scene.w * y], 1.0 / accuracy.depth_pt);
+			(*pixel)[x + scene.w * y] = (int)(color.arr[0]) << 16 |
 					(int)(color.arr[1]) << 8 | (int)(color.arr[2]) | 0xff << 24;
 		}
 	}

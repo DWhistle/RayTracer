@@ -1,6 +1,8 @@
 #ifndef QUAT_H
 # define QUAT_H
-
+# ifndef __OPENCL_C_VERSION__
+#  include <math.h>
+# endif
 #include "vector.h"
 
 typedef struct	s_quat

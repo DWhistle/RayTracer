@@ -1,5 +1,4 @@
 #include "quat.h"
-#include <math.h>
 
 t_quat	create_quat(t_vec4 rotate_vector, double rotate_angle)
 {
