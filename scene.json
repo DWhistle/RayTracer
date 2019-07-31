@@ -1,6 +1,6 @@
 {
-    "w": 400,
-    "h": 400,
+    "w": 700,
+    "h": 700,
     "FOW": 90.0,
     "cartoon effect":0,
     "blur motion":1,
@@ -15,13 +15,49 @@
       "max dist": 10000,
       "delta": 0.01
     },
-    "cylinder":
+    "cone":
     {
       "neg": 0,
       "color":
       {
-        "x":0.0,
+        "x":255.0,
         "y":0.0,
+        "z":0.0
+      },
+      "rot_vec":
+      {
+        "x":1.0,
+        "y":1.0,
+        "z":0.0
+      },
+      "param":
+      {
+        "x":5.0,
+        "y":1.0,
+        "z":1.0
+      },
+      "angle": 0.9,
+      "rad":0.0,      
+      "reflection":1.0,
+      "refraction":0.0,
+      "point":
+      {
+        "x":0.0,
+        "y":-0.0,
+        "z":300.0
+      },
+      "fract":0.0,
+      "len_u": 100.0,
+      "len_v": 200.0,
+      "texture":"UZNGRozhtic.bmp"
+    },
+    "sphere2":
+    {
+      "neg": 0,
+      "color":
+      {
+        "x":200.0,
+        "y":50.0,
         "z":256.0
       },
       "rot_vec":
@@ -30,23 +66,19 @@
         "y":1.0,
         "z":0.0
       },
-      "param":
-      {
-        "x":50.0,
-        "y":50.0,
-        "z":80.0
-      },
-      "angle": 1.0,
+      "radius": 60.0,
+      "angle": 0.0,
       "rad":0.0,      
-      "reflection":1.0,
-      "refraction":0.0,
+      "reflection":0.0,
+      "refraction":1.0,
       "point":
       {
-        "x":0.0,
-        "y":0.0,
-        "z":750.0
+        "x":200.0,
+        "y":50.0,
+        "z":600.0
       },
-      "fract":0.0
+      "fract":0.0,
+      "texture":""
     },
     "plane":
     {
@@ -67,7 +99,7 @@
       {
         "x":0.0,
         "y":0.0,
-        "z":-1.0
+        "z":1.0
       },
       "angle": 0.0,
       "rad":0.0,      
@@ -77,9 +109,10 @@
       {
         "x":0.0,
         "y":0.0,
-        "z":700.0
+        "z":-700.0
       },
-      "fract":0.0
+      "fract":0.0,
+      "texture":""
     },
     "plane1":
     {
@@ -112,19 +145,40 @@
         "y":0.0,
         "z":800.0
       },
-      "fract":0.0
+      "fract":0.0,
+      "len_u": 200.0,
+      "len_v": 200.0,
+      "texture":"UZNGRozhtic.bmp"
     },
     "light":
     {
-      "intensity": 250.0,
+      "intensity": 50.0,
       "point":
       {
         "x":-100.0,
         "y":0.0,
-        "z":0.0
+        "z":200.0
       },
       "type":3,
-      "radius":50.0,
+      "radius":1.0,
+      "vec":
+      {
+        "x":0.0,
+        "y":0.0,
+        "z":0.0
+      }
+    },
+    "light2":
+    {
+      "intensity": 100.0,
+      "point":
+      {
+        "x":100.0,
+        "y":0.0,
+        "z":200.0
+      },
+      "type":3,
+      "radius":1.0,
       "vec":
       {
         "x":0.0,
@@ -139,7 +193,7 @@
       {
         "x":-100.0,
         "y":0.0,
-        "z":0.0
+        "z":550.0
       },
       "type":2,
       "radius":10.0,

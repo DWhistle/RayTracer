@@ -12,6 +12,7 @@
 
 #include "ray_render.h"
 #include "parser.h"
+#include "SDL2/SDL.h"
 #define PI 3.14159265359
 
 t_values query_attribute(t_json *obj, char *name)
@@ -52,7 +53,7 @@ void    get_sphere(t_json *json, t_obj *object)
 void    get_cone(t_json *json, t_obj *object)
 {
     object->type = CONE;
-    object->len = len_cone;
+    object->len = len_cone;   
     object->param = vec_norm(get_vec(query_attribute(json, "param").json_value));
 }
 
@@ -128,6 +129,23 @@ void    get_box(t_json *json, t_obj *object)
     object->param = get_vec(query_attribute(json, "param").json_value);
 }
 
+t_texture   get_texture(char *image, t_json *j)
+{
+    SDL_Surface *serf;
+    t_texture   tex;
+    if (!(serf = SDL_LoadBMP(image)))
+    {
+        tex.texture = NULL;
+        return (tex);
+    }
+    tex.texture = serf->pixels;
+    tex.h = serf->h;
+    tex.w = serf->w;
+    tex.len_u = query_attribute(j, "len_u").float_value;
+    tex.len_v = query_attribute(j, "len_v").float_value;
+    return (tex);
+}
+
 void    get_obj(t_json *obj, char *name, t_obj *object)
 {
     t_json *json;
@@ -143,6 +161,7 @@ void    get_obj(t_json *obj, char *name, t_obj *object)
     object->rad = query_attribute(json, "rad").float_value;
     object->neg = query_attribute(json, "neg").int_value;
     object->fract = query_attribute(json, "fract").float_value;
+    object->texture = get_texture(query_attribute(json, "texture").string_value, json);
     if (ft_strncmp(name, "sphere", 6) == 0)
         get_sphere(json, object);
     else if (ft_strncmp(name, "cone", 4) == 0)

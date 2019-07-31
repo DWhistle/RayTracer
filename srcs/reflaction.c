@@ -42,13 +42,14 @@ t_vec	f(t_point_data *points, int depth_ref, t_scene scene)
 	return (color);
 }
 
-t_point_data	ray_render(t_scene scene, t_vec point, t_accuracy accuracy)
+t_point_data	ray_render(t_scene scene, t_vec point, t_accuracy accuracy, t_point_data (*raymarch)())
 {
 	int				depth_ref;
 	t_point_data	point_data;
 	t_point_data	*points;
 
-	point_data = raymarching(scene, point, accuracy, scene.cam);
+	point_data = raymarch(scene, point, accuracy, scene.cam);
+	return (point_data);
 	if (point_data.obj)
 	{
 		points = ft_memalloc(sizeof(t_point_data) * (accuracy.depth_ref + 1));
@@ -57,7 +58,6 @@ t_point_data	ray_render(t_scene scene, t_vec point, t_accuracy accuracy)
 		while (accuracy.depth_ref > depth_ref++ &&
 		point_data.obj && point_data.obj->reflection)
 		{
-			scene.ignore = point_data.obj;
 			point_data = shadowmarching(scene,
 			get_ref_vec(point_data, point), accuracy, point_data.point);
 			points[depth_ref] = point_data;

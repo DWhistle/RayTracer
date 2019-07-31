@@ -29,6 +29,15 @@ enum
 
 typedef t_vec4 t_vec;
 
+typedef struct s_texture
+{
+	int				h;
+	int				w;
+	double			len_u;
+	double			len_v;
+	unsigned char	*texture;
+}               t_texture;
+
 typedef struct s_obj
 {
 	int		type;
@@ -43,6 +52,7 @@ typedef struct s_obj
 	t_vec	param;
 	int		neg;
 	double	fract;
+	t_texture	texture;
 }               t_obj;
 
 typedef struct	s_light

@@ -3,6 +3,17 @@
 #include "libft.h"
 #include <stdio.h>
 
+double			mix(double x, double y, double a)
+{
+	return (x * (1 - a) + y * a);
+}
+
+double opSmoothUnion( double d1, double d2, double k )
+{
+	double h = clamp1( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
+	return mix( d2, d1, h ) - k*h*(1.0-h);
+}
+
 double			update_r(t_obj new_obj, t_vec point)
 {
 	double len;
@@ -16,8 +27,6 @@ double			update_r(t_obj new_obj, t_vec point)
 		point.arr[2] = fmod(point.arr[2], new_obj.fract) - new_obj.fract * 0.5;
 	}
 	len = new_obj.len(point, new_obj.param) - new_obj.rad;
-	if (new_obj.ind == 1)
-		len = fmax(len, -(2*point.arr[0] + point.arr[1]) / 2);
 	return (len);
 }
 
@@ -40,7 +49,7 @@ t_point_data	crate_point_data(t_vec norm,
 				t_obj *obj, t_vec point, t_vec color)
 {
 	t_point_data point_data;
-
+	
 	point_data.norm = norm;
 	point_data.obj = obj;
 	point_data.point = point;
@@ -63,6 +72,7 @@ double			get_dist(int neg, t_obj **obj, t_vec point, t_scene scene)
 			r = update_r(scene.objs[counter], point);
 			if (r < dist)
 			{
+				//dist = opSmoothUnion(dist, r, 0.1);
 				dist = r;
 				*obj = scene.objs + counter;
 			}
@@ -70,6 +80,32 @@ double			get_dist(int neg, t_obj **obj, t_vec point, t_scene scene)
 		counter++;
 	}
 	return (dist);
+}
+
+t_point_data	raymarch_in_obj(t_obj *obj, t_vec vec,
+							t_accuracy accuracy, t_vec point)
+{
+	double	r[2];
+	double	dist;
+	t_vec	new_point;
+
+	dist = 0;
+	new_point = point;
+	new_point = vec_sum(vec_dotdec(vec, accuracy.delta * 2), point);
+	while (accuracy.depth_march-- &&
+			dist < accuracy.max_dist)
+	{
+		r[0] = fabs(update_r(*obj, point));
+		if (r[0] < accuracy.delta)
+		{
+			dist += r[0] * 2;
+			new_point = vec_sum(vec_dotdec(vec, dist), point);
+			return (crate_point_data(get_normal(new_point, *obj), obj, new_point, new_vec0()));
+		}
+		dist += r[0];
+		new_point = vec_sum(vec_dotdec(vec, dist), point);
+	}
+	return (crate_point_data(new_vec0(), 0, new_vec0(), new_vec0()));
 }
 
 t_point_data	raymarching(t_scene objs, t_vec vec,
@@ -89,12 +125,15 @@ t_point_data	raymarching(t_scene objs, t_vec vec,
 	{
 		
 		r[0] = get_dist(0, &obj, new_point, objs);
+		if (r[0] < 0)
+			r[0] = fabs(fmin(r[0], accuracy.delta * -1.1));
 		r[1] = get_dist(1, &obj2, new_point, objs);
 		r[0] = fmax(r[0], -r[1]);
 		if (r[0] != -r[1])
 			obj2 = obj;
 		if (r[0] < accuracy.delta)
 		{
+			
 			return (crate_point_data(get_normal(new_point, *obj2), obj, new_point, new_vec0()));
 		}
 		dist += r[0];
@@ -123,8 +162,8 @@ t_point_data	shadowmarching(t_scene objs, t_vec vec,
 		
 		r[0] = get_dist(0, &obj, new_point, objs);
 		r[1] = get_dist(1, &obj2, new_point, objs);
-		r[0] = fmax(r[0], -r[1]);
-		r[2] = fmin( r[2], 32*r[0] / dist);
+		r[0] = fmax(fabs(r[0]), -r[1]);
+		r[2] = fmin( r[2], r[0] / dist);
 		if (r[0] != -r[1])
 			obj2 = obj;
 		if (r[2] < accuracy.delta)

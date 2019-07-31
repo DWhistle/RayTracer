@@ -22,7 +22,7 @@ double			len_capsule(t_vec point, t_vec param);
 double			len_triangular_prism(t_vec point, t_vec param);
 double			len_hexagonal_prism(t_vec point, t_vec param);
 t_point_data    path_tracing(t_scene scene, t_vec vec, t_accuracy accuracy, t_vec point);
-t_point_data    ray_render(t_scene scene, t_vec point, t_accuracy accuracy);
+t_point_data	ray_render(t_scene scene, t_vec point, t_accuracy accuracy, t_point_data (*raymarch)());
 t_point_data    raymarching(t_scene objs, t_vec vec, t_accuracy accuracy, t_vec point);
 t_vec			get_normal(t_vec point, t_obj obj);
 double          light_render(t_scene objs, t_point_data point_data, t_vec n);
@@ -36,6 +36,8 @@ t_vec			rot(t_quat quat, t_vec v);
 t_vec			get_ref_vec(t_point_data point_data, t_vec vec);
 double			clamp1(double f, double s, double t);
 t_point_data	shadowmarching(t_scene objs, t_vec vec,
+							t_accuracy accuracy, t_vec point);
+t_point_data	raymarch_in_obj(t_obj *obj, t_vec vec,
 							t_accuracy accuracy, t_vec point);
 double map(t_vec point, t_vec param);
 #endif	
