@@ -57,8 +57,8 @@ int     render(void *window, t_scene *scene)
 {
 	t_rect				screen;
 	int					*pixels;
-	time_t rawtime;
-  	struct tm * timeinfo;
+	time_t 				rawtime;
+  	struct tm 			*timeinfo;
 
   	time ( &rawtime );
   	timeinfo = localtime ( &rawtime );
