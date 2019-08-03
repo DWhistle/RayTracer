@@ -9,7 +9,6 @@
 //#include "srcs/vec_math.c"
 
 
-
 t_vec			rand_point(t_vec point, double r)
 {
 	t_vec	v;
@@ -45,14 +44,6 @@ t_vec			rot(t_quat quat, t_vec v)
 	return ((double4)(t.x, t.y, t.z, 0.0));
 }
 
-double			ft_len(t_obj obj, t_vec point)
-{
-	if (obj.type == SPHERE)
-		return distance(obj.point, point);
-	else
-		return distance(obj.point, point);
-}
-
 double			update_r(t_obj new_obj, t_vec point)
 {
 	double len;
@@ -63,7 +54,7 @@ double			update_r(t_obj new_obj, t_vec point)
 	{
 		point = fmod(point.arr[0], new_obj.fract) - new_obj.fract * 0.5;
 	}
-	len = ft_len(new_obj, point) - new_obj.rad;
+	len = new_obj.len(point, new_obj.param) - new_obj.rad;
 	return (len);
 }
 
@@ -110,7 +101,7 @@ t_vec			get_normal(t_vec point, t_obj obj)
 	return (normalize(vec));
 }
 
-t_point_data	raymarching(t_scene objs, double4 vec, t_accuracy accuracy, t_vec point)
+t_point_data	raymarching(t_scene objs, t_vec vec, t_accuracy accuracy, t_vec point)
 {
 	double	r[2];
 	t_obj	*obj;
@@ -121,7 +112,7 @@ t_point_data	raymarching(t_scene objs, double4 vec, t_accuracy accuracy, t_vec p
 	dist = 0;
 	obj = 0;
 	new_point = point;
-	if (accuracy.depth_march-- &&
+	while (accuracy.depth_march-- &&
 		   dist < accuracy.max_dist)
 	{
 
@@ -148,9 +139,6 @@ t_point_data	raymarching(t_scene objs, double4 vec, t_accuracy accuracy, t_vec p
 			(double4)(0.0, 0.0, 0.0, 0.0),
 			(double4)(0.0, 0.0, 0.0, 0.0)));
 }
-
-
-////////////////////////////////////////////////////////////////////////////////
 
 /*
 

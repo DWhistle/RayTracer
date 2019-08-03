@@ -25,7 +25,7 @@ int			init_cl(t_opencl **cl)
 			&((*cl)->ret_num_platforms));
 	if (ret)
 		return (0);
-	ret = clGetDeviceIDs((*cl)->platform_id, CL_DEVICE_TYPE_GPU, 1,
+	ret = clGetDeviceIDs((*cl)->platform_id, CL_DEVICE_TYPE_CPU, 1,
 			&((*cl)->device_id), &((*cl)->ret_num_devices));
 	if (ret)
 		return (0);

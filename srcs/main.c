@@ -104,7 +104,6 @@ int		main(int argc, char **argv)
 	t_list	*json1;
 	t_list	*list;
 	t_rect	r;
-	//t_opencl	*ocl;
 
 	(void)argc;
 	json1 = parse_json(argv[1]);
@@ -114,7 +113,6 @@ int		main(int argc, char **argv)
 	add_window((void**)&list, r, 0x00000000, "Ray Tracer v1.0");
 	set_event_function(list->content, FT_EVENT_KEYPRESS, ft_key_func, scene);
 	set_event_function(list->content, FT_EVENT_TICKFUNC, ft_tickfunc, NULL);
-	//ft_set_window_window_param(list->content, ocl);
 	ft_mainloop(list);
 	return (0);
 }
