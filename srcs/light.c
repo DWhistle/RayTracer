@@ -14,14 +14,13 @@ t_vec			rand_point(t_vec point, double r)
 	return (point);
 }
 
-t_vec           get_uv_spehere(t_obj *obj, t_vec point)
+t_vec           get_uv_spehere(t_vec point)
 {
     double v;
     double u;
     double phi;
     double theta;
 
-    obj = 0;
     point = vec_norm(point);
     phi   = acos(-point.arr[2]);
     theta = acos(point.arr[1] / sin(phi)) / (2.0 * 3.14);
@@ -47,27 +46,27 @@ t_vec           get_pixel(t_vec uv, t_texture texture)
                     texture.texture[(int)v + (int)u]));
 }
 
-t_vec           get_uv_cylinder(t_obj *obj, t_vec point)
+t_vec           get_uv_cylinder(t_texture texture, t_vec point, double param)
 {
     double v;
     double u;
     
-    point.arr[2] = point.arr[2] /obj->param.arr[2];
-    point.arr[0] = point.arr[0] /obj->param.arr[2];
+    point.arr[2] = point.arr[2] / param;
+    point.arr[0] = point.arr[0] / param;
 
     v = cos(point.arr[2]);
     if (point.arr[0] < 0)
         v = fabs(v - 1);
     if (point.arr[2] < 0)
         v = fabs(v - 1);
-    u = fmod(point.arr[1] / obj->texture.len_u, 1);
+    u = fmod(point.arr[1] / texture.len_u, 1);
     if (u < 0)
         u += 1;
     v *= 2;
     return (new_vec2(u, v));
 }
 
-t_vec           get_uv_cone(t_obj *obj, t_vec point)
+t_vec           get_uv_cone(t_texture texture, t_vec point)
 {
     double v;
     double u;
@@ -78,17 +77,17 @@ t_vec           get_uv_cone(t_obj *obj, t_vec point)
     point = vec_norm(point);
 
     v = cos(point.arr[1]) * 2;
-    u = fmod(fabs(z / obj->texture.len_u), 1);
+    u = fmod(fabs(z / texture.len_u), 1);
     return (new_vec2(u, v));
 }
 
-t_vec           get_uv_plane(t_obj *obj, t_vec point)
+t_vec           get_uv_plane(t_texture texture, t_vec point)
 {
     double v;
     double u;
 
-    v = fmod(point.arr[0] / obj->texture.len_v, 1);
-    u = fmod(point.arr[1] / obj->texture.len_u, 1);
+    v = fmod(point.arr[0] / texture.len_v, 1);
+    u = fmod(point.arr[1] / texture.len_u, 1);
     if (u < 0)
         u += 1;
     if (v < 0)
@@ -104,13 +103,13 @@ t_vec           get_color_obj(t_point_data shadow)
     if (shadow.obj->texture.texture)
     {
         if (shadow.obj->type == SPHERE)
-            return (get_pixel(get_uv_spehere(shadow.obj, point), shadow.obj->texture));
+            return (get_pixel(get_uv_spehere(point), shadow.obj->texture));
         if (shadow.obj->type == CYLINDER)
-            return (get_pixel(get_uv_cylinder(shadow.obj, point), shadow.obj->texture));
+            return (get_pixel(get_uv_cylinder(shadow.obj->texture, point, shadow.obj->param.arr[2]), shadow.obj->texture));
         if (shadow.obj->type == CONE)
-            return (get_pixel(get_uv_cone(shadow.obj, point), shadow.obj->texture));
+            return (get_pixel(get_uv_cone(shadow.obj->texture, point), shadow.obj->texture));
         if (shadow.obj->type == PLANE)
-            return (get_pixel(get_uv_plane(shadow.obj, point), shadow.obj->texture));
+            return (get_pixel(get_uv_plane(shadow.obj->texture, point), shadow.obj->texture));
     }
     return (shadow.obj->color);
 }

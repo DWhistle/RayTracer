@@ -115,6 +115,9 @@ typedef struct	s_scene
 	t_accuracy	accuracy;
 	int			sec;
 	double		FOW;
+	t_quat		rot_x;
+	t_quat		rot;
+	int			signz;
 }				t_scene;
 
 typedef struct	s_polygon

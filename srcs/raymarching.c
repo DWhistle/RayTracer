@@ -68,13 +68,13 @@ t_vec			normal_map(t_vec point, t_obj obj)
     if (obj.normal_map.texture)
     {
         if (obj.type == SPHERE)
-            return (get_pixel(get_uv_spehere(&obj, point), obj.normal_map));
+            return (get_pixel(get_uv_spehere(point), obj.normal_map));
         if (obj.type == CYLINDER)
-            return (get_pixel(get_uv_cylinder(&obj, point), obj.normal_map));
+            return (get_pixel(get_uv_cylinder(obj.normal_map, point, obj.param.arr[2]), obj.normal_map));
         if (obj.type == CONE)
-            return (get_pixel(get_uv_cone(&obj, point), obj.normal_map));
+            return (get_pixel(get_uv_cone(obj.normal_map, point), obj.normal_map));
         if (obj.type == PLANE)
-            return (get_pixel(get_uv_plane(&obj, point), obj.normal_map));
+            return (get_pixel(get_uv_plane(obj.normal_map, point), obj.normal_map));
     }
     return (new_vec0());
 }
