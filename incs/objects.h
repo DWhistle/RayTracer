@@ -82,7 +82,11 @@ typedef struct	s_point_data
 	t_vec norm;
 	t_obj *obj;
 	t_vec point;
+	t_vec ref_point;
+	t_vec refr_point;
 	t_vec color;
+	t_vec ref_color;
+	t_vec refr_color;
 }				t_point_data;
 
 typedef struct	s_accuracy

@@ -20,25 +20,27 @@ t_vec	get_ref_color(t_point_data *points)
 	i = 0;
 	while (points[i].obj)
 		i++;
-	while (i-- != 1)
+	points[i - 1].color = get_color_obj(points[i - 1]);
+	while (i-- >= 2)
 	{
 		color_ref = points[i].color;
 		ref = points[i - 1].obj->reflection;
-		color = points[i - 1].color;
+		color = get_color_obj(points[i - 1]);
 		color = vec_sum(vec_dotdec(color, 1 - ref), vec_dotdec(color_ref, ref));
 		points[i - 1].color = color;
 	}
-	return (points[0].color);
+	return (points[1].color);
 }
 
-t_vec	f(t_point_data *points, int depth_ref, t_scene scene)
+t_vec	f(t_point_data *points, int depth_ref)
 {
 	t_vec			color;
 
-	points[depth_ref].obj = 0;
+	points[depth_ref+1].obj = 0;
+	if (!points)
+		return(new_vec0());
 	color = get_ref_color(points);
 	free(points);
-	scene.ignore = 0;
 	return (color);
 }
 
@@ -49,22 +51,24 @@ t_point_data	ray_render(t_scene scene, t_vec point, t_accuracy accuracy, t_point
 	t_point_data	*points;
 
 	point_data = raymarch(scene, point, accuracy, scene.cam);
-	if (point_data.obj)
+	if (point_data.obj && point_data.obj->reflection > 0 && accuracy.depth_ref)
 	{
-		points = ft_memalloc(sizeof(t_point_data) * (accuracy.depth_ref + 1));
-		points[0] = point_data;
-		depth_ref = 0;
-		while (accuracy.depth_ref > depth_ref++ &&
-		point_data.obj && point_data.obj->reflection)
+		if((points = ft_memalloc(sizeof(t_point_data) * (accuracy.depth_ref + 1))))
 		{
-			point = get_ref_vec(point_data, point);
-			point_data = shadowmarching(scene,
+			points[0] = point_data;
+			depth_ref = 0;
+			while (accuracy.depth_ref > depth_ref && point_data.obj->reflection > 0)
+			{
+				depth_ref++;
+				point = get_ref_vec(point_data, point);
+				points[depth_ref] = shadowmarching(scene,
 					point, accuracy, point_data.point);
-			points[depth_ref] = point_data;
+			}
+			point_data.ref_color = f(points, depth_ref);
+			point_data.ref_point = points[depth_ref].point;
 		}
-		scene.ignore = 0;
-		point_data.color = f(points, depth_ref, scene);
-		return (point_data);
 	}
+	if (point_data.obj)
+		point_data.color = get_color_obj(point_data);
 	return (point_data);
 }

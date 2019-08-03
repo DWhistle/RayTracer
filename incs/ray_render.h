@@ -44,5 +44,6 @@ t_vec           get_uv_spehere(t_vec point);
 t_vec           get_uv_cylinder(t_texture texture, t_vec point, double param);
 t_vec           get_uv_cone(t_texture texture, t_vec point);
 t_vec           get_uv_plane(t_texture texture, t_vec point);
+t_vec           get_color_obj(t_point_data shadow);
 double map(t_vec point, t_vec param);
 #endif	
