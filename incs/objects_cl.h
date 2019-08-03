@@ -2,8 +2,8 @@
 # define OBJECT_CL_H
 
 
-#include "vector.h"
-#include "quat.h"
+//#include "vector.h"
+//#include "quat.h"
 #define MAX_Z 800
 #define E 0.0001
 
@@ -28,7 +28,8 @@ enum
 	POINT = 3
 };
 
-typedef t_vec4 t_vec;
+typedef double4 t_vec;
+typedef double4 t_quat;
 
 typedef struct s_obj
 {
