@@ -39,10 +39,10 @@ int		print_error(int errnum)
 
 void	render_cl(t_opencl	*ocl, t_scene scene, int **pixels)
 {
+	cl_mem mem;
 	//add_parameter(ocl, 1, &scene, sizeof(t_scene));
-//	if (!
-	compile_cl_by_name(ocl, "render");//)
-//		return ;
+	if (!compile_cl_by_name(ocl, "render"))
+		return ;
 	add_parameter_i(ocl, 1, &(scene.number_objs));
 	add_parameter_i(ocl, 1, &(scene.number_lights));
 	add_parameter_i(ocl, 1, &(scene.w));
@@ -54,8 +54,9 @@ void	render_cl(t_opencl	*ocl, t_scene scene, int **pixels)
 				  sizeof(t_point_data));
 	add_parameter(ocl, scene.number_objs, scene.color, sizeof(t_vec));
 	add_parameter(ocl, 1, &(scene.accuracy), sizeof(t_accuracy));
-	add_parameter(ocl, scene.w * scene.h, *pixels, sizeof(int));
+	mem = add_parameter_i(ocl, scene.w * scene.h, *pixels);
 	run_queue(ocl, scene.w * scene.h);
+	get_parameter_i(ocl, scene.w * scene.h, mem, *pixels);
 	//ocl = 0;
 }
 
@@ -68,13 +69,14 @@ int		render(void *window, t_scene *scene)
 	struct tm			*timeinfo;
 	t_opencl			*ocl;
 
+	init_cl(&ocl);
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
 	pixels = ft_get_window_pixels(window, &screen);
 	srand(time(NULL));
 	scene->accuracy.depth_pt++;
 	//ray_tracing(*scene, (int**)&(pixels), scene->accuracy, &screen);
-	ocl = ft_get_window_render_param(window);
+	//ocl = ft_get_window_window_param(window);
 	render_cl(ocl, *scene, &pixels);
 	printf("%d\n", scene->accuracy.depth_pt);
 	return (0);
@@ -102,10 +104,9 @@ int		main(int argc, char **argv)
 	t_list	*json1;
 	t_list	*list;
 	t_rect	r;
-	t_opencl	*ocl;
+	//t_opencl	*ocl;
 
 	(void)argc;
-	init_cl(&ocl);
 	json1 = parse_json(argv[1]);
 	scene = convert_objects(json1->content);
 	list = ft_libui_init();
@@ -113,7 +114,7 @@ int		main(int argc, char **argv)
 	add_window((void**)&list, r, 0x00000000, "Ray Tracer v1.0");
 	set_event_function(list->content, FT_EVENT_KEYPRESS, ft_key_func, scene);
 	set_event_function(list->content, FT_EVENT_TICKFUNC, ft_tickfunc, NULL);
-	ft_set_window_render_param(list->content, ocl);
+	//ft_set_window_window_param(list->content, ocl);
 	ft_mainloop(list);
 	return (0);
 }
