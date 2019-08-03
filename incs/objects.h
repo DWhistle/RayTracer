@@ -38,6 +38,13 @@ typedef struct s_texture
 	unsigned char	*texture;
 }               t_texture;
 
+typedef struct s_restriction
+{
+	t_vec	norm;
+	t_vec	dislocation;
+}               t_restriction;
+
+
 typedef struct s_obj
 {
 	int		type;
@@ -53,6 +60,12 @@ typedef struct s_obj
 	int		neg;
 	double	fract;
 	t_texture	texture;
+	int				numbers_plane;
+	t_restriction *restriction;
+	double	frequency;
+	int		specular;
+	double	amplitude;
+	t_texture normal_map;
 }               t_obj;
 
 typedef struct	s_light
@@ -102,6 +115,9 @@ typedef struct	s_scene
 	t_accuracy	accuracy;
 	int			sec;
 	double		FOW;
+	t_quat		rot_x;
+	t_quat		rot;
+	int			signz;
 }				t_scene;
 
 typedef struct	s_polygon
