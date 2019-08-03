@@ -14,13 +14,14 @@ t_vec			rand_point(t_vec point, double r)
 	return (point);
 }
 
-t_vec           get_pixel_spehere(t_obj *obj, t_vec point)
+t_vec           get_uv_spehere(t_obj *obj, t_vec point)
 {
     double v;
     double u;
     double phi;
     double theta;
 
+    obj = 0;
     point = vec_norm(point);
     phi   = acos(-point.arr[2]);
     theta = acos(point.arr[1] / sin(phi)) / (2.0 * 3.14);
@@ -30,14 +31,23 @@ t_vec           get_pixel_spehere(t_obj *obj, t_vec point)
         u = (1 - theta);
     if (sin(phi) == 0)
         u = 1;
-    u = (int)(u * obj->texture.h) * obj->texture.w * 3;
-    v = (int)((1.0 - phi / 3.14) * obj->texture.w) * 3;
-    return (new_vec3(obj->texture.texture[(int)v + (int)u + 2],
-                    obj->texture.texture[(int)v + (int)u + 1],
-                    obj->texture.texture[(int)v + (int)u]));
+    v = (1.0 - phi / 3.14);
+    return (new_vec2(u, v));
 }
 
-t_vec           get_pixel_cylinder(t_obj *obj, t_vec point)
+t_vec           get_pixel(t_vec uv, t_texture texture)
+{
+    double v;
+    double u;
+
+    u = (int)(uv.arr[0] * texture.h) * texture.w * 3;
+    v = (int)(uv.arr[1] * texture.w) * 3;
+    return (new_vec3(texture.texture[(int)v + (int)u + 2],
+                    texture.texture[(int)v + (int)u + 1],
+                    texture.texture[(int)v + (int)u]));
+}
+
+t_vec           get_uv_cylinder(t_obj *obj, t_vec point)
 {
     double v;
     double u;
@@ -45,16 +55,19 @@ t_vec           get_pixel_cylinder(t_obj *obj, t_vec point)
     point.arr[2] = point.arr[2] /obj->param.arr[2];
     point.arr[0] = point.arr[0] /obj->param.arr[2];
 
-    v = cos(point.arr[2]) * 2;
-    u = fmod(fabs(point.arr[1]) / obj->texture.len_u, 1);
-    u = (int)(u * obj->texture.h) * obj->texture.w * 3;
-    v = (int)(v * obj->texture.w) * 3;
-    return (new_vec3(obj->texture.texture[(int)v + (int)u + 2],
-                    obj->texture.texture[(int)v + (int)u + 1],
-                    obj->texture.texture[(int)v + (int)u]));
+    v = cos(point.arr[2]);
+    if (point.arr[0] < 0)
+        v = fabs(v - 1);
+    if (point.arr[2] < 0)
+        v = fabs(v - 1);
+    u = fmod(point.arr[1] / obj->texture.len_u, 1);
+    if (u < 0)
+        u += 1;
+    v *= 2;
+    return (new_vec2(u, v));
 }
 
-t_vec           get_pixel_cone(t_obj *obj, t_vec point)
+t_vec           get_uv_cone(t_obj *obj, t_vec point)
 {
     double v;
     double u;
@@ -66,47 +79,38 @@ t_vec           get_pixel_cone(t_obj *obj, t_vec point)
 
     v = cos(point.arr[1]) * 2;
     u = fmod(fabs(z / obj->texture.len_u), 1);
-    u = (int)(u * obj->texture.h) * obj->texture.w * 3;
-    v = (int)(v * obj->texture.w) * 3;
-    return (new_vec3(obj->texture.texture[(int)v + (int)u + 2],
-                    obj->texture.texture[(int)v + (int)u + 1],
-                    obj->texture.texture[(int)v + (int)u]));
+    return (new_vec2(u, v));
 }
 
-t_vec           get_pixel_plane(t_obj *obj, t_vec point)
+t_vec           get_uv_plane(t_obj *obj, t_vec point)
 {
     double v;
     double u;
 
     v = fmod(point.arr[0] / obj->texture.len_v, 1);
     u = fmod(point.arr[1] / obj->texture.len_u, 1);
-    u = (int)(u * obj->texture.h) * obj->texture.w * 3;
-    v = (int)(v * obj->texture.w) * 3;
-    return (new_vec3(obj->texture.texture[(int)v + (int)u + 2],
-                    obj->texture.texture[(int)v + (int)u + 1],
-                    obj->texture.texture[(int)v + (int)u]));
+    if (u < 0)
+        u += 1;
+    if (v < 0)
+        v += 1;
+    return (new_vec2(u, v));
 }
 
 t_vec           get_color_obj(t_point_data shadow)
 {
     t_vec point;
-    t_quat q;
     
-    q = shadow.obj->rot_quat;
-    q.x *= -1;
-    q.y *= -1;
-    q.z *= -1;
     point = rot(shadow.obj->rot_quat, vec_sub(shadow.point, shadow.obj->point));
     if (shadow.obj->texture.texture)
     {
         if (shadow.obj->type == SPHERE)
-            return (get_pixel_spehere(shadow.obj, point));
+            return (get_pixel(get_uv_spehere(shadow.obj, point), shadow.obj->texture));
         if (shadow.obj->type == CYLINDER)
-            return (get_pixel_cylinder(shadow.obj, point));
+            return (get_pixel(get_uv_cylinder(shadow.obj, point), shadow.obj->texture));
         if (shadow.obj->type == CONE)
-            return (get_pixel_cone(shadow.obj, point));
+            return (get_pixel(get_uv_cone(shadow.obj, point), shadow.obj->texture));
         if (shadow.obj->type == PLANE)
-            return (get_pixel_plane(shadow.obj, point));
+            return (get_pixel(get_uv_plane(shadow.obj, point), shadow.obj->texture));
     }
     return (shadow.obj->color);
 }
@@ -145,8 +149,11 @@ int     get_shadow(t_scene objs, t_vec vec,
     t_vec point;
     t_point_data shadow;
 
-    return(0);
+    return (0);
     point = point_data.point;
+
+    if (point_data.obj->amplitude)
+        objs.ignore = point_data.obj;
     shadow = shadowmarching(objs, vec, accuracy, point);
     if (shadow.obj)
         return (1);
@@ -185,11 +192,14 @@ t_vec   lightt(t_scene objs, t_vec vec,
                 n_dot_l = vec_dotvec(point_data->norm, vec_norm(li));
                 if (n_dot_l > 0)
                     i += objs.lights[objs.number_lights].intensity * (n_dot_l) / (vec_len(li));
-                hw_vec = vec_norm(vec_sum(vec_dotdec(li, 1), vec_norm(vec_dotdec(vec, -1))));
-                n_dot_l = vec_dotvec(hw_vec, point_data->norm);
-                n_dot_l = vec_dotvec(get_ref_vec(*point_data, vec_dotdec(li, -1)), vec_norm(vec_dotdec(vec, -1)));
-                if (n_dot_l > 0)
-                    i += objs.lights[objs.number_lights].intensity * pow(n_dot_l, 128) / (vec_len(li));
+                if (point_data->obj->specular > 0)
+                {
+                    hw_vec = vec_norm(vec_sum(vec_dotdec(li, 1), vec_norm(vec_dotdec(vec, -1))));
+                    n_dot_l = vec_dotvec(hw_vec, point_data->norm);
+                    n_dot_l = vec_dotvec(get_ref_vec(*point_data, vec_dotdec(li, -1)), vec_norm(vec_dotdec(vec, -1)));
+                    if (n_dot_l > 0)
+                        i += objs.lights[objs.number_lights].intensity * pow(n_dot_l, point_data->obj->specular) / (vec_len(li));
+                }
             }
         }
     }

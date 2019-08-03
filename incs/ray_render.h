@@ -39,5 +39,10 @@ t_point_data	shadowmarching(t_scene objs, t_vec vec,
 							t_accuracy accuracy, t_vec point);
 t_point_data	raymarch_in_obj(t_obj *obj, t_vec vec,
 							t_accuracy accuracy, t_vec point);
+t_vec           get_pixel(t_vec uv, t_texture texture);
+t_vec           get_uv_spehere(t_obj *obj, t_vec point);
+t_vec           get_uv_cylinder(t_obj *obj, t_vec point);
+t_vec           get_uv_cone(t_obj *obj, t_vec point);
+t_vec           get_uv_plane(t_obj *obj, t_vec point);
 double map(t_vec point, t_vec param);
 #endif	
