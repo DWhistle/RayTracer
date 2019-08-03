@@ -1,7 +1,7 @@
 # sdl2 cmake project-config input for ./configure scripts
 
 set(prefix "/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL") 
-set(exec_prefix "${prefix}")
+set(exec_prefix "/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL")
 set(libdir "${exec_prefix}/lib")
 set(SDL2_PREFIX "/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL")
 set(SDL2_EXEC_PREFIX "/Volumes/Storage/goinfre/kmeera-r/RayTracer/libs/libui/SDL")

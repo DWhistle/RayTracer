@@ -1,0 +1,347 @@
+#include "srcs/vector.c"
+#include "incs/ray_rander_cl.h"
+#include "incs/objects.h"
+#include "srcs/vec_sum.c"
+#include "srcs/len_obj.c"
+#include "srcs/vec_mul.c"
+#include "srcs/vec_math.c"
+
+t_vec			rot(t_quat quat, t_vec v)
+{
+	t_quat t;
+
+	t = quat_mul_vector(quat, v);
+	t = quat_mul_quat(t, quat_invert(quat));
+	return (new_vec3(t.x, t.y, t.z));
+}
+
+double			update_r(t_obj new_obj, t_vec point)
+{
+	double len;
+
+	point = vec_sub(point, new_obj.point);
+	point = rot(new_obj.rot_quat, point);
+	if (new_obj.fract > 0)
+	{
+		point.arr[0] = fmod(point.arr[0], new_obj.fract) - new_obj.fract * 0.5;
+		point.arr[1] = fmod(point.arr[1], new_obj.fract) - new_obj.fract * 0.5;
+		point.arr[2] = fmod(point.arr[2], new_obj.fract) - new_obj.fract * 0.5;
+	}
+	if (new_obj.type == SPHERE)
+		len = len_sphere(point, new_obj.param) - new_obj.rad;
+	if (new_obj.type == CYLINDER)
+		len = len_cylinder(point, new_obj.param) - new_obj.rad;
+	if (new_obj.type == PLANE)
+		len = len_plane(point, new_obj.param) - new_obj.rad;
+	if (new_obj.type == CONE)
+		len = len_cone(point, new_obj.param) - new_obj.rad;
+	if (new_obj.type == TOR)
+		len = len_tor(point, new_obj.param) - new_obj.rad;
+	if (new_obj.type == BOX)
+		len = len_box(point, new_obj.param) - new_obj.rad;
+	if (new_obj.type == HEXAGONAL_PRISM)
+		len = len_hexagonal_prism(point, new_obj.param) - new_obj.rad;
+	if (new_obj.type == TRIANGULAR_PRISM)
+		len = len_triangular_prism(point, new_obj.param) - new_obj.rad;
+	if (new_obj.type == CAPSULE)
+		len = len_capsule(point, new_obj.param) - new_obj.rad;
+	if (new_obj.type == ELLIPSOID)
+		len = len_ellipsoid(point, new_obj.param) - new_obj.rad;
+	if (new_obj.type == OCTAHEDRON)
+		len = len_octahedron(point, new_obj.param) - new_obj.rad;
+	return (len);
+}
+
+t_vec			get_normal(t_vec point, t_obj obj)
+{
+	double e = 0.0053;
+	t_vec		vec;
+
+	
+	vec.arr[0] = (update_r(obj, vec_sum(point, new_vec3(e, 0, 0))) - update_r(obj, vec_sub(point, new_vec3(e, 0, 0))));
+	vec.arr[1] = (update_r(obj, vec_sum(point, new_vec3(0, e, 0))) - update_r(obj, vec_sub(point, new_vec3(0, e, 0))));
+	vec.arr[2] = (update_r(obj, vec_sum(point, new_vec3(0, 0, e))) - update_r(obj, vec_sub(point, new_vec3(0, 0, e))));
+	vec.arr[3] = 0;
+	if (obj.neg)
+		vec = vec_dotdec(vec, -1);
+	return(vec_norm(vec));
+}
+
+t_point_data	crate_point_data(t_vec norm,
+				t_obj *obj, t_vec point, t_vec color)
+{
+	t_point_data point_data;
+
+	point_data.norm = norm;
+	point_data.obj = obj;
+	point_data.point = point;
+	point_data.color = color;
+	return (point_data);
+}
+
+double			get_dist(int neg, t_obj **obj, t_vec point, __global t_scene *scene, int ignore)
+{
+	int		counter;
+	double	r;
+	double	dist;
+
+	counter = 0;
+	dist = scene->accuracy.max_dist + 1;
+	while (counter != scene->number_objs)
+	{
+		if (neg == scene->objs[counter].neg && scene->objs[counter].ind != ignore)
+		{
+			r = update_r(scene->objs[counter], point);
+			if (r < dist)
+			{
+				dist = r;
+				*obj = scene->objs + counter;
+			}
+		}
+		counter++;
+	}
+	return (dist);
+}
+
+t_point_data	raymarching(__global t_scene *objs, t_vec vec,
+							t_accuracy accuracy, t_vec point, int ignore)
+{
+	double	r[2];
+	t_obj	*obj;
+	t_obj	*obj2;
+	double	dist;
+	t_vec	new_point;
+
+	dist = 0;
+	obj = 0;
+	new_point = point;
+	while (accuracy.depth_march-- &&
+			dist < accuracy.max_dist)
+	{
+		
+		r[0] = get_dist(0, &obj, new_point, objs, ignore);
+		r[1] = get_dist(1, &obj2, new_point, objs, ignore);
+		r[0] = fmax(r[0], -r[1]);
+		if (r[0] != -r[1])
+			obj2 = obj;
+		if (r[0] < accuracy.delta)
+		{
+			return (crate_point_data(get_normal(new_point, *obj2), obj, new_point, new_vec0()));
+		}
+		dist += r[0];
+		new_point = vec_sum(vec_dotdec(vec, dist), point);
+	}
+	return (crate_point_data(new_vec0(), 0, new_vec0(), new_vec0()));
+}
+
+t_vec	get_ref_vec(t_point_data point_data, t_vec vec)
+{
+	vec = vec_dotdec(vec, -1);
+	vec = vec_sub(vec_dotdec(point_data.norm,
+	vec_dotvec(point_data.norm, vec) * 2), vec);
+	vec = vec_norm(vec);
+	return (vec);
+}
+
+t_vec	get_ref_color(t_point_data *points)
+{
+	int		i;
+	t_vec	color_ref;
+	t_vec	color;
+	double	ref;
+
+	i = 0;
+	while (points[i].obj)
+		i++;
+	while (i-- != 1)
+	{
+		color_ref = points[i].color;
+		ref = points[i - 1].obj->reflection;
+		color = points[i - 1].color;
+		color = vec_sum(vec_dotdec(color, 1 - ref), vec_dotdec(color_ref, ref));
+		points[i - 1].color = color;
+	}
+	return (points[0].color);
+}
+
+t_vec	f(t_point_data *points, int depth_ref, __global t_scene *scene)
+{
+	t_vec			color;
+
+	points[depth_ref].obj = 0;
+	color = get_ref_color(points);
+	return (color);
+}
+
+t_point_data	ray_render(__global t_scene *scene, t_vec point, t_accuracy accuracy)
+{
+	int				depth_ref;
+	t_point_data	point_data;
+	t_point_data	points[accuracy.depth_ref + 1];
+	int				ignore;
+
+	point_data = raymarching(scene, point, accuracy, scene->cam, -1);
+	if (point_data.obj)
+	{
+		points[0] = point_data;
+		depth_ref = 0;
+		while (accuracy.depth_ref > depth_ref++ &&
+		point_data.obj && point_data.obj->reflection)
+		{
+			ignore = point_data.obj->ind;
+			point_data = raymarching(scene,
+			get_ref_vec(point_data, point), accuracy, point_data.point, ignore);
+			points[depth_ref] = point_data;
+		}
+		point_data.color = f(points, depth_ref, scene);
+		return (point_data);
+	}
+	return (point_data);
+}
+
+t_vec			rand_point(t_vec point, double r)
+{
+	return (point);
+}
+
+t_point_data get_point(__global t_scene *objs, t_vec vec,
+							t_accuracy accuracy)
+{
+    t_point_data point_data;
+
+    point_data = ray_render(objs, vec, accuracy);
+    if(point_data.obj)
+        point_data.color = point_data.obj->color;
+    return(point_data);
+}
+
+int     get_shadow(__global t_scene *objs, t_vec vec,
+							t_accuracy accuracy, t_point_data point_data)
+{
+    t_vec point;
+    t_point_data shadow;
+	int				ignore;
+
+    ignore = point_data.obj->ind;
+    point = point_data.point;
+    shadow = raymarching(objs, vec, accuracy, point, ignore);
+    if (shadow.obj)
+        return (1);
+    else
+        return (0);
+}
+
+t_vec   lightt(__global t_scene *objs, t_vec vec,
+							t_accuracy accuracy, t_point_data *point_data)
+{
+    double i;
+    double n_dot_l;
+    t_vec li;
+    t_vec hw_vec;
+
+    if (accuracy.depth_pt == 1)
+        *point_data = get_point(objs, vec, accuracy);
+    if (!point_data->obj)
+            return (new_vec0());
+    i = 0.0;
+    while (objs->number_lights--)
+    {
+        if (objs->lights[objs->number_lights].type == AMBIENT)
+            i += objs->lights[objs->number_lights].intensity;
+        else
+        {
+            
+            if (objs->lights[objs->number_lights].type == DIRECT)
+                li = objs->lights[objs->number_lights].vec;
+            else
+                li = vec_sub(rand_point(objs->lights[objs->number_lights].point,\
+                objs->lights[objs->number_lights].r), point_data->point);
+            accuracy.max_dist = vec_len(li);
+            if (!get_shadow(objs, vec_norm(li), accuracy, *point_data))
+            {
+                n_dot_l = vec_dotvec(point_data->norm, vec_norm(li));
+                if (n_dot_l > 0)
+                    i += objs->lights[objs->number_lights].intensity * (n_dot_l) / (vec_len(li));
+                hw_vec = vec_norm(vec_sum(vec_dotdec(li, 1), vec_norm(vec_dotdec(vec, -1))));
+                n_dot_l = vec_dotvec(hw_vec, point_data->norm);
+                n_dot_l = vec_dotvec(get_ref_vec(*point_data, vec_dotdec(li, -1)), vec_norm(vec_dotdec(vec, -1)));
+                if (n_dot_l > 0)
+                    i += objs->lights[objs->number_lights].intensity * pow(n_dot_l, 128) / (vec_len(li));
+            }
+        }
+    }
+    return(vec_dotdec(point_data->color, i));
+}
+
+t_vec	antialiasing(__global t_scene *scene, double x, double y, t_accuracy accuracy, t_point_data *point_data)
+{
+	double	d_x;
+	double	d_y;
+	t_vec	color_1;
+	t_vec	color_2;
+
+	color_1 = new_vec0();
+	color_2 = new_vec0();	
+	d_x = 0;
+	while (x + d_x < x + 1.0 / scene->w)
+	{
+		d_y = 0;
+		while (y + d_y < y + 1.0 / scene->h)
+		{
+			color_1 = vec_sum(color_1, lightt(scene,
+			vec_norm(new_vec3((x + d_x), (y + d_y), 0.5)), accuracy, point_data));
+			d_y += 1.0 / accuracy.rpp / scene->h;
+		}
+		color_1 = vec_dotdec(color_1, 1.0 / accuracy.rpp);
+		color_2 = vec_sum(color_1, color_2);
+		d_x += 1.0 / accuracy.rpp / scene->w;
+	}
+	return (vec_dotdec(color_2, 1.0 / accuracy.rpp));
+}
+
+__kernel void	ray_tracing(__global t_scene *scene,\
+							__global t_light *lights,\
+							__global t_obj *obj,\
+							__global int *pixels, \
+							__global t_point_data *points_data, \
+							__global t_vec *scene_color)
+{
+	int			x;
+	int			y;
+	t_vec		color;
+	int			i = get_global_id(0);
+
+	x = i % scene->w;
+	y = i / (scene->h*2);
+
+	scene->lights = (t_light*)lights;
+	scene->objs = (t_obj*)obj;
+	scene->color = (t_vec*)scene_color;
+	scene->points_data = (t_point_data*)points_data;
+	color = antialiasing(scene, (double)x / scene->w - 0.5,
+	(double)y / scene->h - 0.5, scene->accuracy, scene->points_data + x + scene->w * y);
+	if (color.arr[0] > 255)
+	{
+		color.arr[1] += color.arr[0] - 255;
+		color.arr[0] = 255;
+	}
+	if (color.arr[1] > 255)
+	{
+		color.arr[2] += color.arr[1] - 255;
+		color.arr[1] = 255;
+	}
+	if (color.arr[2] > 255)
+	{
+		color.arr[0] += color.arr[2] - 255;
+		color.arr[2] = 255;
+	}
+	if (color.arr[0] > 255)
+		color.arr[0] = 255;
+	if (scene->accuracy.depth_pt == 1)
+		scene->color[x + scene->w * y] = color;
+	else
+		scene->color[x + scene->w * y] = vec_sum(scene->color[x + scene->w * y], color);
+	color = vec_dotdec(scene->color[x + scene->w * y], 1.0 / scene->accuracy.depth_pt);
+	pixels[x + scene->w * y] = (int)(color.arr[0]) << 16 |
+			(int)(color.arr[1]) << 8 | (int)(color.arr[2]) | 0xff << 24;
+}
