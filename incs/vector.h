@@ -15,7 +15,9 @@
 # ifndef __OPENCL_C_VERSION__
 #  include <math.h>
 # endif
-# include "../incs/ft_types.h"
+//# include "../incs/ft_types.h"
+
+typedef	double ft_decimal;
 
 union					u_vec4
 {

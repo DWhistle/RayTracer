@@ -18,7 +18,7 @@ cl_mem		add_parameter(t_opencl *cl, int count, void *mem, unsigned long meme)
 	cl_int	ret;
 
 	memobj = clCreateBuffer(cl->context,
-					CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+					CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR,
 					count * meme, mem, &ret);
 	if (ret)
 		return (NULL);
@@ -39,7 +39,7 @@ cl_mem		add_parameter_i(t_opencl *cl, int count, cl_int *mem)
 	cl_int	ret;
 
 	memobj = clCreateBuffer(cl->context,
-					CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+					CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR,
 					count * sizeof(cl_int), mem, &ret);
 	if (ret)
 		return (NULL);
