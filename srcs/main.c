@@ -106,7 +106,6 @@ int		main(int argc, char **argv)
 	t_rect	r;
 
 	(void)argc;
-	init_cl(&ocl);
 	json1 = parse_json(argv[1]);
 	scene = convert_objects(json1->content);
 	list = ft_libui_init();
