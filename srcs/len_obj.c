@@ -120,3 +120,42 @@ double len_box(t_vec point, t_vec param)
 	d = vec_sub(d, param);
 	return(vec_len(vec_fmax(d, 0.0)) + fmin(fmax(d.arr[0], fmax(d.arr[1], d.arr[2])), 0));
 }
+
+double len_mandelbub(t_vec point, t_vec param)
+{
+	t_vec w = point;
+    float m = vec_dotvec(w,w);
+
+    t_vec trap = vec_fabs(w);
+	trap.arr[3] = m;
+	float dz = 1.0;
+    
+    param.arr[0] = 0;
+	for( int i=0; i<9; i++ )
+    {
+        float m2 = m*m;
+        float m4 = m2*m2;
+		dz = 8.0*sqrt(m4*m2*m)*dz + 1.0;
+
+        float x = w.vec.x; float x2 = x*x; float x4 = x2*x2;
+        float y = w.vec.y; float y2 = y*y; float y4 = y2*y2;
+        float z = w.vec.z; float z2 = z*z; float z4 = z2*z2;
+
+        float k3 = x2 + z2;
+        float k2 = 1 / sqrt( k3*k3*k3*k3*k3*k3*k3 );
+        float k1 = x4 + y4 + z4 - 6.0*y2*z2 - 6.0*x2*y2 + 2.0*z2*x2;
+        float k4 = x2 - y2 + z2;
+
+        w.vec.x = point.vec.x +  64.0*x*y*z*(x2-z2)*k4*(x4-6.0*x2*z2+z4)*k1*k2;
+        w.vec.y = point.vec.y + -16.0*y2*k3*k4*k4 + k1*k1;
+        w.vec.z = point.vec.z +  -8.0*y*k4*(x4*x4 - 28.0*x4*x2*z2 + 70.0*x4*z4 - 28.0*x2*z2*z4 + z4*z4)*k1*k2;
+
+        m = vec_dotvec(w,w);
+		if( m > 256.0 )
+            break;
+    }
+
+    //resColor = vec4(m, trap.yzw);
+
+    return 0.25*log(m)*sqrt(m)/dz;
+}

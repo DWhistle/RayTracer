@@ -49,6 +49,13 @@ void		print_log(t_opencl *cl)
 	clGetProgramBuildInfo(cl->program, cl->device_id,
 			CL_PROGRAM_BUILD_LOG, log_size, log, NULL);
 	ft_putendl(log);
+	clGetProgramBuildInfo(cl->program, cl->device_id,
+					CL_PROGRAM_BUILD_OPTIONS, 0, NULL, &log_size);
+	ft_memdel((void*)&log);
+	log = (char *)malloc(log_size);
+	clGetProgramBuildInfo(cl->program, cl->device_id,
+					CL_PROGRAM_BUILD_OPTIONS, log_size, log, NULL);
+	ft_putendl(log);
 }
 
 int			compile_cl_by_name(t_opencl *cl, const char *name)

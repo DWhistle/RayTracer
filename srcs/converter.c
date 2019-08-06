@@ -306,6 +306,9 @@ void    get_obj(t_json *obj, char *name, t_obj *object)
     object->refraction = query_attribute(json, "refraction", &res).float_value;
 	if (res)
 		object->refraction = 0;
+    object->transparency = query_attribute(json, "transparency", &res).float_value;
+	if (res)
+		object->transparency = 0;
 	object->frequency = query_attribute(json, "frequency", &res).float_value;
 	if (res)
 		object->frequency = 0;

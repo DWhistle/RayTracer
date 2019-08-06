@@ -1,7 +1,7 @@
 {
     "w": 700,
     "h": 700,
-    "FOW": 90.0,
+    "FOW": 50.0,
     "cartoon effect":0,
     "blur motion":1,
     "negative":0,
@@ -9,15 +9,15 @@
     "sepia":0,
     "cam":
     {
-      "x":200.0,
+      "x":400.0,
       "y":0.0,
-      "z":0.0
+      "z":250.0
     },
     "direction":
     {
-      "x":0.0,
+      "x":-1.0,
       "y":0.0,
-      "z":1.0
+      "z":0.3
     },
     "accuracy":
     {
@@ -27,7 +27,7 @@
       "max dist": 10000,
       "delta": 0.01
     },
-    "cylinder":
+    "box":
     {
       "neg": 0,
       "color":
@@ -38,32 +38,27 @@
       },
       "rot_vec":
       {
-        "x":1.0,
+        "x":0.0,
         "y":1.0,
         "z":0.0
       },
       "param":
       {
-        "x":5.0,
+        "x":1.0,
         "y":1.0,
-        "z":50.0
+        "z":1.0
       },
-      "angle": 0.0,
+      "angle": -0.3,
       "rad":0.0,      
       "reflection":0.0,
       "refraction":0.0,
       "point":
       {
-        "x":0.0,
-        "y":-0.0,
-        "z":500.0
+        "x":398.0,
+        "y":0.0,
+        "z":251.0
       },
-      "fract":0.0,
-      "texture":
-      {
-        "path":"UZNGRozhtic.bmp",
-        "len_u":100.0
-      }
+      "fract":0.0
     },
     "sphere2":
     {
@@ -83,21 +78,17 @@
       "radius": 60.0,
       "angle": 0.0,
       "rad":0.0,      
-      "reflection":0.0,
-      "refraction":0.8,
+      "reflection":0.7,
+      "refraction":1.0,
       "point":
       {
-        "x":200.0,
-        "y":50.0,
-        "z":300.0
+        "x":0.0,
+        "y":-0.0,
+        "z":500.0
       },
       "fract":0.0,
-      "specular":0,
-      "normal_map":
-      {
-        "path":"ice_normals.bmp",
-        "len_u":100.0
-      }
+      "specular":200,
+      "transparency": 0.4
     },
     "plane":
     {
@@ -165,6 +156,106 @@
       },
       "fract":0.0
     },
+    "plane3":
+    {
+      "neg": 0,
+      "color":
+      {
+        "x":200.0,
+        "y":0.0,
+        "z":0.0
+      },
+      "rot_vec":
+      {
+        "x":1.0,
+        "y":1.0,
+        "z":0.0
+      },
+      "param":
+      {
+        "x":1.0,
+        "y":0.0,
+        "z":0.0
+      },
+      "angle": 0.0,
+      "rad":0.0,      
+      "reflection":0.0,
+      "refraction":0.0,
+      "point":
+      {
+        "x":-300.0,
+        "y":0.0,
+        "z":0.0
+      },
+      "fract":0.0
+    },
+    "plane5":
+    {
+      "neg": 0,
+      "color":
+      {
+        "x":0.0,
+        "y":0.0,
+        "z":200.0
+      },
+      "rot_vec":
+      {
+        "x":1.0,
+        "y":1.0,
+        "z":0.0
+      },
+      "param":
+      {
+        "x":1.0,
+        "y":0.0,
+        "z":0.0
+      },
+      "angle": 0.0,
+      "rad":0.0,      
+      "reflection":0.0,
+      "refraction":0.0,
+      "transparency": 0.0,
+      "point":
+      {
+        "x":-200.0,
+        "y":0.0,
+        "z":0.0
+      },
+      "fract":0.0
+    },
+    "plane4":
+    {
+      "neg": 0,
+      "color":
+      {
+        "x":0.0,
+        "y":200.0,
+        "z":200.0
+      },
+      "rot_vec":
+      {
+        "x":1.0,
+        "y":1.0,
+        "z":0.0
+      },
+      "param":
+      {
+        "x":-1.0,
+        "y":0.0,
+        "z":0.0
+      },
+      "angle": 0.0,
+      "rad":0.0,      
+      "reflection":0.0,
+      "refraction":0.0,
+      "point":
+      {
+        "x":600.0,
+        "y":0.0,
+        "z":0.0
+      },
+      "fract":0.0
+    },
     "light":
     {
       "intensity": 150.0,
@@ -173,6 +264,24 @@
         "x":0.0,
         "y":0.0,
         "z":650.0
+      },
+      "type":3,
+      "radius":1.0,
+      "vec":
+      {
+        "x":0.0,
+        "y":0.0,
+        "z":0.0
+      }
+    },
+    "light3":
+    {
+      "intensity": 150.0,
+      "point":
+      {
+        "x":400.0,
+        "y":0.0,
+        "z":300.0
       },
       "type":3,
       "radius":1.0,
@@ -193,7 +302,7 @@
         "z":200.0
       },
       "type":3,
-      "radius":1.0,
+      "radius":30.0,
       "vec":
       {
         "x":0.0,

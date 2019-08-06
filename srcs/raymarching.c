@@ -212,7 +212,7 @@ t_point_data	shadowmarching(t_scene objs, t_vec vec,
 		r[0] = get_dist(0, &obj, new_point, objs);
 		r[1] = get_dist(1, &obj2, new_point, objs);
 		r[0] = fmax(r[0], -r[1]);
-		r[2] = fmin( r[2], r[0] / dist);
+		r[2] = fmin( r[2], 32 * r[0] / dist);
 		if (r[0] != -r[1])
 			obj2 = obj;
 		if (r[2] < accuracy.delta)
