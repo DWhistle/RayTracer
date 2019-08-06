@@ -13,6 +13,8 @@ typedef struct	s_quat
 	double		z;
 }				t_quat;
 
+t_quat			quat_from_vec(t_vec4 vec);
+t_vec4			vec_from_quat(t_quat q);
 t_quat			quat_invert(t_quat q);
 t_quat			quat_scale(t_quat q, double val);
 t_quat			quat_mul_vector(t_quat a, t_vec4 b);

@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/30 00:16:08 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/08/06 00:13:31 by hgreenfe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "objects.h"
 #include "ray_render.h"
 #include "ft_opencl_func.h"
+#include "cl_objects_converter.h"
 #include "libft.h"
 #include <stdio.h>
 #include "parser.h"
@@ -36,10 +37,19 @@ int		print_error(int errnum)
 	return (0);
 }
 
+void 	ft_printmem(void *pxls, int w, int h)
+{
+	SDL_Surface	*surface;
+
+
+	surface = SDL_CreateRGBSurfaceFrom(pxls, w, h, 32, 8, 0xff, 0xff00, 0xff0000, 0xff000000);
+	SDL_SaveBMP(surface, "screenshot.bmp");
+}
 
 void	render_cl(t_opencl	*ocl, t_scene scene, int **pixels)
 {
-	cl_mem mem;
+	cl_mem mem_pixels;
+	cl_mem mem_color;
 	//add_parameter(ocl, 1, &scene, sizeof(t_scene));
 	if (!compile_cl_by_name(ocl, "render"))
 		return ;
@@ -48,18 +58,24 @@ void	render_cl(t_opencl	*ocl, t_scene scene, int **pixels)
 	add_parameter_i(ocl, 1, &(scene.w));
 	add_parameter_i(ocl, 1, &(scene.h));
 	add_parameter_f(ocl, 4, (scene.cam.arr));
-	add_parameter(ocl, scene.number_lights, scene.lights, sizeof(t_light));
-	add_parameter(ocl, scene.number_objs, scene.objs, sizeof(t_obj));
-	add_parameter(ocl, scene.number_objs, scene.points_data,
-				  sizeof(t_point_data));
-	add_parameter(ocl, scene.number_objs, scene.color, sizeof(t_vec));
+	add_parameter(ocl, scene.number_lights,
+			get_cl_all_lights(scene.lights, scene.number_lights),
+			sizeof(t_light));
+	add_parameter(ocl, scene.number_objs,
+			get_many_cl_obj(scene.objs, scene.number_objs), sizeof(t_obj));
+	add_parameter(ocl, scene.number_objs,
+			get_cl_points(scene.points_data, scene.number_objs),
+			sizeof(t_point_data));
+	mem_color = add_parameter(ocl, scene.w * scene.h,
+			get_cl_many_vec(scene.color, scene.w * scene.h), sizeof(cl_double4));
 	add_parameter(ocl, 1, &(scene.accuracy), sizeof(t_accuracy));
-	mem = add_parameter_i(ocl, scene.w * scene.h, *pixels);
+	mem_pixels = add_parameter_i(ocl, scene.w * scene.h, *pixels);
 	run_queue(ocl, scene.w * scene.h);
-	get_parameter_i(ocl, scene.w * scene.h, mem, *pixels);
-	//ocl = 0;
+	get_parameter_i(ocl, scene.w * scene.h, mem_pixels, *pixels);
+	get_parameter_f(ocl, scene.w * scene.h * 4, mem_color, (void*)scene.color);
+	if (scene.accuracy.depth_pt == 10)
+		ft_printmem(*pixels, scene.w, scene.h);
 }
-
 
 int		render(void *window, t_scene *scene)
 {
