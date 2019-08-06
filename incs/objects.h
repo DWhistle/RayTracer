@@ -47,19 +47,19 @@ typedef struct s_restriction
 
 typedef struct s_obj
 {
-	int		type;
-	t_quat	rot_quat;
-	t_vec	point;
-	double	rad;
-	double	(*len)();
-	int		ind;
-	double	reflection;
-	t_vec	color;
-	double	refraction;
-	t_vec	param;
-	int		neg;
-	double	fract;
-	t_texture	texture;
+	int				type;
+	t_quat			rot_quat;
+	t_vec			point;
+	double			rad;
+	double			(*len)();
+	int				ind;
+	double			reflection;
+	t_vec			color;
+	double			refraction;
+	t_vec			param;
+	int				neg;
+	double			fract;
+	t_texture		texture;
 	int				numbers_plane;
 	t_restriction *restriction;
 	double	frequency;
@@ -132,9 +132,9 @@ typedef struct	s_scene
 
 typedef struct	s_polygon
 {
-	t_vec	*points;
-	int		number_point;
-	t_vec	*norm;
+	t_vec		*points;
+	int			number_point;
+	t_vec		*norm;
 }				t_polygon;
 
 typedef struct	s_triangle
