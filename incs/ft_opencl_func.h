@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/14 21:19:48 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/30 00:16:08 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/08/12 19:53:33 by hgreenfe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef	struct			s_opencl {
 	cl_uint				arg_count;
 }						t_opencl;
 
+void		            print_log(t_opencl *cl);
 int						init_cl(t_opencl **cl);
 int						compile_cl_by_name(t_opencl *cl,
 											const char *name);
@@ -41,6 +42,8 @@ cl_mem					add_parameter_f(t_opencl *cl, int count,
 int						run_queue(t_opencl *cl, size_t parallels);
 int						get_parameter_i(t_opencl *cl, int num, cl_mem memobj,
 											cl_int *mem);
+int						get_parameter(t_opencl *cl, int count, cl_mem memobj,
+										cl_double *mem, size_t memsize);
 void					clear_parameters(t_opencl *cl);
 int						get_parameter_f(t_opencl *cl, int count, cl_mem memobj,
 											cl_double *mem);

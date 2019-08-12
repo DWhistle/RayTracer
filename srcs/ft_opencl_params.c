@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/01 21:57:30 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/29 21:52:57 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/08/12 19:50:46 by hgreenfe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,18 @@ int			get_parameter_f(t_opencl *cl, int count, cl_mem memobj,
 					memobj, CL_TRUE, 0,
 					count * sizeof(cl_double),
 					mem, 0, NULL, NULL);
+	return (!ret);
+}
+
+int			get_parameter(t_opencl *cl, int count, cl_mem memobj,
+						cl_double *mem, size_t memsize)
+{
+	int		ret;
+
+	ret = clEnqueueReadBuffer(cl->command_queue,
+							  memobj, CL_TRUE, 0,
+							  count * memsize,
+							  mem, 0, NULL, NULL);
 	return (!ret);
 }
 
