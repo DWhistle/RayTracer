@@ -52,7 +52,9 @@ FILES := main \
 		 get_next_line \
 		 converter \
 		 parser_logic \
-		 parser_utils
+		 parser_utils \
+		 cl_objects_converter \
+		 effects
 		 #converter
 
 
