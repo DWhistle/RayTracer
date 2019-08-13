@@ -112,13 +112,47 @@ double len_octahedron(t_vec point, t_vec param)
 	return (vec_len(new_vec3(q.arr[0], q.arr[1] - param.arr[0] + k, q.arr[2] - k)));
 }
 
-double len_box(t_vec point, t_vec param)
+float maxcomp(t_vec p ) { return fmax(p.vec.x,fmax(p.vec.y,p.vec.z));}
+
+double lenbox(t_vec point, t_vec param)
 {
 	t_vec d;
 
 	d = new_vec3(fabs(point.arr[0]), fabs(point.arr[1]), fabs(point.arr[2]));
 	d = vec_sub(d, param);
 	return(vec_len(vec_fmax(d, 0.0)) + fmin(fmax(d.arr[0], fmax(d.arr[1], d.arr[2])), 0));
+}
+
+float sdCross(t_vec point, t_vec param)
+{
+	param.arr[0] = 0;
+	double da = maxcomp(vec_fabs(new_vec2(point.arr[0], point.arr[1])));
+	double db = maxcomp(vec_fabs(new_vec2(point.arr[1], point.arr[2])));
+	double dc = maxcomp(vec_fabs(new_vec2(point.arr[2], point.arr[0])));
+	return fmin(da,fmin(db,dc))-1.0;
+}
+
+double len_box(t_vec point, t_vec param)
+{
+   double d = lenbox(point, param);
+   t_vec a = new_vec0();
+
+   double s = 1.0;
+
+	point = vec_sub(point, new_vec3(-1, -1, -1));
+   for( int m=0; m<5; m++ )
+   {
+		a = vec_dotdec(point, s);
+      	a.arr[0] = (fmod(a.arr[0], 2.0 )-1.0) * 3;
+	  	a.arr[1] = (fmod(a.arr[1], 2.0 )-1.0) * 3;
+	  	a.arr[2] = (fmod(a.arr[2], 2.0 )-1.0) * 3;
+      
+		s *= 3.0;
+      double c = (sdCross(a, param))/s;
+		d = fmax(d, -c);
+   }
+
+   return d;
 }
 
 double len_mandelbub(t_vec point, t_vec param)
@@ -130,8 +164,7 @@ double len_mandelbub(t_vec point, t_vec param)
 	trap.arr[3] = m;
 	float dz = 1.0;
     
-    param.arr[0] = 0;
-	for( int i=0; i<9; i++ )
+	for( int i=0; i < param.arr[0]; i++ )
     {
         float m2 = m*m;
         float m4 = m2*m2;

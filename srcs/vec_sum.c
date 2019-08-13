@@ -1,18 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   vec_sum.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/19 19:37:31 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/29 21:52:57 by hgreenfe         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include "vector.h"
 
-#include "../incs/vector.h"
-
-t_vec4	vec_sum(t_vec4 v1, t_vec4 v2)
+t_vec4		vec_sum(t_vec4 v1, t_vec4 v2)
 {
 	t_vec4	ret;
 
@@ -23,7 +11,7 @@ t_vec4	vec_sum(t_vec4 v1, t_vec4 v2)
 	return (ret);
 }
 
-t_vec4	vec_add(t_vec4 v1, ft_decimal val)
+t_vec4		vec_add(t_vec4 v1, ft_decimal val)
 {
 	t_vec4	ret;
 
@@ -34,7 +22,7 @@ t_vec4	vec_add(t_vec4 v1, ft_decimal val)
 	return (ret);
 }
 
-t_vec4	vec_sub(t_vec4 v1, t_vec4 v2)
+t_vec4		vec_sub(t_vec4 v1, t_vec4 v2)
 {
 	t_vec4	ret;
 
@@ -45,19 +33,17 @@ t_vec4	vec_sub(t_vec4 v1, t_vec4 v2)
 	return (ret);
 }
 
-int		vec_equ(t_vec4 v1, t_vec4 v2, ft_decimal eps)
+int			vec_equ(t_vec4 v1, t_vec4 v2, ft_decimal eps)
 {
-	return (
-			v1.vec.x - v2.vec.x <= eps &&
-			v1.vec.y - v2.vec.y <= eps &&
-			v1.vec.z - v2.vec.z <= eps &&
-			v1.vec.w - v2.vec.w <= eps);
+	return (fabs(v1.vec.x - v2.vec.x) <= eps &&
+			fabs(v1.vec.y - v2.vec.y) <= eps &&
+			fabs(v1.vec.z - v2.vec.z) <= eps &&
+			fabs(v1.vec.w - v2.vec.w) <= eps);
 }
 
-int		vec_ident(t_vec4 v1, t_vec4 v2)
+int			vec_ident(t_vec4 v1, t_vec4 v2)
 {
-	return (
-			v1.vec.x == v2.vec.x &&
+	return (v1.vec.x == v2.vec.x &&
 			v1.vec.y == v2.vec.y &&
 			v1.vec.z == v2.vec.z &&
 			v1.vec.w == v2.vec.w);

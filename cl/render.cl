@@ -1,3 +1,4 @@
+
 //#include "srcs/vector.c"
 #include "incs/ray_rander_cl.h"
 
@@ -153,24 +154,19 @@ t_point_data	raymarching(t_scene objs, double4 vec, t_accuracy accuracy, t_vec p
 ////////////////////////////////////////////////////////////////////////////////
 
 /*
-
-
 t_point_data	ray_render(t_scene scene, t_vec point, t_accuracy accuracy)
 {
 	int				depth_ref;
 	t_point_data	point_data;
 	t_point_data	*points;
-
 	point_data = raymarching(scene, point, accuracy, scene.cam);
 	return (point_data);
 }
-
 t_point_data get_point(t_scene objs, t_vec vec,
 					   t_accuracy accuracy)
 {
 	t_point_data point_data;
 	t_point_data shadow;
-
 	point_data = ray_render(objs, vec, accuracy, raymarching);
 	shadow = point_data;
 	if(shadow.obj)
@@ -192,8 +188,6 @@ t_point_data get_point(t_scene objs, t_vec vec,
 		shadow.color = get_color_obj(shadow);
 	return(shadow);
 }
-
-
 t_vec   lightt(t_scene objs, t_vec vec,
 			   t_accuracy accuracy, t_point_data *point_data)
 {
@@ -201,7 +195,6 @@ t_vec   lightt(t_scene objs, t_vec vec,
 	double n_dot_l;
 	t_vec li;
 	t_vec hw_vec;
-
 	if (accuracy.depth_pt == 1)
 		*point_data = get_point(objs, vec, accuracy);
 	if (!point_data->obj)
@@ -213,7 +206,6 @@ t_vec   lightt(t_scene objs, t_vec vec,
 			i += objs.lights[objs.number_lights].intensity;
 		else
 		{
-
 			if (objs.lights[objs.number_lights].type == DIRECT)
 				li = objs.lights[objs.number_lights].vec;
 			else
@@ -243,7 +235,6 @@ t_vec	antialiasing(t_scene *scene, double x, double y, t_accuracy accuracy, t_po
 	double	d_y;
 	t_vec	color_1;
 	t_vec	color_2;
-
 	color_1 = {0.0, 0.0, 0.0, 0.0};
 	color_2 = {0.0, 0.0, 0.0, 0.0};
 	d_x = 0;
@@ -264,7 +255,6 @@ t_vec	antialiasing(t_scene *scene, double x, double y, t_accuracy accuracy, t_po
 	}
 	return (color_2 / accuracy.rpp);
 }
-
 */
 
 __kernel void	ray_tracing(__global int *obj_count,

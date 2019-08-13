@@ -22,6 +22,7 @@ enum
 	CAPSULE = 11,
 	ELLIPSOID = 12,
 	OCTAHEDRON = 13,
+	MANDELBUB = 14,
 	DIRECT = 1,
 	AMBIENT = 2,
 	POINT = 3
@@ -74,7 +75,7 @@ typedef struct	s_light
 	int		type;
 	double	intensity;
 	double	r;
-	t_vec	point;
+	t_vec	point	;
 	t_vec	vec;
 }				t_light;
 

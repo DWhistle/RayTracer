@@ -1,7 +1,7 @@
 {
-    "w": 700,
-    "h": 700,
-    "FOW": 50.0,
+    "w": 300,
+    "h": 300,
+    "FOW": 90.0,
     "cartoon effect":0,
     "blur motion":1,
     "negative":0,
@@ -11,7 +11,7 @@
     {
       "x":400.0,
       "y":0.0,
-      "z":250.0
+      "z":250.5
     },
     "direction":
     {
@@ -25,7 +25,7 @@
       "depth raymarching": 200,
       "depth reflaction": 1,
       "max dist": 10000,
-      "delta": 0.01
+      "delta": 0.00001
     },
     "box":
     {
@@ -48,10 +48,11 @@
         "y":1.0,
         "z":1.0
       },
-      "angle": -0.3,
+      "angle": -1.5,
       "rad":0.0,      
       "reflection":0.0,
       "refraction":0.0,
+      "transparency":0.0,
       "point":
       {
         "x":398.0,
@@ -261,9 +262,9 @@
       "intensity": 150.0,
       "point":
       {
-        "x":0.0,
+        "x":200.0,
         "y":0.0,
-        "z":650.0
+        "z":450.0
       },
       "type":3,
       "radius":1.0,
@@ -279,7 +280,7 @@
       "intensity": 150.0,
       "point":
       {
-        "x":400.0,
+        "x":500.0,
         "y":0.0,
         "z":300.0
       },

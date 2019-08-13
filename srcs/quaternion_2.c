@@ -9,10 +9,10 @@ t_quat	create_quat(t_vec4 rotate_vector, double rotate_angle)
 	quat.x = rotate_vector.arr[0] * sin(rotate_angle / 2);
 	quat.y = rotate_vector.arr[1] * sin(rotate_angle / 2);
 	quat.z = rotate_vector.arr[2] * sin(rotate_angle / 2);
-	return(quat);
+	return (quat);
 }
 
-t_quat	quat_mul_quat(t_quat a , t_quat b)
+t_quat	quat_mul_quat(t_quat a, t_quat b)
 {
 	t_quat res;
 
@@ -20,7 +20,7 @@ t_quat	quat_mul_quat(t_quat a , t_quat b)
 	res.x = a.w * b.x + a.x * b.w + a.y * b.z - a.z * b.y;
 	res.y = a.w * b.y - a.x * b.z + a.y * b.w + a.z * b.x;
 	res.z = a.w * b.z + a.x * b.y - a.y * b.x + a.z * b.w;
-	return(res);
+	return (res);
 }
 
 t_quat	quat_mul_vector(t_quat a, t_vec4 b)
@@ -36,7 +36,7 @@ t_quat	quat_mul_vector(t_quat a, t_vec4 b)
 
 double	quat_length(t_quat q)
 {
-	return(sqrt(q.w * q.w + q.x * q.x + q.y * q.y + q.z * q.z));
+	return (sqrt(q.w * q.w + q.x * q.x + q.y * q.y + q.z * q.z));
 }
 
 t_quat	quat_scale(t_quat q, double val)
@@ -45,5 +45,5 @@ t_quat	quat_scale(t_quat q, double val)
 	q.x = q.x * val;
 	q.y = q.y * val;
 	q.z = q.z * val;
-	return(q);
+	return (q);
 }
