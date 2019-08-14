@@ -44,6 +44,40 @@ t_vec			f(t_point_data *points, int depth_ref)
 	return (color);
 }
 
+t_point_data	get_refraction(t_scene *objs, t_vec *vec,
+							t_accuracy accuracy, t_point_data point_data)
+{
+	if(point_data.obj)
+	{
+	*vec = transparency(*vec, point_data);
+	point_data = raymarch_in_obj(point_data.obj, *vec, accuracy, point_data.point);
+	objs->ignore = point_data.obj;
+	*vec = transparency(*vec, point_data);
+	point_data = ray_render(objs, *vec, point_data.point, raymarching);
+	objs->ignore = 0;
+	}
+	return (point_data);
+}
+
+t_point_data	get_reflaction(t_scene *objs, t_vec *vec, t_point_data point_data)
+{
+	*vec = get_ref_vec(point_data, *vec);
+	objs->ignore = point_data.obj;
+	return (raymarching(objs,
+			point_data.point, objs->accuracy, point_data.point));
+	objs->ignore = 0;
+}
+
+t_point_data	get_next_point(t_scene *objs, t_vec *vec,
+							t_accuracy accuracy, t_point_data point_data)
+{
+	//accuracy.delta = 0;
+	//point_data = get_reflaction(objs, vec, point_data);
+	//objs->ignore = 0;
+	point_data = get_refraction(objs, vec, accuracy, point_data);
+	return (point_data);
+}
+
 t_point_data	ray_render(t_scene *scene, t_vec vec,\
 							t_vec point, t_point_data (*raymarch)())
 {
@@ -52,23 +86,21 @@ t_point_data	ray_render(t_scene *scene, t_vec vec,\
 	t_point_data	*points;
 
 	point_data = raymarch(scene, vec, scene->accuracy, point);
+	if (point_data.obj)
+		point_data.color = get_color_obj(point_data);
 	if (point_data.obj && point_data.obj->reflection > 0 && scene->accuracy.depth_ref)
 		if ((points = ft_memalloc(sizeof(t_point_data) *\
-			(scene->accuracy.depth_ref + 1))))
+			(scene->accuracy.depth_ref + 2))))
 		{
 			points[0] = point_data;
 			depth_ref = 0;
 			while (scene->accuracy.depth_ref > depth_ref++ &&\
-					point_data.obj->reflection > 0)
+					(point_data.obj->reflection > 0 || point_data.obj->refraction > 0 || point_data.obj->transparency > 0))
 			{
-				vec = get_ref_vec(point_data, vec);
-				points[depth_ref] = shadowmarching(scene,
-					point, scene->accuracy, point_data.point);
+				points[depth_ref] = get_next_point(scene, &vec, scene->accuracy, point_data);
 			}
-			point_data.ref_color = f(points, depth_ref);
-			point_data.ref_point = points[depth_ref].point;
+			point_data.color = f(points, depth_ref);
+			point_data.point = points[depth_ref].point;
 		}
-	if (point_data.obj)
-		point_data.color = get_color_obj(point_data);
 	return (point_data);
 }

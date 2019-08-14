@@ -115,50 +115,11 @@ t_vec			get_color_obj(t_point_data shadow)
 	return (shadow.obj->color);
 }
 
-t_point_data	get_transparency(t_scene *objs, t_vec vec, t_point_data point_data)
-{
-	t_point_data shadow;
-
-	shadow = point_data;
-	while (shadow.obj && shadow.obj->transparency)
-	{
-		objs->ignore = shadow.obj;
-		shadow = ray_render(objs, vec, shadow.point, raymarching);
-	}
-	point_data.tranc_norm = shadow.norm;
-	point_data.tranc_color = shadow.color;
-	point_data.tranc_point = shadow.point;
-	return (point_data);
-}
-
-t_point_data	get_refraction(t_scene *objs, t_vec vec,
-							t_accuracy accuracy, t_point_data point_data)
-{
-	t_point_data	shadow;
-
-	shadow = point_data;
-	while (shadow.obj && shadow.obj->refraction)
-	{
-		vec = transparency(vec, shadow);
-		shadow = raymarch_in_obj(shadow.obj, vec, accuracy, shadow.point);
-		objs->ignore = shadow.obj;
-		vec = transparency(vec, shadow);
-		shadow = ray_render(objs, vec, shadow.point, raymarching);
-	}
-	point_data.refr_norm = shadow.norm;
-	point_data.refr_color = shadow.color;
-	point_data.refr_point = shadow.point;
-	return (point_data);
-}
-
-t_point_data	get_point(t_scene *objs, t_vec vec,
-							t_accuracy accuracy)
+t_point_data	get_point(t_scene *objs, t_vec vec)
 {
 	t_point_data point_data;
 
 	point_data = ray_render(objs, vec, objs->cam, raymarching);
-	point_data = get_transparency(objs, vec, point_data);
-	point_data = get_refraction(objs, vec, accuracy, point_data);
 	return (point_data);
 }
 
@@ -252,23 +213,15 @@ t_vec			lightt(t_scene *objs, t_vec vec,
 	t_vec			color;
 
 	if (accuracy.depth_pt == 1)
-		*point_data = get_point(objs, vec, accuracy);
+		*point_data = get_point(objs, vec);
 	if (!point_data->obj)
 		return (new_vec0());
 	p_d = *point_data;
 	p_d = update_p_d(p_d, point_data->ref_point,\
 	point_data->ref_color, point_data->ref_norm);
 	color = vec_dotdec(light_math(objs, accuracy, vec,\
-	point_data), 1 - point_data->obj->reflection - 0.0);
+	point_data), 1);
 	color = vec_sum(color, vec_dotdec(light_math(objs,\
 	accuracy, vec, &p_d), point_data->obj->reflection));
-	p_d = update_p_d(p_d, point_data->refr_point,\
-	point_data->refr_color, point_data->refr_norm);
-	color = vec_sum(color, vec_dotdec(light_math(objs,\
-	accuracy, vec, &p_d), 0.0));
-	p_d = update_p_d(p_d, point_data->tranc_point,\
-	point_data->tranc_color, point_data->tranc_norm);
-	color = vec_sum(color, vec_dotdec(light_math(objs,\
-	accuracy, vec, &p_d), point_data->obj->transparency));
 	return (color);
 }

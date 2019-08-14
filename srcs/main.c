@@ -91,9 +91,9 @@ int		render(void *window, t_scene *scene)
 	pixels = ft_get_window_pixels(window, &screen);
 	srand(time(NULL));
 	scene->accuracy.depth_pt++;
-	//ray_tracing(scene, (int**)&(pixels), scene->accuracy);
+	ray_tracing(scene, (int**)&(pixels), scene->accuracy);
 	//ocl = ft_get_window_window_param(window);
-	render_cl(ocl, *scene, &pixels);
+	//render_cl(ocl, *scene, &pixels);
 	printf("%d\n", scene->accuracy.depth_pt);
 	return (0);
 }

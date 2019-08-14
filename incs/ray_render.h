@@ -47,4 +47,5 @@ t_vec           get_uv_plane(t_texture texture, t_vec point);
 t_vec           get_color_obj(t_point_data shadow);
 double			len_mandelbub(t_vec point, t_vec param);
 double			map(t_vec point, t_vec param);
+double			len_box_fractal(t_vec point, t_vec param);
 #endif	

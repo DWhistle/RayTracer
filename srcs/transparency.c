@@ -20,3 +20,19 @@ t_vec	transparency(t_vec vec, t_point_data point)
 			vec_dotdec(point.norm, -1));
 	return (v);
 }
+
+t_point_data	get_transparency(t_scene *objs, t_vec vec, t_point_data point_data)
+{
+	t_point_data shadow;
+
+	shadow = point_data;
+	while (shadow.obj && shadow.obj->transparency)
+	{
+		objs->ignore = shadow.obj;
+		shadow = ray_render(objs, vec, shadow.point, raymarching);
+	}
+	point_data.tranc_norm = shadow.norm;
+	point_data.tranc_color = shadow.color;
+	point_data.tranc_point = shadow.point;
+	return (point_data);
+}

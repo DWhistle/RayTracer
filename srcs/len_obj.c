@@ -114,7 +114,7 @@ double len_octahedron(t_vec point, t_vec param)
 
 float maxcomp(t_vec p ) { return fmax(p.vec.x,fmax(p.vec.y,p.vec.z));}
 
-double lenbox(t_vec point, t_vec param)
+double len_box(t_vec point, t_vec param)
 {
 	t_vec d;
 
@@ -132,15 +132,15 @@ float sdCross(t_vec point, t_vec param)
 	return fmin(da,fmin(db,dc))-1.0;
 }
 
-double len_box(t_vec point, t_vec param)
+double len_box_fractal(t_vec point, t_vec param)
 {
-   double d = lenbox(point, param);
+   double d = len_box(point, param);
    t_vec a = new_vec0();
 
    double s = 1.0;
 
 	point = vec_sub(point, new_vec3(-1, -1, -1));
-   for( int m=0; m<5; m++ )
+   for( int m=0; m<3; m++ )
    {
 		a = vec_dotdec(point, s);
       	a.arr[0] = (fmod(a.arr[0], 2.0 )-1.0) * 3;

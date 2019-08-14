@@ -104,8 +104,11 @@ int			get_cone(t_json *json, t_obj *object)
 
 	object->type = CONE;
 	object->len = len_cone;
-	object->param = vec_norm(get_vec(\
-	query_attribute(json, "param", &res).json_value));
+	object->param = get_vec(\
+	query_attribute(json, "param", &res).json_value);
+	object->param.arr[2] = 0;
+	object->param.arr[3] = 0;
+	object->param = vec_norm(object->param);
 	if (res)
 		object->param = new_vec0();
 	return (res);
@@ -224,6 +227,21 @@ int			get_box(t_json *json, t_obj *object)
 	object->len = len_box;
 	object->param = new_vec0();
 	object->param = get_vec(query_attribute(json, "param", &res).json_value);
+	if (res)
+		object->param = new_vec0();
+	return (res);
+}
+
+int			get_fractal_box(t_json *json, t_obj *object)
+{
+	int		res;
+
+	object->type = BOX;
+	object->len = len_box_fractal;
+	object->param = new_vec0();
+	object->param = get_vec(query_attribute(json, "param", &res).json_value);
+	object->param.arr[1] = object->param.arr[0];
+	object->param.arr[2] = object->param.arr[0];
 	if (res)
 		object->param = new_vec0();
 	return (res);
@@ -360,6 +378,8 @@ void	get_obj3(t_json *json, char *name, t_obj *object)
 		get_octahedron(json, object);
 	else if (ft_strncmp(name, "box", 3) == 0)
 		get_box(json, object);
+	else if (ft_strncmp(name, "fractal_box", 3) == 0)
+		get_fractal_box(json, object);
 	else if (ft_strncmp(name, "mandelbub", 3) == 0)
 		get_mandelbub(json, object);
 }
@@ -414,6 +434,7 @@ int			check_names_obj(char *name)
 			|| !ft_strncmp(name, "plane", 5)\
 			|| !ft_strncmp(name, "cylinder", 8)\
 			|| !ft_strncmp(name, "box", 3)\
+			|| !ft_strncmp(name, "fractal_box", 3)\
 			|| !ft_strncmp(name, "octahedron", 10)\
 			|| !ft_strncmp(name, "ellipsoid", 9)\
 			|| !ft_strncmp(name, "capsule", 7)\
