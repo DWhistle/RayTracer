@@ -1,5 +1,5 @@
 //#include "srcs/vector.c"
-#include "incs/ray_rander_cl.h"
+# include "incs/objects_cl.h"
 
 
 //#include "incs/objects.h"
@@ -7,8 +7,6 @@
 //#include "srcs/len_obj.c"
 //#include "srcs/vec_mul.c"
 //#include "srcs/vec_math.c"
-
-
 
 t_vec			rand_point(t_vec point, double r)
 {
@@ -25,7 +23,7 @@ t_vec			rand_point(t_vec point, double r)
 }
 
 t_point_data	crate_point_data(t_vec norm,
-								 t_obj *obj, t_vec point, t_vec color)
+								 __global t_obj *obj, t_vec point, t_vec color)
 {
 	t_point_data point_data;
 
@@ -67,14 +65,17 @@ double			update_r(t_obj new_obj, t_vec point)
 	return (len);
 }
 
-double			get_dist(int neg, t_obj **obj, t_vec point, t_scene scene)
+double			get_dist(int neg,
+		__global t_obj **obj,
+		t_vec point,
+		t_scene scene)
 {
 	int		counter;
 	double	r;
 	double	dist;
 
 	counter = 0;
-	dist = scene.accuracy.max_dist + 1;
+	dist = scene.accuracy->max_dist + 1;
 	while (counter != scene.number_objs)
 	{
 		if (neg == scene.objs[counter].neg
@@ -110,33 +111,37 @@ t_vec			get_normal(t_vec point, t_obj obj)
 	return (normalize(vec));
 }
 
-t_point_data	raymarching(t_scene objs, double4 vec, t_accuracy accuracy, t_vec point)
+t_point_data	raymarching(t_scene scene,
+		double4 vec,
+		t_vec point)
 {
 	double	r[2];
-	t_obj	*obj;
-	t_obj	*obj2;
+	__global t_obj	*obj;
+	__global t_obj	*obj2;
 	double	dist;
 	t_vec	new_point;
 
 	dist = 0;
 	obj = 0;
 	new_point = point;
-	if (accuracy.depth_march-- &&
-		   dist < accuracy.max_dist)
+	if (scene.accuracy->depth_march-- &&
+		   dist < scene.accuracy->max_dist)
 	{
-
-		r[0] = get_dist(0, &obj, new_point, objs);
+		r[0] = get_dist(0, &obj, new_point, scene);
 		if (r[0] < 0)
-			r[0] = fabs(fmin(r[0], accuracy.delta * -1.1));
-		r[1] = get_dist(1, &obj2, new_point, objs);
+			r[0] = fabs(fmin(r[0], scene.accuracy->delta * -1.1));
+		r[1] = get_dist(1, &obj2, new_point, scene);
 		r[0] = fmax(r[0], -r[1]);
 		if (r[0] != -r[1])
 			obj2 = obj;
-		if (r[0] < accuracy.delta)
+		if (r[0] < scene.accuracy->delta)
 		{
 
 			return (crate_point_data(
-					get_normal(new_point, *obj2), obj, new_point, (double4)(0.0, 0.0, 0.0, 0.0))
+					get_normal(new_point, *obj2),
+					obj,
+					new_point,
+					obj->color)
 			);
 		}
 		dist += r[0];
@@ -265,7 +270,33 @@ t_vec	antialiasing(t_scene *scene, double x, double y, t_accuracy accuracy, t_po
 	return (color_2 / accuracy.rpp);
 }
 
+
+t_obj	*get_objects(__global t_obj *objects, int count)
+{
+	t_obj	objs[count];
+	int		i;
+
+	i = 0;
+	while (i < count)
+	{
+		objs[i].type = objects[i].type;
+		objs[i].rot_quat = objects[i].rot_quat;
+		objs[i].point = objects[i].point;
+		objs[i].color = objects[i].color;
+		objs[i].param = objects[i].param;
+		objs[i].rad = objects[i].rad;
+		objs[i].ind = objects[i].ind;
+		objs[i].reflection = objects[i].reflection;
+		objs[i].refraction = objects[i].refraction;
+		objs[i].neg = objects[i].neg;
+		objs[i].fract = objects[i].fract;
+		++i;
+	}
+	return (objs);
+}
+
 */
+
 
 __kernel void	ray_tracing(__global int *obj_count,
 							 __global int *light_count,
@@ -274,6 +305,7 @@ __kernel void	ray_tracing(__global int *obj_count,
 							 __global t_vec *cam,
 							 __global t_light *lights,
 							__global t_obj *obj,
+                            __global t_obj *ignore,
 							__global t_point_data *points_data,
 							__global t_vec *scene_color,
 							__global t_accuracy *accuracy,
@@ -282,41 +314,63 @@ __kernel void	ray_tracing(__global int *obj_count,
 	int			x;
 	int			y;
 	t_vec		color;
+	t_scene     scene;
 	int			i = get_global_id(0);
-	t_scene	scene;
 
+	//printf("%lf, %lf, %lf,\n",
+	//	cam->x,
+	//	cam->y,
+	//	cam->z);
 	scene.w = *width;
 	scene.h = *height;
 	scene.number_objs = *obj_count;
 	scene.number_lights = *light_count;
 	scene.cam = *cam;
-	x = i % scene.w;
-	y = i / (scene.h*2);
-	scene.lights = (t_light*)lights;
-	scene.objs = (t_obj*)obj;
-	scene.color = (t_vec*)scene_color;
-	scene.points_data = (t_point_data*)points_data;
-	scene.accuracy = (t_accuracy)*accuracy;
+	x = i % (scene.w);
+	y = i / (scene.w);
+	scene.lights = lights;
+	//printf("%d\n", *obj_count);
+	scene.objs = obj;
+	scene.ignore = ignore;
+	//scene.objs[0] = obj[0];
+	//scene.objs[0].type = obj[0].type;
+	scene.color = scene_color;
+	scene.points_data = points_data;
+	scene.accuracy = accuracy;
 	//color = antialiasing(&scene,
 	//					 ((double)x / scene.w) - 0.5,
 	//					 ((double)y / scene.h) - 0.5,
 	//					scene.accuracy,
 	//					scene.points_data + x + scene.w * y);
-	t_vec point = (double4)((x - scene.w * 0.5) / scene.w,
-							(y - scene.h * 0.5) / scene.h,
-							0.5, 0.4);
-	t_point_data rm = raymarching(scene, point, scene.accuracy, scene.cam);
+	t_vec point = (double4)((x - (scene.w) * 0.5) / (scene.w),
+							(y - (scene.h) * 0.5) / (scene.h),
+							10.5, 1);
+	t_point_data rm = raymarching(scene, point, *cam);
 	if (rm.obj)
+	{
 		color = rm.obj->color;
+		if (i == 500*1204 + 500)
+			printf("yeah!\n");
+	}
 	else
-		color = (double4)(0.0,0.0,0.0,0.0);
+	{
+		if (i == 500*1204 + 500)
+			printf("nooo!\n");
+		color = (double4)(0.0, 0.0, 0.0, 0.0);
+	}
+	if (i == 500*1204 + 500)
+		printf("%lf, %lf, %lf, %lf\n",
+				scene.objs[1].color.x,
+				scene.objs[1].color.y,
+				scene.objs[1].color.z,
+				scene.objs[1].color.w);
 	color = fmin(color, (double)255.0);
-	if (scene.accuracy.depth_pt == 1)
-		scene.color[x + scene.w * y] = color;
+	if (accuracy->depth_pt == 1)
+		scene_color[x + (scene.w) * y] = color;
 	else
-		scene.color[x + scene.w * y] = scene.color[x + scene.w * y] + color;
-	color = scene.color[x + scene.w * y] / scene.accuracy.depth_pt;
-	pixels[x + scene.w * y] =
+		scene_color[x + (scene.w) * y] = scene_color[x + (scene.w) * y] + color;
+	color = scene_color[x + (scene.w) * y] / accuracy->depth_pt;
+	pixels[x + (scene.w) * y] =
 			(int)(color.x) << 16 |
 			(int)(color.y) << 8 | (int)(color.z) | 0xff << 24;
 }

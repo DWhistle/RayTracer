@@ -38,11 +38,11 @@ typedef struct s_texture
 	unsigned char	*texture;
 }               t_texture;
 
-typedef struct s_restriction
+typedef struct	s_restriction
 {
 	t_vec	norm;
 	t_vec	dislocation;
-}               t_restriction;
+}				t_restriction;
 
 
 typedef struct s_obj
