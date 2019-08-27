@@ -53,7 +53,9 @@ FILES := main \
 		 converter \
 		 parser_logic \
 		 parser_utils \
-		 cl_objects_converter
+		 cl_objects_converter \
+		 len_primitives \
+		 len_advanced
 		 #converter
 
 
