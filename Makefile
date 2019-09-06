@@ -1,4 +1,4 @@
-	# **************************************************************************** #
+# **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
@@ -6,7 +6,7 @@
 #    By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 19:22:42 by hgreenfe          #+#    #+#              #
-#    Updated: 2019/05/27 16:56:16 by kmeera-r         ###   ########.fr        #
+#    Updated: 2019/09/02 12:43:58 by kmeera-r         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,24 +33,38 @@ RMFLAGS = -rf
 
 FILES := main \
 		 raymarching \
+		 raymarching_2 \
+		 raymarching_3 \
 		 vec_mul \
+		 vec_mul_2 \
 		 vec_sum \
 		 vec_math \
 		 vector \
 		 ray_tracing \
 		 antialiasing \
 		 len_obj \
+		 len_obj_2 \
+		 len_obj_3 \
+		 len_obj_4 \
 		 ft_opencl_files \
 		 ft_opencl_func \
 		 ft_opencl_params \
 		 quaternion_1 \
 		 quaternion_2 \
 		 light \
+		 light_2 \
+		 light_3 \
 		 reflaction \
 		 transparency \
 		 parser \
 		 get_next_line \
 		 converter \
+		 converter_2 \
+		 converter_3 \
+		 converter_4 \
+		 converter_5 \
+		 converter_6 \
+		 converter_7 \
 		 parser_logic \
 		 parser_utils \
 		 cl_objects_converter \

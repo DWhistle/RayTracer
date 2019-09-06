@@ -1,9 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   effects.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/02 11:23:07 by kmeera-r          #+#    #+#             */
+/*   Updated: 2019/09/02 11:23:48 by kmeera-r         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "effects.h"
 
 t_vec4	cartoon(t_vec4 color)
 {
-	int i = 255;
-	int a = 50;
+	int i;
+	int a;
+
+	i = 255;
+	a = 50;
 	while (i > 0)
 	{
 		if (color.arr[0] < i && color.arr[0] > i - a)
@@ -42,31 +57,29 @@ t_vec4	stereoscopy(t_vec4 color, int i)
 
 int		*motion_blur(int *pixels, int w, int h)
 {
-	int x;
-	int y;
-	int r;
-	int g;
-	int b;
-	int a;
-	a = 1;
-	while (a < 50)
+	t_motion_blur mb;
+
+	mb.a = 1;
+	while (mb.a < 50)
 	{
-		x = w;
-		while (x--)
+		mb.x = w;
+		while (mb.x--)
 		{
-			y = h;
-			while(y--)
-			{
-				if (x - a > 0 && y - a > 0)
+			mb.y = h;
+			while (mb.y--)
+				if (mb.x - mb.a > 0 && mb.y - mb.a > 0)
 				{
-					r = pixels[x + w * y] / (256 * 256)  + pixels[x - a + w * (y - a)] / (256 * 256);
-					g = pixels[x + w * y] / 256 % 256 + pixels[x - a + w * (y - a)] / 256 % 256;
-					b = pixels[x + w * y] % 256 + pixels[x - a + w * (y - a)] % 256;
-					pixels[x + w * y] = (r / 2) * 256 * 256 + (g / 2) * 256 + (b / 2);
+					mb.r = pixels[mb.x + w * mb.y] / (256 * 256)\
+					+ pixels[mb.x - mb.a + w * (mb.y - mb.a)] / (256 * 256);
+					mb.g = pixels[mb.x + w * mb.y] / 256 % 256\
+					+ pixels[mb.x - mb.a + w * (mb.y - mb.a)] / 256 % 256;
+					mb.b = pixels[mb.x + w * mb.y] % 256\
+					+ pixels[mb.x - mb.a + w * (mb.y - mb.a)] % 256;
+					pixels[mb.x + w * mb.y] = (mb.r / 2)\
+					* 256 * 256 + (mb.g / 2) * 256 + (mb.b / 2);
 				}
-			}
 		}
-		a += a;
+		mb.a += mb.a;
 	}
 	return (pixels);
 }

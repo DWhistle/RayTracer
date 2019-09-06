@@ -1,114 +1,16 @@
-#include <math.h>
-#include "ray_render.h"
-#include "libft.h"
-#include <stdio.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raymarching.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/02 12:11:36 by kmeera-r          #+#    #+#             */
+/*   Updated: 2019/09/02 13:50:00 by kmeera-r         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-double			mix(double x, double y, double a)
-{
-	return (x * (1 - a) + y * a);
-}
-
-double			smooth_union(double d1, double d2, double k)
-{
-	double h;
-
-	h = clamp1(0.5 + 0.5 * (d2 - d1) / k, 0.0, 1.0);
-	return (mix(d2, d1, h) - k * h * (1.0 - h));
-}
-
-double			update_restriction(double r, t_obj obj, t_vec point)
-{
-	t_vec	norm;
-	int		n;
-	t_vec	new_point;
-
-	if (!obj.restriction)
-		return (r);
-	n = obj.numbers_plane;
-	while (n--)
-	{
-		norm = obj.restriction[n].norm;
-		new_point = vec_sum(point, obj.restriction[n].dislocation);
-		r = fmax(r, new_point.arr[0] * norm.arr[0] +\
-						new_point.arr[1] * norm.arr[1] +\
-						new_point.arr[2] * norm.arr[2]);
-	}
-	return (r);
-}
-
-double			displace(t_vec point, double r, t_obj obj)
-{
-	return (r + sin(obj.frequency * point.arr[0]) *\
-			sin(obj.frequency * point.arr[2]) *\
-			sin(obj.frequency * point.arr[1]) * obj.amplitude);
-}
-
-double			onion(double len, double h)
-{
-	return (fabs(len) - h);
-}
-
-double			update_r(t_obj new_obj, t_vec point)
-{
-	double len;
-
-	point = vec_sub(point, new_obj.point);
-	point = rot(new_obj.rot_quat, point);
-	if (new_obj.fract > 0)
-	{
-		point.arr[0] = fmod(point.arr[0], new_obj.fract) - new_obj.fract * 0.5;
-		point.arr[1] = fmod(point.arr[1], new_obj.fract) - new_obj.fract * 0.5;
-		point.arr[2] = fmod(point.arr[2], new_obj.fract) - new_obj.fract * 0.5;
-	}
-	len = new_obj.len(point, new_obj.param);
-	len = update_restriction(len, new_obj, point);
-	len = displace(point, len, new_obj);
-	return (len - new_obj.rad);
-}
-
-t_vec			normal_map(t_vec point, t_obj obj)
-{
-	point = rot(obj.rot_quat, vec_sub(point, obj.point));
-	if (obj.normal_map.texture)
-	{
-		if (obj.type == SPHERE)
-			return (get_pixel(get_uv_spehere(point), obj.normal_map));
-		else if (obj.type == CYLINDER)
-			return (get_pixel(get_uv_cylinder(obj.normal_map, point,\
-					obj.param.arr[2]), obj.normal_map));
-		else if (obj.type == CONE)
-			return (get_pixel(get_uv_cone(obj.normal_map, point),\
-					obj.normal_map));
-		else if (obj.type == PLANE)
-			return (get_pixel(get_uv_plane(obj.normal_map, point),\
-					obj.normal_map));
-	}
-	return (new_vec0());
-}
-
-t_vec			get_normal(t_vec point, t_obj obj)
-{
-	double	e;
-	t_vec	vec;
-
-	e = 0.0053;
-	if (obj.normal_map.texture)
-	{
-		vec = vec_norm(normal_map(point, obj));
-		vec = vec_dotdec(vec, -1);
-		return (vec);
-	}
-	vec.arr[0] = (update_r(obj, vec_sum(point, new_vec3(e, 0, 0))) -\
-					update_r(obj, vec_sub(point, new_vec3(e, 0, 0))));
-	vec.arr[1] = (update_r(obj, vec_sum(point, new_vec3(0, e, 0))) -\
-					update_r(obj, vec_sub(point, new_vec3(0, e, 0))));
-	vec.arr[2] = (update_r(obj, vec_sum(point, new_vec3(0, 0, e))) -\
-					update_r(obj, vec_sub(point, new_vec3(0, 0, e))));
-	vec.arr[3] = 0;
-	if (obj.neg)
-		vec = vec_dotdec(vec, -1);
-	return (vec_norm(vec));
-}
+#include "raymarching.h"
 
 t_point_data	crate_point_data(t_vec norm,
 				t_obj *obj, t_vec point, t_vec color)
@@ -190,7 +92,7 @@ t_point_data	raymarching(t_scene *objs, t_vec vec,
 		r[0] = get_dist(0, &obj, new_point, objs);
 		r[1] = get_dist(1, &obj2, new_point, objs);
 		r[0] = fmax(r[0], -r[1]);
-		if (r[0] != -r[1])
+		if (r[0] + r[1] > 0.001)
 			obj2 = obj;
 		if (r[0] < accuracy.delta)
 		{

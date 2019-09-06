@@ -36,13 +36,12 @@ typedef struct s_obj
 	int		type;
 	t_quat	rot_quat;
 	t_vec	point;
+	t_vec	color;
+	t_vec	param;
 	double	rad;
-	double	(*len)();
 	int		ind;
 	double	reflection;
-	t_vec	color;
 	double	refraction;
-	t_vec	param;
 	int		neg;
 	double	fract;
 }               t_obj;
@@ -59,7 +58,7 @@ typedef struct	s_light
 typedef struct	s_point_data
 {
 	t_vec norm;
-	t_obj *obj;
+	__global t_obj *obj;
 	t_vec point;
 	t_vec color;
 }				t_point_data;
@@ -76,24 +75,24 @@ typedef struct	s_accuracy
 
 typedef struct	s_scene
 {
-	t_obj		*objs;
-	int			w;
-	int			h;
-	int			number_objs;
-	int			number_lights;
-	t_vec		cam;
-	t_light		*lights;
-	t_obj		*ignore;
-	t_vec		*color;
-	t_point_data		*points_data;
-	int			ce;
-	int			bm;
-	int			neg;
-	int			ster;
-	int			sepia;
-	t_accuracy	accuracy;
-	int			sec;
-}				t_scene;
+    __global t_obj		    *objs;
+	int			            w;
+	int			            h;
+	int			            number_objs;
+	int			            number_lights;
+	t_vec		            cam;
+    __global t_light	    *lights;
+    __global t_obj		    *ignore;
+    __global t_vec		    *color;
+    __global t_point_data	*points_data;
+	int			            ce;
+	int			            bm;
+	int			            neg;
+	int			            ster;
+	int			            sepia;
+    __global t_accuracy	    *accuracy;
+	int			            sec;
+}				            t_scene;
 
 typedef struct	s_polygon
 {
@@ -114,5 +113,19 @@ typedef struct	s_segment
 	t_vec		a;
 	t_vec		b;
 }				t_segment;
+
+t_obj	        *get_objects(__global t_obj *objects, int count);
+t_point_data	raymarching(t_scene scene, double4 vec, t_vec point);
+t_vec			get_normal(t_vec point, t_obj obj);
+double			get_dist(int neg,
+                           __global t_obj **obj,
+                           t_vec point,
+                           t_scene scene);
+double			update_r(t_obj new_obj, t_vec point);
+double			ft_len(t_obj obj, t_vec point);
+t_vec			rot(t_quat quat, t_vec v);
+t_point_data	crate_point_data(t_vec norm,
+                                 __global t_obj *obj, t_vec point, t_vec color);
+t_vec			rand_point(t_vec point, double r);
 
 #endif

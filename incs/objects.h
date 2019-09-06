@@ -1,10 +1,22 @@
-	#ifndef OBJECT_H
-# define OBJECT_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   objects.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/02 12:49:11 by kmeera-r          #+#    #+#             */
+/*   Updated: 2019/09/06 14:35:08 by kmeera-r         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "vector.h"
-#include "quat.h"
-#define MAX_Z 800
-#define E 0.0001
+#ifndef OBJECTS_H
+# define OBJECTS_H
+
+# include "vector.h"
+# include "quat.h"
+# define MAX_Z 800
+# define E 0.0001
 
 enum
 {
@@ -28,25 +40,24 @@ enum
 	POINT = 3
 };
 
-typedef t_vec4 t_vec;
+typedef t_vec4	t_vec;
 
-typedef struct s_texture
+typedef struct	s_texture
 {
 	int				h;
 	int				w;
 	double			len_u;
 	double			len_v;
 	unsigned char	*texture;
-}               t_texture;
+}				t_texture;
 
-typedef struct s_restriction
+typedef struct	s_restriction
 {
 	t_vec	norm;
 	t_vec	dislocation;
-}               t_restriction;
+}				t_restriction;
 
-
-typedef struct s_obj
+typedef struct	s_obj
 {
 	int				type;
 	t_quat			rot_quat;
@@ -62,13 +73,13 @@ typedef struct s_obj
 	double			fract;
 	t_texture		texture;
 	int				numbers_plane;
-	t_restriction *restriction;
-	double	frequency;
-	int		specular;
-	double	amplitude;
-	t_texture normal_map;
-	double	transparency;
-}               t_obj;
+	t_restriction	*restriction;
+	double			frequency;
+	int				specular;
+	double			amplitude;
+	t_texture		normal_map;
+	double			transparency;
+}				t_obj;
 
 typedef struct	s_light
 {
@@ -82,14 +93,8 @@ typedef struct	s_light
 typedef struct	s_point_data
 {
 	t_vec norm;
-	t_vec ref_norm;
-	t_vec refr_norm;
-	t_vec tranc_norm;
 	t_obj *obj;
 	t_vec point;
-	t_vec ref_point;
-	t_vec refr_point;
-	t_vec tranc_point;
 	t_vec color;
 	t_vec ref_color;
 	t_vec refr_color;
@@ -101,34 +106,35 @@ typedef struct	s_accuracy
 	int		rpp;
 	int		depth_march;
 	int		depth_pt;
-	int 	depth_ref;
-	int 	max_dist;
+	int		depth_ref;
+	int		max_dist;
 	double	delta;
 }				t_accuracy;
 
 typedef struct	s_scene
 {
-	t_obj		*objs;
-	int			w;
-	int			h;
-	int			number_objs;
-	int			number_lights;
-	t_vec		cam;
-	t_light		*lights;
-	t_obj		*ignore;
-	t_vec		*color;
-	t_point_data		*points_data;
-	int			ce;
-	int			bm;
-	int			neg;
-	int			ster;
-	int			sepia;
-	t_accuracy	accuracy;
-	int			sec;
-	double		FOW;
-	t_quat		rot_x;
-	t_quat		rot;
-	int			signz;
+	t_obj			*objs;
+	int				w;
+	int				h;
+	int				number_objs;
+	int				number_lights;
+	t_vec			cam;
+	t_light			*lights;
+	t_obj			*ignore;
+	t_vec			*color;
+	t_point_data	*points_data;
+	int				ce;
+	int				bm;
+	int				neg;
+	int				ster;
+	int				sepia;
+	t_accuracy		accuracy;
+	int				sec;
+	double			fow;
+	t_quat			rot_x;
+	t_quat			rot;
+	int				signz;
+	double			tr_intensity;
 }				t_scene;
 
 typedef struct	s_polygon

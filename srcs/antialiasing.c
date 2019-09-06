@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   antialiasing.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/02 12:27:52 by kmeera-r          #+#    #+#             */
+/*   Updated: 2019/09/02 12:41:50 by kmeera-r         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ray_render.h"
 
 t_vec	color_ipdate(t_scene *scene, t_vec color)
@@ -23,7 +35,7 @@ t_vec	antialiasing(t_scene *scene, double x,\
 		while (y + d_y < y + 1.0 / scene->h)
 		{
 			vec = vec_norm(new_vec3((x + d_x), (y + d_y),\
-			(scene->FOW / 2) * scene->signz));
+			(scene->fow / 2) * scene->signz));
 			vec = rot(scene->rot, rot(scene->rot_x, vec));
 			color_1 = vec_sum(color_1,\
 			lightt(scene, vec, scene->accuracy, point_data));

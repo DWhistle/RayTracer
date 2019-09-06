@@ -6,11 +6,11 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 18:24:39 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/29 21:52:57 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/09/02 12:25:07 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/vector.h"
+#include "vector.h"
 
 t_vec4	new_vec(ft_decimal val)
 {

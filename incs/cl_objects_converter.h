@@ -6,7 +6,7 @@
 /*   By: hgreenfe <hgreenfe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 19:20:30 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/08/06 00:20:30 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/08/12 19:40:27 by hgreenfe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,16 @@ typedef struct			s_cl_point_data
 	cl_double4			color;
 }						t_cl_point_data;
 
+typedef struct	        s_cl_accuracy
+{
+    int		            rpp;
+    int		            depth_march;
+    int		            depth_pt;
+    int 	            depth_ref;
+    int 	            max_dist;
+    double	            delta;
+}				        t_cl_accuracy;
+
 typedef struct			s_cl_scene
 {
 	t_cl_obj			*objs;
@@ -68,10 +78,11 @@ typedef struct			s_cl_scene
 	int					neg;
 	int					ster;
 	int					sepia;
-	t_accuracy			accuracy;
+	t_accuracy			*accuracy;
 	int					sec;
 }						t_cl_scene;
 
+void					*get_zero_memory(size_t size);
 t_cl_point_data			*get_cl_points(t_point_data *points, int count);
 cl_double4				*get_cl_many_vec(t_vec *vec, int count);
 t_cl_scene				*get_cl_scene(t_scene *scene);

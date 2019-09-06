@@ -6,11 +6,11 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 18:40:37 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/29 21:52:57 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/09/02 12:24:19 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/vector.h"
+#include "vector.h"
 
 double		vec_dotvec(t_vec4 v1, t_vec4 v2)
 {
@@ -46,11 +46,6 @@ ft_decimal	vec_sqrdist(t_vec4 vec)
 			vec.vec.y * vec.vec.y +\
 			vec.vec.z * vec.vec.z +\
 			vec.vec.w * vec.vec.w);
-}
-
-ft_decimal	vec_len(t_vec4 vec)
-{
-	return (sqrt(vec_sqrdist(vec)));
 }
 
 t_vec4		vec_norm(t_vec4 v)

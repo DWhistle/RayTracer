@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
-project(rtv1)
+project(RT)
 
 set(CMAKE_CXX_STANDARD 14)
 include_directories(incs)
@@ -29,7 +29,7 @@ find_library(UI_LIB ui
 add_compile_options(-Wall -Wextra -Werror)
 link_libraries(${SDL_LIB} ${FT_LIB} ${CL_LIB} ${UI_LIB})
 
-add_executable(rtv1
+add_executable(RT
         srcs/main.c
         srcs/raymarching.c
         srcs/vec_mul.c
@@ -47,5 +47,10 @@ add_executable(rtv1
         srcs/reflaction.c
         srcs/transparency.c
         srcs/parser.c
+        srcs/parser_logic.c
+        srcs/parser_utils.c
+        srcs/vec_math.c
         srcs/get_next_line.c
+        srcs/cl_objects_converter.c
+        srcs/converter.c
         )

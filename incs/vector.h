@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 18:25:23 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/30 00:16:08 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/09/02 13:07:54 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 # ifndef __OPENCL_C_VERSION__
 #  include <math.h>
 # endif
-//# include "../incs/ft_types.h"
 
-typedef	double ft_decimal;
+typedef	double	ft_decimal;
 
 union					u_vec4
 {
@@ -36,9 +35,11 @@ typedef union u_vec4	t_vec4;
 typedef union u_vec4*	t_pvec4;
 
 t_vec4					new_vec(ft_decimal val);
-t_vec4					new_vec4(ft_decimal valx, ft_decimal valy, ft_decimal valz,
+t_vec4					new_vec4(ft_decimal valx, ft_decimal valy,
+								ft_decimal valz,
 									ft_decimal valw);
-t_vec4					new_vec3(ft_decimal valx, ft_decimal valy, ft_decimal valz);
+t_vec4					new_vec3(ft_decimal valx, ft_decimal valy,
+								ft_decimal valz);
 t_vec4					new_vec2(ft_decimal valx, ft_decimal valy);
 t_vec4					new_vec0(void);
 double					vec_dotvec(t_vec4 v1, t_vec4 v2);

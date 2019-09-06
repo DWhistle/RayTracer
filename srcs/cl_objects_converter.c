@@ -6,7 +6,7 @@
 /*   By: hgreenfe <hgreenfe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 19:27:27 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/08/05 23:32:01 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/08/12 19:47:36 by hgreenfe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_cl_obj		*get_many_cl_obj(t_obj *objs, int count)
 
 	i = 0;
 	if (!objs || !count)
-		return (NULL);
+		return ((t_cl_obj*)get_zero_memory(count * sizeof(t_cl_obj)));
 	cl_obj = (t_cl_obj*)ft_memalloc(sizeof(t_cl_obj) * count);
 	if (!cl_obj)
 		return (NULL);
@@ -90,7 +90,8 @@ t_cl_light		*get_cl_all_lights(t_light *light, int count)
 	int			i;
 
 	if (!light || !count)
-		return (NULL);
+	if (!light || !count)
+		return ((t_cl_light*)get_zero_memory(count * sizeof(t_cl_light)));
 	cl_light = (t_cl_light*)ft_memalloc(sizeof(t_cl_light) * count);
 	if (!cl_light)
 		return (NULL);
@@ -113,7 +114,7 @@ t_cl_point_data	*get_cl_points(t_point_data *points, int count)
 	int				i;
 
 	if (!points)
-		return (NULL);
+		return (get_zero_memory(count * sizeof(t_cl_point_data)));
 	cl_point_data = (t_cl_point_data*)ft_memalloc(sizeof(t_cl_point_data) * count);
 	if (!cl_point_data)
 		return (NULL);
@@ -127,4 +128,12 @@ t_cl_point_data	*get_cl_points(t_point_data *points, int count)
 		++i;
 	}
 	return (cl_point_data);
+}
+
+void			*get_zero_memory(size_t size)
+{
+    if (size > 0)
+        return (ft_memalloc(size));
+    else
+        return (NULL);
 }
