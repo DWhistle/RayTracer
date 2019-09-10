@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_opencl_func.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/14 21:03:42 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/08/15 20:37:50 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/09/10 19:39:26 by bturcott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,7 @@ int			compile_cl_by_name(t_opencl *cl, const char *name)
 	if (ret)
 		return (0);
 	ret = clBuildProgram(cl->program, 1, &(cl->device_id), NULL, NULL, NULL);
-	if (ret == CL_BUILD_PROGRAM_FAILURE)
-	{
-		print_log(cl);
-		return (0);
-	}
-	else if (ret)
+	if (ret == CL_BUILD_PROGRAM_FAILURE || ret)
 	{
 		print_log(cl);
 		return (0);

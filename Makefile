@@ -55,7 +55,8 @@ FILES := main \
 		 parser_utils \
 		 cl_objects_converter \
 		 len_primitives \
-		 len_advanced
+		 len_advanced \
+		 ft_opencl_getters
 		 #converter
 
 

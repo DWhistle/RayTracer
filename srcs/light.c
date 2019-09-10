@@ -105,11 +105,14 @@ t_vec           get_color_obj(t_point_data shadow)
         if (shadow.obj->type == SPHERE)
             return (get_pixel(get_uv_spehere(point), shadow.obj->texture));
         if (shadow.obj->type == CYLINDER)
-            return (get_pixel(get_uv_cylinder(shadow.obj->texture, point, shadow.obj->param.arr[2]), shadow.obj->texture));
+            return (get_pixel(get_uv_cylinder(shadow.obj->texture, point,
+            shadow.obj->param.arr[2]), shadow.obj->texture));
         if (shadow.obj->type == CONE)
-            return (get_pixel(get_uv_cone(shadow.obj->texture, point), shadow.obj->texture));
+            return (get_pixel(get_uv_cone(shadow.obj->texture, point),
+            shadow.obj->texture));
         if (shadow.obj->type == PLANE)
-            return (get_pixel(get_uv_plane(shadow.obj->texture, point), shadow.obj->texture));
+            return (get_pixel(get_uv_plane(shadow.obj->texture, point),
+            shadow.obj->texture));
     }
     return (shadow.obj->color);
 }
@@ -179,7 +182,6 @@ t_vec   lightt(t_scene objs, t_vec vec,
             i += objs.lights[objs.number_lights].intensity;
         else
         {
-            
             if (objs.lights[objs.number_lights].type == DIRECT)
                 li = objs.lights[objs.number_lights].vec;
             else
