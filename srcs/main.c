@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/09/17 19:20:10 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/09/17 19:32:47 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ int		render(void *window, t_scene *scene)
 	ray_tracing(scene, (int**)&(pixels), scene->accuracy);
 	//ocl = ft_get_window_window_param(window);
 	//render_cl(ocl, *scene, &pixels);
-
 	printf("%d\n", scene->accuracy.depth_pt);
 	return (0);
 }
