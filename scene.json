@@ -3,7 +3,7 @@
     "h": 512,
     "FOW": 50.0,
     "cartoon effect":0,
-    "blur motion":1,
+    "blur motion":0,
     "negative":0,
     "stereoscopy":0,
     "sepia":0,
@@ -25,7 +25,7 @@
       "depth raymarching": 200,
       "depth reflaction": 5,
       "max dist": 10000,
-      "delta": 0.00001
+      "delta": 0.005
     },
     "sphere":
     {
@@ -47,20 +47,71 @@
       {
         "x":100.0,
         "y":40.0,
-        "z":100.0
+        "z":50.0
       },
-      "angle": 1.5,
       "rad":0.0,  
-      "reflection":0.5,
-      "refraction":0.0,
-      "transparency":0.5,
+      "reflection":0.0,
+      "refraction":0.9,
+      "transparency":0.0,
+      "specular":40,
       "point":
       {
-        "x":200.0,
+        "x":100.0,
         "y":100.0,
-        "z":551.0
+        "z":530.0
       },
-      "fract":0.0
+      "restriction":
+      {
+        "plane":
+        {
+          "norm":
+          {
+            "x":0.0,
+            "y":-1.0,
+            "z":0.0
+          },
+          "dislocation":
+          {
+            "x":0.0,
+            "y":200.0,
+            "z":0.0
+          }
+        }
+      }
+    },
+    "sphere2":
+    {
+      "neg": 0,
+      "color":
+      {
+        "x":255.0,
+        "y":0.0,
+        "z":0.0
+      },
+      "rot_vec":
+      {
+        "x":1.0,
+        "y":0.0,
+        "z":1.0
+      },
+      "radius":100.0,
+      "param":
+      {
+        "x":100.0,
+        "y":40.0,
+        "z":50.0
+      },
+      "rad":0.0,  
+      "reflection":0.0,
+      "refraction":0.0,
+      "transparency":0.0,
+      "specular":40,
+      "point":
+      {
+        "x":100.0,
+        "y":-101.0,
+        "z":600.0
+      }
     },
     "plane":
     {
@@ -85,9 +136,9 @@
       },
       "angle": 0.0,
       "rad":0.0,      
-      "reflection":0.5,
+      "reflection":0.1,
       "refraction":0.0,
-      "transparency":0.5,
+      "transparency":0.7,
       "point":
       {
         "x":0.0,
