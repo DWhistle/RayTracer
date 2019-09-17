@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:10:21 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/09/02 12:10:22 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/09/12 13:56:22 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,18 @@ void	ray_tracing(t_scene *scene, int **pixel,
 				vec_sum(scene->color[x + scene->w * y], color);
 			color = vec_dotdec(scene->color[x + scene->w * y],\
 								1.0 / accuracy.depth_pt);
+			if (scene->sepia)
+				color = sepia(color);
+			if (scene->ce)
+				color = cartoon(color);
+			if (scene->neg)
+				color = negative(color);
+			if (scene->ster)
+				color = stereoscopy(color, scene->ster);
 			(*pixel)[x + scene->w * y] = (int)(color.arr[0]) << 16 |
-					(int)(color.arr[1]) << 8 | (int)(color.arr[2]) | 0xff << 24;
+				(int)(color.arr[1]) << 8 | (int)(color.arr[2]) | 0xff << 24;
 		}
 	}
+	if (scene->bm)
+		*pixel = motion_blur(*pixel, scene->w, scene->h);
 }

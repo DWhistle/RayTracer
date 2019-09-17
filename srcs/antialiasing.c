@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:27:52 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/09/02 12:41:50 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/09/11 15:07:13 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ t_vec	antialiasing(t_scene *scene, double x,\
 	t_vec	color_2;
 	t_vec	vec;
 
-	color_1 = new_vec0();
 	color_2 = new_vec0();
 	d_x = 0;
 	while (x + d_x < x + 1.0 / scene->w)
 	{
 		d_y = 0;
+		color_1 = new_vec0();
 		while (y + d_y < y + 1.0 / scene->h)
 		{
 			vec = vec_norm(new_vec3((x + d_x), (y + d_y),\

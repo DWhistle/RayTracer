@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 11:50:53 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/09/06 15:40:25 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/09/12 13:56:27 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int				get_shadow(t_scene *objs, t_vec vec,\
 
 	point = point_data.point;
 	objs->ignore = point_data.obj;
-	shadow = raymarching(objs, vec, accuracy, point);
+	shadow = shadowmarching(objs, vec, accuracy, point);
 	objs->tr_intensity = 1;
 	while (shadow.obj && shadow.obj->transparency)
 	{
@@ -28,7 +28,7 @@ int				get_shadow(t_scene *objs, t_vec vec,\
 		objs->ignore = shadow.obj;
 		accuracy.max_dist -= vec_len(vec_sub(shadow.point, point));
 		point = shadow.point;
-		shadow = raymarching(objs, vec, accuracy, point);
+		shadow = shadowmarching(objs, vec, accuracy, point);
 	}
 	objs->ignore = 0;
 	if (shadow.obj)

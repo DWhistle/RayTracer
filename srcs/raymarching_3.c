@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:12:12 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/09/02 12:17:09 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/09/12 12:43:59 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_vec			get_normal(t_vec point, t_obj obj)
 	double	e;
 	t_vec	vec;
 
-	e = 0.0053;
+	e = 0.53;
 	if (obj.normal_map.texture)
 	{
 		vec = vec_norm(normal_map(point, obj));

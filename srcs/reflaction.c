@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:17:23 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/09/06 15:15:38 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/09/12 12:46:19 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ t_point_data	reflection(t_scene *scene, t_vec vec, t_point_data point_data, t_po
 	n_vec = get_ref_vec(point_data, vec);
 	scene->ignore = point_data.obj;
 	n_point_data = ray_render(scene, n_vec, point_data.point, raymarch);
-	point_data.ref_color = vec_dotdec(n_point_data.color, point_data.obj->reflection);
+	point_data.ref_color = n_point_data.color;
 	scene->accuracy.depth_ref++;
 	scene->ignore = 0;
 	return (point_data);
@@ -83,7 +83,7 @@ t_point_data	refraction(t_scene *scene, t_vec vec, t_point_data point_data, t_po
 	n_vec = transparency(n_vec, n_point_data);
 	scene->ignore = point_data.obj;
 	n_point_data = ray_render(scene, n_vec, n_point_data.point, raymarch);
-	point_data.refr_color = vec_dotdec(n_point_data.color, point_data.obj->refraction);
+	point_data.refr_color = n_point_data.color;
 	scene->accuracy.depth_ref++;
 	scene->ignore = 0;
 	return (point_data);
@@ -96,7 +96,7 @@ t_point_data	transparenc(t_scene *scene, t_vec vec, t_point_data point_data, t_p
 	scene->accuracy.depth_ref--;
 	scene->ignore = point_data.obj;
 	n_point_data = ray_render(scene, vec, point_data.point, raymarch);
-	point_data.tranc_color = vec_dotdec(n_point_data.color, point_data.obj->transparency);
+	point_data.tranc_color = n_point_data.color;
 	scene->accuracy.depth_ref++;
 	scene->ignore = 0;
 	return (point_data);

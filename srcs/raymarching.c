@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:11:36 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/09/02 13:50:00 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/09/12 13:10:25 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,28 +108,23 @@ t_point_data	raymarching(t_scene *objs, t_vec vec,
 t_point_data	shadowmarching(t_scene *objs, t_vec vec,
 							t_accuracy accuracy, t_vec point)
 {
-	double	r[3];
+	double	r[2];
 	t_obj	*obj;
-	t_obj	*obj2;
 	double	dist;
 	t_vec	new_point;
 
 	dist = 0;
 	obj = 0;
 	new_point = point;
-	r[2] = 1;
 	while (accuracy.depth_march-- && dist < accuracy.max_dist)
 	{
-		r[0] = get_dist(0, &obj, new_point, objs);
-		r[1] = get_dist(1, &obj2, new_point, objs);
-		r[0] = fmax(r[0], -r[1]);
-		r[2] = fmin(r[2], 32 * r[0] / dist);
-		if (r[0] != -r[1])
-			obj2 = obj;
-		if (r[2] < accuracy.delta)
-			return (crate_point_data(get_normal(new_point, *obj2),\
+		r[0] = fabs(get_dist(0, &obj, new_point, objs));
+		if (r[0] < accuracy.delta)
+		{
+			return (crate_point_data(get_normal(new_point, *obj),\
 					obj, new_point, new_vec0()));
-			dist += fmax(r[0], accuracy.delta);
+		}
+		dist += r[0];
 		new_point = vec_sum(vec_dotdec(vec, dist), point);
 	}
 	return (crate_point_data(new_vec0(), NULL, new_vec0(), new_vec0()));
