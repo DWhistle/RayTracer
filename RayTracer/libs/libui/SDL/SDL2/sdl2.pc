@@ -1,7 +1,7 @@
 # sdl pkg-config source file
 
-prefix=/Users/hgreenfe/main_learn/rtv1/test/rtv1/libs/libui/SDL
-exec_prefix=/Users/hgreenfe/main_learn/rtv1/test/rtv1/libs/libui/SDL
+prefix=/Users/hgreenfe/Desktop/rtv/RayTracer/libs/libui/SDL
+exec_prefix=/Users/hgreenfe/Desktop/rtv/RayTracer/libs/libui/SDL
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
 
