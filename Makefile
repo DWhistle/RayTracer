@@ -6,7 +6,7 @@
 #    By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 19:22:42 by hgreenfe          #+#    #+#              #
-#    Updated: 2019/11/09 12:01:18 by kmeera-r         ###   ########.fr        #
+#    Updated: 2019/11/09 15:54:25 by kmeera-r         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -110,7 +110,7 @@ $(OBJDIR)%.o: $(SRCDIR)%.c
 
 
 $(NAME):  $(LIBDIR) $(SDL) $(FULL_OBJS)
-	$(CC) $(CCFLAGS) -o $(NAME) $(FRAMEWORK) $(LIBFLAGS) $(FULL_OBJS)
+	@$(CC) $(CCFLAGS) -o $(NAME) $(FRAMEWORK) $(LIBFLAGS) $(FULL_OBJS)
 
 clean:
 	make -C $(LIBDIR) clean

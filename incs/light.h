@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/09 11:45:09 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/09 11:45:23 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/09 15:46:12 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,4 @@ t_point_data	get_refraction(t_scene *objs, t_vec vec,
 							t_accuracy accuracy, t_point_data point_data);
 t_point_data	get_point(t_scene *objs, t_vec vec,
 							t_accuracy accuracy);
-
 #endif

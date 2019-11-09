@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 19:48:30 by bturcott          #+#    #+#             */
-/*   Updated: 2019/07/29 21:52:57 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/11/09 17:10:28 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,7 @@ char		*read_file(int fd)
 	char	*file;
 	char	*temp;
 	char	*temp2;
-	int		i;
 
-	i = 0;
 	temp2 = ft_strdup("\0");
 	while (get_next_line(fd, &temp))
 	{
@@ -95,6 +93,7 @@ t_list		*parse_json(char *config_file)
 {
 	int			fd;
 	t_parser	*json;
+	t_list		*objs;
 
 	fd = open(config_file, O_RDONLY);
 	if (fd == -1 || fd == 0)
@@ -109,5 +108,6 @@ t_list		*parse_json(char *config_file)
 	json->i = 0;
 	json->objects = NULL;
 	close(fd);
-	return (json_operator(json));
+	objs = json_operator(json);
+	return (objs);
 }

@@ -1,18 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bturcott <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgreenfe <hgreenfe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 17:46:31 by bturcott          #+#    #+#             */
-/*   Updated: 2019/07/29 21:52:57 by hgreenfe         ###   ########.fr       */
+/*   Created: 2019/04/04 03:53:45 by hgreenfe          #+#    #+#             */
+/*   Updated: 2019/04/04 04:30:52 by hgreenfe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# define BUFF_SIZE 100
+#include "libft.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-int	get_next_line(const int fd, char **line);
-#endif
+int		main(void)
+{
+	char	*mem;
+
+	mem = "   -1234";
+	printf("%d = %d\n", atoi(mem), ft_atoi(mem));
+	return (0);
+}

@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8bbe9fa77796456c4316ca7118d8538ad98f2680
 //#include "srcs/vector.c"
 #include "incs/ray_rander_cl.h"
 
@@ -26,7 +29,11 @@ t_vec			rand_point(t_vec point, double r)
 }
 
 t_point_data	crate_point_data(t_vec norm,
+<<<<<<< HEAD
 								 t_obj *obj, t_vec point, t_vec color)
+=======
+								 __global t_obj *obj, t_vec point, t_vec color)
+>>>>>>> 8bbe9fa77796456c4316ca7118d8538ad98f2680
 {
 	t_point_data point_data;
 
@@ -68,14 +75,25 @@ double			update_r(t_obj new_obj, t_vec point)
 	return (len);
 }
 
+<<<<<<< HEAD
 double			get_dist(int neg, t_obj **obj, t_vec point, t_scene scene)
+=======
+double			get_dist(int neg,
+		__global t_obj **obj,
+		t_vec point,
+		t_scene scene)
+>>>>>>> 8bbe9fa77796456c4316ca7118d8538ad98f2680
 {
 	int		counter;
 	double	r;
 	double	dist;
 
 	counter = 0;
+<<<<<<< HEAD
 	dist = scene.accuracy.max_dist + 1;
+=======
+	dist = scene.accuracy->max_dist + 1;
+>>>>>>> 8bbe9fa77796456c4316ca7118d8538ad98f2680
 	while (counter != scene.number_objs)
 	{
 		if (neg == scene.objs[counter].neg
@@ -154,19 +172,36 @@ t_point_data	raymarching(t_scene objs, double4 vec, t_accuracy accuracy, t_vec p
 ////////////////////////////////////////////////////////////////////////////////
 
 /*
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 8bbe9fa77796456c4316ca7118d8538ad98f2680
 t_point_data	ray_render(t_scene scene, t_vec point, t_accuracy accuracy)
 {
 	int				depth_ref;
 	t_point_data	point_data;
 	t_point_data	*points;
+<<<<<<< HEAD
 	point_data = raymarching(scene, point, accuracy, scene.cam);
 	return (point_data);
 }
+=======
+
+	point_data = raymarching(scene, point, accuracy, scene.cam);
+	return (point_data);
+}
+
+>>>>>>> 8bbe9fa77796456c4316ca7118d8538ad98f2680
 t_point_data get_point(t_scene objs, t_vec vec,
 					   t_accuracy accuracy)
 {
 	t_point_data point_data;
 	t_point_data shadow;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8bbe9fa77796456c4316ca7118d8538ad98f2680
 	point_data = ray_render(objs, vec, accuracy, raymarching);
 	shadow = point_data;
 	if(shadow.obj)
@@ -188,6 +223,11 @@ t_point_data get_point(t_scene objs, t_vec vec,
 		shadow.color = get_color_obj(shadow);
 	return(shadow);
 }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 8bbe9fa77796456c4316ca7118d8538ad98f2680
 t_vec   lightt(t_scene objs, t_vec vec,
 			   t_accuracy accuracy, t_point_data *point_data)
 {
@@ -195,6 +235,10 @@ t_vec   lightt(t_scene objs, t_vec vec,
 	double n_dot_l;
 	t_vec li;
 	t_vec hw_vec;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8bbe9fa77796456c4316ca7118d8538ad98f2680
 	if (accuracy.depth_pt == 1)
 		*point_data = get_point(objs, vec, accuracy);
 	if (!point_data->obj)
@@ -206,6 +250,10 @@ t_vec   lightt(t_scene objs, t_vec vec,
 			i += objs.lights[objs.number_lights].intensity;
 		else
 		{
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8bbe9fa77796456c4316ca7118d8538ad98f2680
 			if (objs.lights[objs.number_lights].type == DIRECT)
 				li = objs.lights[objs.number_lights].vec;
 			else
@@ -235,6 +283,10 @@ t_vec	antialiasing(t_scene *scene, double x, double y, t_accuracy accuracy, t_po
 	double	d_y;
 	t_vec	color_1;
 	t_vec	color_2;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8bbe9fa77796456c4316ca7118d8538ad98f2680
 	color_1 = {0.0, 0.0, 0.0, 0.0};
 	color_2 = {0.0, 0.0, 0.0, 0.0};
 	d_x = 0;
@@ -255,6 +307,10 @@ t_vec	antialiasing(t_scene *scene, double x, double y, t_accuracy accuracy, t_po
 	}
 	return (color_2 / accuracy.rpp);
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8bbe9fa77796456c4316ca7118d8538ad98f2680
 */
 
 __kernel void	ray_tracing(__global int *obj_count,
@@ -309,4 +365,8 @@ __kernel void	ray_tracing(__global int *obj_count,
 	pixels[x + scene.w * y] =
 			(int)(color.x) << 16 |
 			(int)(color.y) << 8 | (int)(color.z) | 0xff << 24;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 8bbe9fa77796456c4316ca7118d8538ad98f2680

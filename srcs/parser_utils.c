@@ -3,16 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 19:53:17 by bturcott          #+#    #+#             */
-/*   Updated: 2019/07/29 21:52:57 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/11/09 16:58:59 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-int	is_float(t_parser *json)
+void	free_json_obj(t_json *obj)
+{
+	int i;
+
+	i = 0;
+	while (obj->key[i] != 0 && i < MAX_FIELDS)
+	{
+		if (obj->type[i] == JSON)
+		{
+			free_json_obj((t_json *)(obj->value[i].json_value));
+		}
+		else if (obj->type[i] == STRING)
+		{
+			free(&obj->value[i].string_value);
+		}
+		free(obj->key[i]);
+		i++;
+	}
+}
+
+int		is_float(t_parser *json)
 {
 	int i;
 
@@ -26,7 +46,7 @@ int	is_float(t_parser *json)
 	return (0);
 }
 
-int	escape(t_parser *json)
+int		escape(t_parser *json)
 {
 	if (json->i > 0)
 		return (json->f[json->i - 1] == '\\');

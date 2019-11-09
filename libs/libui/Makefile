@@ -6,7 +6,7 @@
 #    By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/17 20:30:06 by hgreenfe          #+#    #+#              #
-#    Updated: 2019/07/30 00:16:08 by hgreenfe         ###   ########.fr        #
+#    Updated: 2019/11/09 15:57:23 by kmeera-r         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,7 +81,8 @@ all: $(NAME)
 
 sdl_config:
 	touch sdl_config
-	cd $(PATH_SDL)/SDL2; ./configure --prefix=$(PATH_SDL) --exec-prefix=$(PATH_SDL)
+	touch $(PATH_SDL)/SDL2/README.txt
+	cd $(PATH_SDL)/SDL2; sh ./autogen.sh && ./configure --prefix=$(PATH_SDL) --exec-prefix=$(PATH_SDL)
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
@@ -103,7 +104,7 @@ $(SDL): sdl_config
 #	make -sC $(PATH_SDL)/SDL2_image install
 
 $(NAME):  $(LIBDIR) $(SDL) $(OBJDIR) $(FULL_OBJS) sdl_config
-	$(AR) $(ARFLAGS) $(LIBUIDIR)/lib$(NAME).a $(FULL_OBJS)
+	@$(AR) $(ARFLAGS) $(LIBUIDIR)/lib$(NAME).a $(FULL_OBJS)
 
 clean: clean_sdl
 	make -C $(LIBDIR) clean

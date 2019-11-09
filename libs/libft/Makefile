@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hgreenfe <hgreenfe@student.42.fr>          +#+  +:+       +#+         #
+#    By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 19:22:42 by hgreenfe          #+#    #+#              #
-#    Updated: 2019/07/30 00:16:08 by hgreenfe         ###   ########.fr        #
+#    Updated: 2019/11/09 15:55:38 by kmeera-r         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -93,12 +93,12 @@ OBJ = $(FILES:.c=.o)
 AR = ar -rsc
 RM = rm
 RMFLAGS = -rf
-	
+
+all: $(NAME)
+
 $(NAME): $(OBJ)
 	$(CC) $(CCFLAGS) $(FILES)
 	$(AR) $(NAME) $(OBJ)
-
-all: $(NAME)
 
 test: 
 	$(CC) $(CCFLAGS) -L. -lft $(SRCDIR)/main.c

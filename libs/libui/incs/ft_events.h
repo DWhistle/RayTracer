@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_events.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgreenfe <hgreenfe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/01 11:13:31 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/29 21:52:57 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/11/09 16:45:42 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include "ft_window.h"
 # include "ft_control.h"
 
-# define DEFAULT_TICKS	100
+# define DEFAULT_TICKS	1000
 
 typedef	SDL_Event	t_event;
 

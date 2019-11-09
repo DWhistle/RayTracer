@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/11/09 11:49:17 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/09 16:49:40 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,6 @@
 #define WIN_W   600
 #define WIN_H   600
 
-int		print_error(int errnum)
-{
-	if (errnum == 1)
-		ft_putendl("Error! SDL Init error");
-	else if (errnum == 2)
-		ft_putendl("Error! Create window error");
-	return (0);
-}
-
-void	ft_printmem(void *pxls, int w, int h)
-{
-	SDL_Surface	*surface;
-
-	surface = SDL_CreateRGBSurfaceFrom(pxls, w, h, 32,\
-	8, 0xff, 0xff00, 0xff0000, 0xff000000);
-	SDL_SaveBMP(surface, "screenshot.bmp");
-}
-
 int		render(void *window, t_scene *scene)
 {
 	t_rect				screen;
@@ -51,8 +33,6 @@ int		render(void *window, t_scene *scene)
 	time_t				rawtime;
 	struct tm			*timeinfo;
 
-	if (scene->accuracy.depth_pt)
-		return (0);
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
 	pixels = ft_get_window_pixels(window, &screen);
@@ -78,6 +58,15 @@ void	ft_key_func(void *wnd, int n, void *param)
 	}
 }
 
+void	free_json(t_list *obj)
+{
+	t_json *json;
+
+	json = (t_json *)obj->content;
+	free_json_obj(json);
+	free(obj);
+}
+
 int		main(int argc, char **argv)
 {
 	void	*scene;
@@ -86,13 +75,21 @@ int		main(int argc, char **argv)
 	t_rect	r;
 
 	(void)argc;
+	printf("rewrwe\n");
+	atexit(SDL_Quit);
 	json1 = parse_json(argv[1]);
+	printf("rewrwe");
+	if (json1 == NULL)
+		exit(0);
 	scene = convert_objects(json1->content);
+	printf("rewrwe");
+	free_json(json1);
 	list = ft_libui_init();
 	r = ft_new_rect(WIN_X, WIN_Y, ((t_scene*)scene)->w, ((t_scene*)scene)->h);
 	add_window((void**)&list, r, 0x00000000, "Ray Tracer v1.0");
 	set_event_function(list->content, FT_EVENT_KEYPRESS, ft_key_func, scene);
 	set_event_function(list->content, FT_EVENT_TICKFUNC, ft_tickfunc, NULL);
 	ft_mainloop(list);
+	printf("rewrwe");
 	return (0);
 }

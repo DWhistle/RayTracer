@@ -6,122 +6,89 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/15 17:40:39 by bturcott          #+#    #+#             */
-/*   Updated: 2019/07/29 21:52:57 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/11/09 16:10:23 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include "get_next_line.h"
 #include "libft.h"
 
-t_list		*find_n_alloc(const int fd, t_list **begin)
+static int	ret_line(char **line, char **lines, int length)
 {
-	t_list *check;
-	t_list *new;
+	int		len;
 
-	new = NULL;
-	check = *begin;
-	if (*begin)
-		while (check)
+	if (!lines)
+		return (-1);
+	if (!line)
+	{
+		ft_strdel(lines);
+		*lines = NULL;
+		return (-1);
+	}
+	ft_strclr(*line);
+	if (**lines == 0)
+		return (0);
+	*line = ft_strsub(*lines, 0, length);
+	len = ft_strlen(*lines);
+	ft_memmove(*lines, *lines + length + 1, len - length);
+	(*lines)[len - length] = 0;
+	return (1);
+}
+
+static int	ft_read_line(const int fd, char **lines)
+{
+	char	buf[BUFF_SIZE + 1];
+	char	*temp;
+	int		ret;
+
+	if (!*lines)
+		*lines = ft_strnew(0);
+	if (fd < 0)
+	{
+		ft_strclr(*lines);
+		return (-1);
+	}
+	ret = read(fd, buf, BUFF_SIZE);
+	if (ret >= 0)
+	{
+		buf[ret] = 0;
+		if (*lines)
 		{
-			if ((int)check->content_size == fd)
-				return (check);
-			if (!check->next)
-				break ;
-			check = check->next;
+			temp = ft_strjoin(*lines, buf);
+			ft_strdel(lines);
+			*lines = temp;
 		}
-	new = ft_lstnew("\0", (int)fd);
-	new->next = NULL;
-	if (*begin)
-		check->next = new;
-	else
-		*begin = new;
-	return (new);
-}
-
-char		*ft_newline(char *src, int i, char **line)
-{
-	int		c;
-	int		d;
-	char	*cont;
-
-	c = 0;
-	d = i;
-	if (!(*line = (char *)malloc(sizeof(char) * (i + 1))))
-		return (NULL);
-	while (src[d])
-		d++;
-	if (!(cont = (char *)malloc(sizeof(char) * (d - i) + 1)))
-		return (NULL);
-	while (c < i)
-	{
-		line[0][c] = src[c];
-		c++;
 	}
-	line[0][c++] = 0;
-	i = 0;
-	while (c < d)
-		cont[i++] = src[c++];
-	cont[i] = 0;
-	free(src);
-	return (cont);
-}
-
-char		*ft_strdupn(char **line, char *src, char m)
-{
-	int i;
-	int l;
-
-	i = 0;
-	l = 0;
-	while (src[i] && src[i] != m)
-		i++;
-	while (src[l])
-		l++;
-	if (i != l)
-		src = ft_newline(src, i, line);
-	else
-	{
-		if (!(*line = (char *)malloc(sizeof(char) * (i + 1))))
-			return (NULL);
-		l = -1;
-		while (i > ++l)
-			line[0][l] = src[l];
-		line[0][l] = 0;
-		free(src);
-		return (NULL);
-	}
-	return (src);
+	return (ret);
 }
 
 int			get_next_line(const int fd, char **line)
 {
-	static t_list	*begin;
-	t_list			*elem;
-	char			*temp;
-	int				i;
+	int			ret;
+	char		*linebreak;
+	static char	*lines = NULL;
 
-	i = 0;
-	elem = NULL;
-	temp = NULL;
-	if (read(fd, temp, 0) < 0 || fd == -1 || !line)
-		return (-1);
-	if (!(temp = (char *)malloc(sizeof(char) * (BUFF_SIZE + 1))))
-		return (0);
-	elem = find_n_alloc(fd, &begin);
-	if (elem->content == 0)
-		return (0);
-	while (!(ft_strchr(elem->content, '\n')) && (i = read(fd, temp, BUFF_SIZE)))
+	if (line)
+		*line = "";
+	if (lines && *lines)
 	{
-		temp[i] = 0;
-		elem->content = ft_strjoin(elem->content, temp);
+		if ((linebreak = ft_strchr(lines, '\n')))
+			return (ret_line(line, &lines, linebreak - lines));
 	}
-	free(temp);
-	if (elem->content == 0)
-		return (0);
-	elem->content = ft_strdupn(line, elem->content, '\n');
-	return (1);
+	ret = ft_read_line(fd, &lines);
+	if (ret == 0)
+		return (ret_line(line, &lines, ft_strlen(lines)));
+	else if (ret < 0)
+		return (-1);
+	while (!(linebreak = ft_strchr(lines, '\n')))
+	{
+		ret = ft_read_line(fd, &lines);
+		if (ret == 0)
+			return (ret_line(line, &lines, ft_strlen(lines)));
+		else if (ret < 0)
+			return (-1);
+	}
+	return (ret_line(line, &lines, linebreak - lines));
 }
