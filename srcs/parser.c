@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 19:48:30 by bturcott          #+#    #+#             */
-/*   Updated: 2019/11/09 17:10:28 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/09 19:21:29 by bturcott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ int			make_json(t_parser *json, t_json *obj)
 	{
 		if (i > MAX_FIELDS)
 			return (-1);
-		parse_key(json, &obj->key[i]);
+		if (!parse_key(json, &obj->key[i]))
+			return (0);
 		while (json->f[json->i] && json->f[json->i] != ':')
 			json->i++;
 		if (parse_value(json, obj->value, &obj->type, i) == -1)
@@ -64,7 +65,11 @@ t_list		*json_operator(t_parser *json)
 			json->i++;
 			if (!(obj = create_json_obj()))
 				return (NULL);
-			make_json(json, obj);
+			if (!make_json(json, obj))
+				{
+					ft_putendl("corrupted json");
+					exit(0);
+				}
 			ft_lstadd(&json->objects, ft_lstnew((void *)obj, sizeof(t_json)));
 		}
 		json->i += (json->f[json->i]) ? 1 : 0;

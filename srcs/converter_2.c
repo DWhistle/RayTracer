@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   converter_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 11:19:12 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/09 15:47:41 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/09 19:31:08 by bturcott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,12 @@ t_values	query_attribute(t_json *obj, char *name, int *res)
 
 	empty.int_value = 0;
 	i = 0;
+	if (obj == NULL || obj->value == NULL || obj->type == NULL || obj->key == NULL)
+	{
+		ft_putstr("Missing json value: ");
+		ft_putendl(name);
+		exit(1);
+	}
 	while (obj->type[i] != 0)
 	{
 		if (!ft_strcmp(obj->key[i], name))
