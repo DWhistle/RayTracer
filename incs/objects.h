@@ -182,4 +182,14 @@ typedef struct	s_mandelbub
 	t_vec	trap;
 }				t_mandelbub;
 
+typedef	struct	s_pthread_param
+{
+	int			x;
+	int			y;
+	t_vec		color;
+	int			**pixel;
+	t_accuracy	accuracy;
+	t_scene		*scene;
+}				t_pthread_param;
+
 #endif
