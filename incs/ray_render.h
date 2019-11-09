@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 13:06:37 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/09/17 19:34:00 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/09 12:05:36 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,14 @@ double			light_render(t_scene objs, t_point_data point_data, t_vec n);
 double			update_r(t_obj new_obj, t_vec point);
 t_vec			lightt(t_scene *objs, t_vec vec,
 							t_accuracy accuracy, t_point_data *point_data);
-t_vec			transparency(t_vec vec, t_point_data point);
+t_vec			transparency(t_vec vec, t_point_data point,\
+							double obj_refr, double refr);
 t_point_data	crate_point_data(t_vec norm,
 				t_obj *obj, t_vec point, t_vec color);
 t_vec			rot(t_quat quat, t_vec v);
 t_vec			get_ref_vec(t_point_data point_data, t_vec vec);
 double			clamp1(double f, double s, double t);
-t_point_data	shadowmarching(t_scene *objs, t_vec vec,
-							t_accuracy accuracy, t_vec point);
-t_point_data	raymarch_in_obj(t_obj *obj, t_vec vec,
+double			shadowmarching(t_scene *objs, t_vec vec,
 							t_accuracy accuracy, t_vec point);
 t_vec			get_pixel(t_vec uv, t_texture texture);
 t_vec			get_uv_spehere(t_vec point);
@@ -65,4 +64,14 @@ t_vec			get_color_obj(t_point_data shadow);
 double			len_mandelbub(t_vec point, t_vec param);
 double			map(t_vec point, t_vec param);
 float			sd_cross(t_vec point, t_vec param);
+t_vec			get_ref_vec(t_point_data point_data, t_vec vec);
+t_vec			get_ref_color(t_point_data *points);
+t_point_data	reflection(t_scene *scene, t_vec vec, t_point_data point_data,\
+							t_point_data (*raymarch)());
+t_point_data	refraction(t_scene *scene, t_vec vec,\
+				t_point_data point_data, t_point_data (*raymarch)());
+t_point_data	transparenc(t_scene *scene, t_vec vec,\
+				t_point_data point_data, t_point_data (*raymarch)());
+t_point_data	ray_render(t_scene *scene, t_vec vec,\
+							t_vec point, t_point_data (*raymarch)());
 #endif

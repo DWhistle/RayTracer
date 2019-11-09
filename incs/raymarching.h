@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 13:07:11 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/09/02 13:07:12 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/09/30 13:16:02 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_point_data	raymarch_in_obj(t_obj *obj, t_vec vec,
 							t_accuracy accuracy, t_vec point);
 t_point_data	raymarching(t_scene *objs, t_vec vec,
 							t_accuracy accuracy, t_vec point);
-t_point_data	shadowmarching(t_scene *objs, t_vec vec,
+double			shadowmarching(t_scene *objs, t_vec vec,
 							t_accuracy accuracy, t_vec point);
 
 #endif

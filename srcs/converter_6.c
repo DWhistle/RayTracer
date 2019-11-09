@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 11:19:01 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/09/02 11:19:03 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/09/20 19:51:40 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,10 @@ void		get_obj(t_json *obj, char *name, t_obj *object)
 	object->refraction = query_attribute(json, "refraction", &res).float_value;
 	if (res)
 		object->refraction = 0;
+	object->tr_refraction = query_attribute(json,\
+							"tr_refraction", &res).float_value;
+	if (res)
+		object->tr_refraction = 0;
 	get_obj2(json, object);
 	get_obj4(json, object);
 	get_obj3(json, name, object);

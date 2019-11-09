@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 18:40:37 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/09/02 12:24:19 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/09 11:56:36 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ double		vec_dotvec(t_vec4 v1, t_vec4 v2)
 			v1.vec.z * v2.vec.z + v1.vec.w * v2.vec.w);
 }
 
-t_vec4		vec_dotdec(t_vec4 v1, ft_decimal val)
+t_vec4		vec_dotdec(t_vec4 v1, t_decimal val)
 {
 	t_vec4	ret;
 
@@ -40,7 +40,7 @@ t_vec4		vec_mul(t_vec4 v1, t_vec4 v2)
 	return (ret);
 }
 
-ft_decimal	vec_sqrdist(t_vec4 vec)
+t_decimal	vec_sqrdist(t_vec4 vec)
 {
 	return (vec.vec.x * vec.vec.x +\
 			vec.vec.y * vec.vec.y +\
@@ -51,7 +51,7 @@ ft_decimal	vec_sqrdist(t_vec4 vec)
 t_vec4		vec_norm(t_vec4 v)
 {
 	t_vec4		vec;
-	ft_decimal	dist;
+	t_decimal	dist;
 
 	dist = 1.0 / sqrt(vec_sqrdist(v));
 	vec.vec.x = v.vec.x * dist;

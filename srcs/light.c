@@ -6,35 +6,11 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 11:50:53 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/09/17 19:33:53 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/08 16:03:03 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "light.h"
-
-int				get_shadow(t_scene *objs, t_vec vec,\
-							t_accuracy accuracy, t_point_data point_data)
-{
-	t_vec			point;
-	t_point_data	shadow;
-
-	point = point_data.point;
-	objs->ignore = point_data.obj;
-	shadow = shadowmarching(objs, vec, accuracy, point);
-	objs->tr_intensity = 1;
-	while (shadow.obj && shadow.obj->transparency)
-	{
-		objs->tr_intensity *= shadow.obj->transparency;
-		objs->ignore = shadow.obj;
-		accuracy.max_dist -= vec_len(vec_sub(shadow.point, point));
-		point = shadow.point;
-		shadow = shadowmarching(objs, vec, accuracy, point);
-	}
-	objs->ignore = 0;
-	if (shadow.obj)
-		return (1);
-	return (0);
-}
 
 double			color_calc(t_scene *objs, t_vec vec,\
 						t_point_data *point_data, t_vec li)
@@ -44,12 +20,12 @@ double			color_calc(t_scene *objs, t_vec vec,\
 	t_vec	hw_vec;
 
 	i = 0.0;
-	if (!get_shadow(objs, vec_norm(li), objs->accuracy, *point_data))
+	if (!get_shadow(objs, li, objs->accuracy, *point_data))
 	{
-		n_dot_l = vec_dotvec(point_data->norm, vec_norm(li));
+		n_dot_l = vec_dotvec(point_data->norm, li);
 		if (n_dot_l > 0)
 			i += objs->lights[objs->number_lights].intensity *\
-				(n_dot_l) / (vec_len(li));
+			(n_dot_l) * objs->tr_intensity;
 		if (point_data->obj->specular > 0)
 		{
 			hw_vec = vec_norm(vec_sum(vec_dotdec(li, 1),\
@@ -59,10 +35,18 @@ double			color_calc(t_scene *objs, t_vec vec,\
 					vec_dotdec(li, -1)), vec_norm(vec_dotdec(vec, -1)));
 			if (n_dot_l > 0)
 				i += objs->lights[objs->number_lights].intensity *\
-					pow(n_dot_l, point_data->obj->specular) / (vec_len(li));
+					pow(n_dot_l, point_data->obj->specular) *\
+objs->lights[objs->number_lights].intensity * (n_dot_l) * objs->tr_intensity;
 		}
 	}
-	return (i * objs->tr_intensity);
+	return (i);
+}
+
+void			light_math2(t_scene *objs, t_vec *li, t_point_data *point_data)
+{
+	*li = vec_sub(rand_point(objs->lights[objs->number_lights].\
+	point, objs->lights[objs->number_lights].r), point_data->point);
+	objs->accuracy.max_dist = vec_len(*li);
 }
 
 t_vec			light_math(t_scene *objs,\
@@ -77,7 +61,6 @@ t_vec			light_math(t_scene *objs,\
 	n = objs->number_lights;
 	len = objs->accuracy.max_dist;
 	while (objs->number_lights--)
-	{
 		if (objs->lights[objs->number_lights].type == AMBIENT)
 			i += objs->lights[objs->number_lights].intensity;
 		else
@@ -85,13 +68,9 @@ t_vec			light_math(t_scene *objs,\
 			if (objs->lights[objs->number_lights].type == DIRECT)
 				li = objs->lights[objs->number_lights].vec;
 			else
-				li = vec_sub(rand_point(
-					objs->lights[objs->number_lights].point,\
-			objs->lights[objs->number_lights].r), point_data->point);
-			objs->accuracy.max_dist = vec_len(li);
-			i += color_calc(objs, vec, point_data, li);
+				light_math2(objs, &li, point_data);
+			i += color_calc(objs, vec, point_data, vec_norm(li));
 		}
-	}
 	objs->accuracy.max_dist = len;
 	objs->number_lights = n;
 	return (vec_dotdec(point_data->color, i));

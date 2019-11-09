@@ -1,18 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_types.h                                         :+:      :+:    :+:   */
+/*   len_triangle_prism.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/19 18:27:35 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/11/09 11:42:31 by kmeera-r         ###   ########.fr       */
+/*   Created: 2019/11/05 14:53:59 by kmeera-r          #+#    #+#             */
+/*   Updated: 2019/11/05 14:54:32 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_TYPES_H
-# define FT_TYPES_H
+#include "ray_render.h"
 
-typedef	double	t_decimal;
+double	len_triangular_prism(t_vec point, t_vec param)
+{
+	t_vec	q;
 
-#endif
+	q = vec_fabs(point);
+	return (fmax(q.arr[2] - param.arr[1],\
+			fmax(q.arr[0] * 0.866025 + point.arr[1] * 0.5,\
+			-point.arr[1]) - param.arr[0] * 0.5));
+}

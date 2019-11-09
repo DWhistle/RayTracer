@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 16:14:59 by bturcott          #+#    #+#             */
-/*   Updated: 2019/07/30 00:16:08 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/11/09 12:06:59 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,25 +51,16 @@ typedef struct s_json_parser{
    char *f;
 }              t_parser;
 
-
-void *convert_objects(t_json *j);
-int make_json(t_parser *json, t_json *obj);
-t_list *parse_json(char *config_file);
-int     gate_names_obj(t_json *j, char*** names, int (*check_names)());
-int parse_value(t_parser *json, t_values *value, int **type, int i);
-t_json *create_json_obj(void);
-
-/*
-** logic
-*/
-int parse_key(t_parser *json, char **key);
-int parse_int(t_parser *json, t_values *value);
-int parse_float(t_parser *json, t_values *value);
-
-/*
-** utils
-*/
-int is_float(t_parser *json);
-int escape(t_parser *json);
+void		*convert_objects(t_json *j);
+int			make_json(t_parser *json, t_json *obj);
+t_list		*parse_json(char *config_file);
+int			gate_names_obj(t_json *j, char*** names, int (*check_names)());
+int			parse_value(t_parser *json, t_values *value, int **type, int i);
+t_json		*create_json_obj(void);
+int			parse_key(t_parser *json, char **key);
+int			parse_int(t_parser *json, t_values *value);
+int			parse_float(t_parser *json, t_values *value);
+int			is_float(t_parser *json);
+int			escape(t_parser *json);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:23:25 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/09/02 12:26:05 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/09 12:00:33 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_vec4	vec_sum(t_vec4 v1, t_vec4 v2)
 	return (ret);
 }
 
-t_vec4	vec_add(t_vec4 v1, ft_decimal val)
+t_vec4	vec_add(t_vec4 v1, t_decimal val)
 {
 	t_vec4	ret;
 
@@ -45,7 +45,7 @@ t_vec4	vec_sub(t_vec4 v1, t_vec4 v2)
 	return (ret);
 }
 
-int		vec_equ(t_vec4 v1, t_vec4 v2, ft_decimal eps)
+int		vec_equ(t_vec4 v1, t_vec4 v2, t_decimal eps)
 {
 	return (fabs(v1.vec.x - v2.vec.x) <= eps &&
 			fabs(v1.vec.y - v2.vec.y) <= eps &&

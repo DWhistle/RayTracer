@@ -6,7 +6,7 @@
 #    By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 19:22:42 by hgreenfe          #+#    #+#              #
-#    Updated: 2019/09/02 12:43:58 by kmeera-r         ###   ########.fr        #
+#    Updated: 2019/11/09 12:01:18 by kmeera-r         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,19 +42,14 @@ FILES := main \
 		 vector \
 		 ray_tracing \
 		 antialiasing \
-		 len_obj \
 		 len_obj_2 \
-		 len_obj_3 \
-		 len_obj_4 \
-		 ft_opencl_files \
-		 ft_opencl_func \
-		 ft_opencl_params \
 		 quaternion_1 \
 		 quaternion_2 \
 		 light \
 		 light_2 \
 		 light_3 \
 		 reflaction \
+		 reflaction2 \
 		 transparency \
 		 parser \
 		 get_next_line \
@@ -67,8 +62,21 @@ FILES := main \
 		 converter_7 \
 		 parser_logic \
 		 parser_utils \
-		 cl_objects_converter \
-		 effects
+		 effects \
+		 len_triangle_prism \
+		 len_tor \
+		 len_sphere \
+		 len_plane \
+		 len_octahedron \
+		 len_mandelbub \
+		 len_hexagonal_prism \
+		 len_ellipsoid \
+		 len_cylinder \
+		 len_cone \
+		 len_capsule \
+		 len_box \
+		 len_box_fract \
+		 
 		 #converter
 
 

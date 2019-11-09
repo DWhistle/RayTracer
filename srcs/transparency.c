@@ -6,13 +6,13 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:18:05 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/09/02 12:18:06 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/08 15:49:17 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ray_render.h"
 
-t_vec	rot(t_quat quat, t_vec v)
+t_vec			rot(t_quat quat, t_vec v)
 {
 	t_quat t;
 
@@ -21,19 +21,30 @@ t_vec	rot(t_quat quat, t_vec v)
 	return (new_vec3(t.x, t.y, t.z));
 }
 
-t_vec	transparency(t_vec vec, t_point_data point)
+t_vec			transparency(t_vec vec, t_point_data point,\
+					double obj_refr, double refr)
 {
 	double	a;
+	double	k;
 	t_vec	v;
 
-	a = acos(vec_dotvec(vec, point.norm));
-	a = cos(asin(sin(a) * point.obj->refraction));
-	v = rot(create_quat(vec_mul(vec, point.norm), a),\
-			vec_dotdec(point.norm, -1));
+	obj_refr = refr / obj_refr;
+	a = -vec_dotvec(vec, point.norm);
+	k = 0;
+	if (a < 0)
+	{
+		a *= -1;
+		point.norm = vec_dotdec(point.norm, -1);
+		obj_refr = 1.0 / obj_refr;
+	}
+	k = 1.0 - obj_refr * obj_refr * (1 - a * a);
+	v = vec_norm(vec_sum(vec_dotdec(vec, obj_refr),\
+	vec_dotdec(point.norm, a * obj_refr - sqrt(k))));
 	return (v);
 }
 
-t_point_data	get_transparency(t_scene *objs, t_vec vec, t_point_data point_data)
+t_point_data	get_transparency(t_scene *objs,\
+				t_vec vec, t_point_data point_data)
 {
 	t_point_data shadow;
 
@@ -43,8 +54,6 @@ t_point_data	get_transparency(t_scene *objs, t_vec vec, t_point_data point_data)
 		objs->ignore = shadow.obj;
 		shadow = ray_render(objs, vec, shadow.point, raymarching);
 	}
-	point_data.tranc_norm = shadow.norm;
 	point_data.tranc_color = shadow.color;
-	point_data.tranc_point = shadow.point;
 	return (point_data);
 }

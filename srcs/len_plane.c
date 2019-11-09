@@ -1,18 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_types.h                                         :+:      :+:    :+:   */
+/*   len_plane.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/19 18:27:35 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/11/09 11:42:31 by kmeera-r         ###   ########.fr       */
+/*   Created: 2019/11/05 14:53:49 by kmeera-r          #+#    #+#             */
+/*   Updated: 2019/11/05 14:54:56 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_TYPES_H
-# define FT_TYPES_H
+#include "ray_render.h"
 
-typedef	double	t_decimal;
+double	len_plane(t_vec point, t_vec param)
+{
+	t_vec norm;
 
-#endif
+	norm = new_vec3(param.arr[0], param.arr[1], param.arr[2]);
+	return (fabs(vec_dotvec(point, norm) + param.arr[3]));
+}

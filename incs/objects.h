@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:49:11 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/09/06 14:35:08 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/08 12:24:16 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct	s_obj
 	double			reflection;
 	t_vec			color;
 	double			refraction;
+	double			tr_refraction;
 	t_vec			param;
 	int				neg;
 	double			fract;
@@ -157,5 +158,28 @@ typedef struct	s_segment
 	t_vec		a;
 	t_vec		b;
 }				t_segment;
+
+typedef struct	s_mandelbub
+{
+	double	m;
+	double	dz;
+	double	m2;
+	double	m4;
+	double	x;
+	double	y;
+	double	z;
+	double	k3;
+	double	k2;
+	double	k1;
+	double	k4;
+	double	x2;
+	double	y2;
+	double	z2;
+	double	x4;
+	double	y4;
+	double	z4;
+	t_vec	w;
+	t_vec	trap;
+}				t_mandelbub;
 
 #endif

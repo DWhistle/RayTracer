@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:11:36 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/09/12 13:10:25 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/08 15:06:32 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,38 +94,39 @@ t_point_data	raymarching(t_scene *objs, t_vec vec,
 		r[0] = fmax(r[0], -r[1]);
 		if (r[0] + r[1] > 0.001)
 			obj2 = obj;
-		if (r[0] < accuracy.delta)
+		if (fabs(r[0]) < accuracy.delta)
 		{
 			return (crate_point_data(get_normal(new_point, *obj2),\
 					obj, new_point, new_vec0()));
 		}
-		dist += r[0];
+		dist += fabs(r[0]);
 		new_point = vec_sum(vec_dotdec(vec, dist), point);
 	}
 	return (crate_point_data(new_vec0(), NULL, new_vec0(), new_vec0()));
 }
 
-t_point_data	shadowmarching(t_scene *objs, t_vec vec,
+double			shadowmarching(t_scene *objs, t_vec vec,
 							t_accuracy accuracy, t_vec point)
 {
+	double	res;
 	double	r[2];
 	t_obj	*obj;
 	double	dist;
 	t_vec	new_point;
 
-	dist = 0;
+	dist = 0.1;
 	obj = 0;
-	new_point = point;
+	new_point = vec_sum(vec_dotdec(vec, dist), point);
+	res = 1;
+	accuracy.depth_march = 20;
 	while (accuracy.depth_march-- && dist < accuracy.max_dist)
 	{
-		r[0] = fabs(get_dist(0, &obj, new_point, objs));
-		if (r[0] < accuracy.delta)
-		{
-			return (crate_point_data(get_normal(new_point, *obj),\
-					obj, new_point, new_vec0()));
-		}
+		r[0] = get_dist(0, &obj, new_point, objs);
+		res = fmin(res, 8 * r[0] / dist);
 		dist += r[0];
 		new_point = vec_sum(vec_dotdec(vec, dist), point);
+		if (res < accuracy.delta)
+			break ;
 	}
-	return (crate_point_data(new_vec0(), NULL, new_vec0(), new_vec0()));
+	return (clamp1(res, 0.0, 1.0));
 }

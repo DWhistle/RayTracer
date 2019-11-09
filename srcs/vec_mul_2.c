@@ -6,13 +6,13 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:24:26 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/09/02 12:24:27 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/09 11:53:49 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vector.h"
 
-ft_decimal	vec_len(t_vec4 vec)
+t_decimal	vec_len(t_vec4 vec)
 {
 	return (sqrt(vec_sqrdist(vec)));
 }
