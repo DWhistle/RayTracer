@@ -21,7 +21,7 @@ t_vec			rot(t_quat quat, t_vec v)
 	return (new_vec3(t.x, t.y, t.z));
 }
 
-t_vec			transparency(t_vec vec, t_point_data point,\
+t_vec			transparency(t_vec vec, t_point_data point,
 					double obj_refr, double refr)
 {
 	double	a;
