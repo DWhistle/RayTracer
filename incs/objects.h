@@ -137,6 +137,7 @@ typedef struct	s_scene
 	t_quat			rot;
 	int				signz;
 	double			tr_intensity;
+	int				enabled;
 }				t_scene;
 
 typedef struct	s_polygon

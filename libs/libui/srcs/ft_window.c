@@ -33,6 +33,7 @@ void		*ft_create_new_window(void)
 	wnd->windowfunc = NULL;
 	wnd->renderfunc = NULL;
 	wnd->tickfunc = NULL;
+	wnd->thread = NULL;
 	return (wnd);
 }
 

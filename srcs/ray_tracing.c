@@ -77,6 +77,7 @@ void	*pthread_antialiasing(void *p_param)
 	param->color = vec_dotdec(param->scene->color[param->x + param->scene->w * param->y],
 							  1.0 / param->accuracy.depth_pt);
 	effects1(param->scene, &(param->color), param->pixel, param->x + param->scene->w * param->y);
+	//printf("x%d y%d\n", param->x, param->y);
 	return (param);
 }
 
@@ -138,7 +139,6 @@ t_list	*pthread_init(t_scene *scene, int **pixel,
 			free (p_param);
 			free (p_param2);
 			x--;
-			printf("x%d y%d\n", x, y);
 			//lst = push_pthread(&tread_id, lst);
 		}
 	}
