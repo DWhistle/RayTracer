@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/11/09 16:49:40 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/29 17:47:26 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int		render(void *window, t_scene *scene)
 	srand(time(NULL));
 	scene->accuracy.depth_pt++;
 	ray_tracing(scene, (int**)&(pixels), scene->accuracy);
+	printf("\nsdads\n");
 	return (0);
 }
 

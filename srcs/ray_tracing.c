@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:10:21 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/09 16:09:00 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/28 21:34:17 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,17 @@ t_vec	check_color(t_vec color)
 
 void	effects1(t_scene *scene, t_vec *color, int **pixel, int pix)
 {
-	if (scene->sepia)
-		*color = sepia(*color);
-	if (scene->ce)
-		*color = cartoon(*color);
-	if (scene->neg)
-		*color = negative(*color);
-	if (scene->ster)
-		*color = stereoscopy(*color, scene->ster);
-	(*pixel)[pix] = (int)(color->arr[0]) << 16 |
-				(int)(color->arr[1]) << 8 | (int)(color->arr[2]) | 0xff << 24;
+	scene = 0;
+	//if (scene->sepia)
+	//	*color = sepia(*color);
+	//if (scene->ce)
+	//	*color = cartoon(*color);
+	//if (scene->neg)
+	//	*color = negative(*color);
+	//if (scene->ster)
+	//	*color = stereoscopy(*color, scene->ster);
+	(*pixel)[pix] = (unsigned int)(color->arr[0]) << 16 |
+				(unsigned int)(color->arr[1]) << 8 | (unsigned int)(color->arr[2]) | 0xff << 24;
 }
 
 void	effects2(t_scene *scene, int **pixel)
@@ -66,6 +67,7 @@ void	*pthread_antialiasing(void *p_param)
 	param->color = antialiasing(param->scene, (double)param->x / param->scene->w - 0.5,
 								((double)param->y - param->scene->h / 2) / param->scene->w,
 								param->scene->points_data + param->x + param->scene->w * param->y);
+	
 	param->color = check_color(param->color);
 	if (param->accuracy.depth_pt == 1)
 		param->scene->color[param->x + param->scene->w * param->y] = param->color;
@@ -92,7 +94,7 @@ pthread_t	*pop_pthread(t_list *lst)
 	pthread_t	*pid;
 
 	pid = lst->content;
-	ft_lstdelone(&lst, ft_bzero);
+	//ft_lstdelone(&lst, ft_bzero);
 	lst = lst->next;
 	return (pid);
 }
@@ -101,6 +103,8 @@ t_list	*pthread_init(t_scene *scene, int **pixel,
 						t_accuracy accuracy)
 {
 	pthread_t 			tread_id;
+	pthread_t 			tread_id2;
+	t_pthread_param		*p_param2;
 	t_pthread_param		*p_param;
 	t_list				*lst;
 	int					x;
@@ -121,7 +125,21 @@ t_list	*pthread_init(t_scene *scene, int **pixel,
 			p_param->accuracy = accuracy;
 			pthread_create(&tread_id, NULL, &pthread_antialiasing,
 						   (void *) p_param);
-			lst = push_pthread(&tread_id, lst);
+			p_param2 = ft_memalloc(sizeof(t_pthread_param));
+			p_param2->scene = scene;
+			p_param2->x = x - 1;
+			p_param2->y = y;
+			p_param2->pixel = pixel;
+			p_param2->accuracy = accuracy;
+			pthread_create(&tread_id2, NULL, &pthread_antialiasing,
+						   (void *) p_param2);
+			pthread_join(tread_id, NULL);
+			pthread_join(tread_id2, NULL);
+			free (p_param);
+			free (p_param2);
+			x--;
+			printf("x%d y%d\n", x, y);
+			//lst = push_pthread(&tread_id, lst);
 		}
 	}
 	return (lst);
@@ -151,7 +169,7 @@ void	ray_tracing(t_scene *scene, int **pixel,
 	t_list	*lst;
 
 	lst = pthread_init(scene, pixel, accuracy);
-	pthread_run(lst, scene);
+	//pthread_run(lst, scene);
 }
 
 /*

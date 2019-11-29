@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/08 15:14:26 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/08 15:26:12 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/28 20:47:19 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,14 @@ t_point_data	ray_render(t_scene *scene, t_vec vec,\
 							t_vec point, t_point_data (*raymarch)())
 {
 	t_point_data	point_data;
-	float			n;
+	//float			n;
 
 	point_data = raymarch(scene, vec, scene->accuracy, point);
 	if (point_data.obj)
 	{
 		point_data.color = get_color_obj(point_data);
 		point_data.color = light_math(scene, vec, &point_data);
-		if (scene->accuracy.depth_ref)
+		/*if (scene->accuracy.depth_ref)
 		{
 			if (point_data.obj->reflection)
 				point_data = reflection(scene, vec, point_data, raymarching);
@@ -62,7 +62,7 @@ t_point_data	ray_render(t_scene *scene, t_vec vec,\
 		+ point_data.obj->tr_refraction;
 		if (n > 1.0)
 			n = 1.0;
-		ff(&point_data, n);
+		ff(&point_data, n);*/
 	}
 	return (point_data);
 }
