@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   objects.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:49:11 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/09 15:46:39 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/30 14:12:42 by bturcott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,8 @@ typedef struct	s_mandelbub
 typedef	struct	s_pthread_param
 {
 	int			x;
-	int			y;
+	int			ymin;
+	int			ymax;
 	t_vec		color;
 	int			**pixel;
 	t_accuracy	accuracy;

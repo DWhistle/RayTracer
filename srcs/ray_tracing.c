@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_tracing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:10:21 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/28 21:34:17 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/30 15:26:06 by bturcott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "ftui.h"
 #include "effects.h"
 #include <pthread.h>
+
+#define NUMBER_OF_THREADS 10
 
 t_vec	check_color(t_vec color)
 {
@@ -64,20 +66,28 @@ void	*pthread_antialiasing(void *p_param)
 	t_pthread_param	*param;
 
 	param = p_param;
-	param->color = antialiasing(param->scene, (double)param->x / param->scene->w - 0.5,
-								((double)param->y - param->scene->h / 2) / param->scene->w,
-								param->scene->points_data + param->x + param->scene->w * param->y);
-	
-	param->color = check_color(param->color);
-	if (param->accuracy.depth_pt == 1)
-		param->scene->color[param->x + param->scene->w * param->y] = param->color;
-	else
-		param->scene->color[param->x + param->scene->w * param->y] =
-				vec_sum(param->scene->color[param->x + param->scene->w * param->y], param->color);
-	param->color = vec_dotdec(param->scene->color[param->x + param->scene->w * param->y],
-							  1.0 / param->accuracy.depth_pt);
-	effects1(param->scene, &(param->color), param->pixel, param->x + param->scene->w * param->y);
-	//printf("x%d y%d\n", param->x, param->y);
+	int y = param->ymin;
+	int x;
+	while (y < param->ymax)
+	{
+		x = -1;
+		while (++x < param->x)
+		{
+		param->color = antialiasing(param->scene, (double)x / param->scene->w - 0.5,
+										((double)y - param->scene->h / 2) / param->scene->w,
+										param->scene->points_data + x + param->scene->w * y);			
+			param->color = check_color(param->color);
+			if (param->accuracy.depth_pt == 1)
+				param->scene->color[x + param->scene->w * y] = param->color;
+			else
+				param->scene->color[x + param->scene->w * y] =
+						vec_sum(param->scene->color[x + param->scene->w * y], param->color);
+			param->color = vec_dotdec(param->scene->color[x + param->scene->w * y],
+									1.0 / param->accuracy.depth_pt);
+			effects1(param->scene, &(param->color), param->pixel, x + param->scene->w * y);
+		}
+		y++;
+	}
 	return (param);
 }
 
@@ -103,46 +113,35 @@ pthread_t	*pop_pthread(t_list *lst)
 t_list	*pthread_init(t_scene *scene, int **pixel,
 						t_accuracy accuracy)
 {
-	pthread_t 			tread_id;
-	pthread_t 			tread_id2;
-	t_pthread_param		*p_param2;
-	t_pthread_param		*p_param;
-	t_list				*lst;
-	int					x;
+	pthread_t 			tread_ids[NUMBER_OF_THREADS];
+	t_pthread_param		**p_params;
 	int					y;
+	int 				step;
 
-	lst = NULL;
-	y = scene->h;
-	while (y--)
+	y = -1;
+	step = scene->h / NUMBER_OF_THREADS;
+	p_params = ft_memalloc(sizeof(t_pthread_param *) * NUMBER_OF_THREADS);
+	int current = 0;
+	while (++y < NUMBER_OF_THREADS)
 	{
-		x = scene->w;
-		while (x--)
-		{
-			p_param = ft_memalloc(sizeof(t_pthread_param));
-			p_param->scene = scene;
-			p_param->x = x;
-			p_param->y = y;
-			p_param->pixel = pixel;
-			p_param->accuracy = accuracy;
-			pthread_create(&tread_id, NULL, &pthread_antialiasing,
-						   (void *) p_param);
-			p_param2 = ft_memalloc(sizeof(t_pthread_param));
-			p_param2->scene = scene;
-			p_param2->x = x - 1;
-			p_param2->y = y;
-			p_param2->pixel = pixel;
-			p_param2->accuracy = accuracy;
-			pthread_create(&tread_id2, NULL, &pthread_antialiasing,
-						   (void *) p_param2);
-			pthread_join(tread_id, NULL);
-			pthread_join(tread_id2, NULL);
-			free (p_param);
-			free (p_param2);
-			x--;
-			//lst = push_pthread(&tread_id, lst);
-		}
+		p_params[y] = ft_memalloc(sizeof(t_pthread_param));
+		p_params[y]->scene = scene;
+		p_params[y]->x = scene->w;
+		p_params[y]->ymin = current;
+		p_params[y]->ymax = current + ((y == NUMBER_OF_THREADS - 1) ? step + scene->h % NUMBER_OF_THREADS : step);
+		p_params[y]->pixel = pixel;
+		p_params[y]->accuracy = accuracy;
+		pthread_create(&tread_ids[y], NULL, &pthread_antialiasing,
+		 				   (void *) p_params[y]);
+		current += step;
 	}
-	return (lst);
+	y = -1;
+	while (++y < NUMBER_OF_THREADS){
+		pthread_join(tread_ids[y], NULL);
+		free(p_params[y]);
+	}
+	free(p_params);
+	return (NULL);
 }
 
 void	pthread_run(t_list *lst, t_scene *scene)
@@ -169,6 +168,7 @@ void	ray_tracing(t_scene *scene, int **pixel,
 	t_list	*lst;
 
 	lst = pthread_init(scene, pixel, accuracy);
+	printf("%p",(void *)lst);
 	//pthread_run(lst, scene);
 }
 
