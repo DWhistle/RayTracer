@@ -75,27 +75,21 @@ void			*ft_process(void *list)
 
 int				ft_pthread(t_list *list)
 {
-	pthread_t 			tread_id;
 	t_window			*wnd;
 
 	wnd = list->content;
 	if (!wnd->thread)
 	{
-		pthread_create(&tread_id, NULL, &ft_process, (void *) list);
-		wnd->thread = &tread_id;
+		wnd->thread = ft_memalloc(sizeof(pthread_t));
+		pthread_create((wnd->thread), NULL, &ft_process, (void *)list);
 	}
 	else
 	{
 		if (wnd->quit)
-		{
 			pthread_cancel(*(wnd->thread));
-			wnd->thread = NULL;
-		}
 		else
-		{
 			pthread_join(*(wnd->thread), NULL);
-			wnd->thread = NULL;
-		}
+		ft_memdel((void**)&(wnd->thread));
 	}
 	return (0);
 }

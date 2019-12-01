@@ -15,7 +15,7 @@
 #include "effects.h"
 #include <pthread.h>
 
-#define NUMBER_OF_THREADS 10
+#define NUMBER_OF_THREADS 16
 
 t_vec	check_color(t_vec color)
 {
@@ -64,30 +64,30 @@ void	effects2(t_scene *scene, int **pixel)
 void	*pthread_antialiasing(void *p_param)
 {
 	t_pthread_param	*param;
+	int				y;
+	int				x;
 
 	param = p_param;
-	int y = param->ymin;
-	int x;
+	y = param->ymin;
 	while (y < param->ymax)
 	{
 		x = -1;
 		while (++x < param->x)
 		{
-		param->color = antialiasing(param->scene, (double)x / param->scene->w - 0.5,
-										((double)y - param->scene->h / 2) / param->scene->w,
-										param->scene->points_data + x + param->scene->w * y);			
+			param->color = antialiasing(param->scene, (double)x / param->scene->w - 0.5,
+				((double)y - param->scene->h * 0.5) / param->scene->h,
+				param->scene->points_data + x + param->scene->w * y);
+			if (param->accuracy.depth_pt != 1)
+				param->color =
+					vec_sum(param->scene->color[x + param->scene->w * y], param->color);
 			param->color = check_color(param->color);
-			if (param->accuracy.depth_pt == 1)
-				param->scene->color[x + param->scene->w * y] = param->color;
-			else
-				param->scene->color[x + param->scene->w * y] =
-						vec_sum(param->scene->color[x + param->scene->w * y], param->color);
-			param->color = vec_dotdec(param->scene->color[x + param->scene->w * y],
-									1.0 / param->accuracy.depth_pt);
+			param->scene->color[x + param->scene->w * y] =
+				vec_dotdec(param->color, 1.0 / param->accuracy.depth_pt);
 			effects1(param->scene, &(param->color), param->pixel, x + param->scene->w * y);
 		}
 		y++;
 	}
+	printf("%d - %d\n", param->ymin, param->ymax);
 	return (param);
 }
 
@@ -105,9 +105,22 @@ pthread_t	*pop_pthread(t_list *lst)
 	pthread_t	*pid;
 
 	pid = lst->content;
-	//ft_lstdelone(&lst, ft_bzero);
+	ft_lstdelone(&lst, ft_bzero);
 	lst = lst->next;
 	return (pid);
+}
+
+void	ft_wait_threads(pthread_t const *tread_ids, t_pthread_param **p_params)
+{
+	int		y;
+
+	y = -1;
+	while (++y < NUMBER_OF_THREADS)
+	{
+		pthread_join(tread_ids[y], NULL);
+		free(p_params[y]);
+	}
+	free(p_params);
 }
 
 t_list	*pthread_init(t_scene *scene, int **pixel,
@@ -116,31 +129,25 @@ t_list	*pthread_init(t_scene *scene, int **pixel,
 	pthread_t 			tread_ids[NUMBER_OF_THREADS];
 	t_pthread_param		**p_params;
 	int					y;
-	int 				step;
+	const int			step = scene->h / NUMBER_OF_THREADS;
 
 	y = -1;
-	step = scene->h / NUMBER_OF_THREADS;
 	p_params = ft_memalloc(sizeof(t_pthread_param *) * NUMBER_OF_THREADS);
-	int current = 0;
-	while (++y < NUMBER_OF_THREADS)
+	while (++y * step < scene->h - step)
 	{
 		p_params[y] = ft_memalloc(sizeof(t_pthread_param));
 		p_params[y]->scene = scene;
 		p_params[y]->x = scene->w;
-		p_params[y]->ymin = current;
-		p_params[y]->ymax = current + ((y == NUMBER_OF_THREADS - 1) ? step + scene->h % NUMBER_OF_THREADS : step);
+		p_params[y]->ymin = y * step;
+		p_params[y]->ymax = (((y + 1) * step) < scene->h - step)
+				? (y + 1) * step
+				: scene->h;
 		p_params[y]->pixel = pixel;
 		p_params[y]->accuracy = accuracy;
-		pthread_create(&tread_ids[y], NULL, &pthread_antialiasing,
-		 				   (void *) p_params[y]);
-		current += step;
+		pthread_create(&(tread_ids[y]), NULL,
+				&pthread_antialiasing, (void *) p_params[y]);
 	}
-	y = -1;
-	while (++y < NUMBER_OF_THREADS){
-		pthread_join(tread_ids[y], NULL);
-		free(p_params[y]);
-	}
-	free(p_params);
+	ft_wait_threads(tread_ids, p_params);
 	return (NULL);
 }
 
