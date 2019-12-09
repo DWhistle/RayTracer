@@ -77,10 +77,11 @@ void	*pthread_antialiasing(void *p_param)
 			param->color = antialiasing(param->scene, (double)x / param->scene->w - 0.5,
 				((double)y - param->scene->h * 0.5) / param->scene->h,
 				param->scene->points_data + x + param->scene->w * y);
-			if (param->accuracy.depth_pt != 1)
-				param->color =
-					vec_sum(param->scene->color[x + param->scene->w * y], param->color);
 			param->color = check_color(param->color);
+			if (param->accuracy.depth_pt != 1)
+				param->scene->color[x + param->scene->w * y] =
+					vec_sum(param->scene->color[x + param->scene->w * y],
+								param->color);
 			param->scene->color[x + param->scene->w * y] =
 				vec_dotdec(param->color, 1.0 / param->accuracy.depth_pt);
 			effects1(param->scene, &(param->color), param->pixel, x + param->scene->w * y);
@@ -142,9 +143,10 @@ t_list	*pthread_init(t_scene *scene, int **pixel,
 		p_params[y]->ymax = (((y + 1) * step) < scene->h - step)
 				? (y + 1) * step
 				: scene->h;
+		p_params[y]->color = new_vec(0);
 		p_params[y]->pixel = pixel;
 		p_params[y]->accuracy = accuracy;
-		pthread_create(&(tread_ids[y]), NULL,
+		pthread_create(tread_ids + y, NULL,
 				&pthread_antialiasing, (void *) p_params[y]);
 	}
 	ft_wait_threads(tread_ids, p_params);

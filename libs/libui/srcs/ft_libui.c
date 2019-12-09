@@ -143,6 +143,7 @@ void			ft_mainloop(void *list)
 				next = next->next;
 			}
 		}
-		ft_save_pthread(list);
+		//ft_save_pthread(list);
+		ft_process(list);
 	}
 }
