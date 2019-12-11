@@ -66,25 +66,33 @@ void	*pthread_antialiasing(void *p_param)
 	t_pthread_param	*param;
 	int				y;
 	int				x;
+	int				w;
 
 	param = p_param;
 	y = param->ymin;
+	w = param->scene->w;
 	while (y < param->ymax)
 	{
 		x = -1;
 		while (++x < param->x)
 		{
-			param->color = antialiasing(param->scene, (double)x / param->scene->w - 0.5,
+			param->color = antialiasing(param->scene, (double)x / w - 0.5,
 				((double)y - param->scene->h * 0.5) / param->scene->h,
-				param->scene->points_data + x + param->scene->w * y);
+				param->scene->points_data + x + w * y);
 			param->color = check_color(param->color);
 			if (param->accuracy.depth_pt != 1)
-				param->scene->color[x + param->scene->w * y] =
-					vec_sum(param->scene->color[x + param->scene->w * y],
+				param->color =
+					vec_sum(param->color,
 								param->color);
-			param->scene->color[x + param->scene->w * y] =
+			//printf("%f\n", param->scene->color[x + param->scene->w * y]);
+			if (x == 0)
+				printf("%d: %f %f %f %f\n", y, param->color.arr[0]
+						,param->color.arr[1]
+						,param->color.arr[2]
+						,param->color.arr[3]);
+			param->color =
 				vec_dotdec(param->color, 1.0 / param->accuracy.depth_pt);
-			effects1(param->scene, &(param->color), param->pixel, x + param->scene->w * y);
+			effects1(param->scene, &(param->color), param->pixel, x + w * y);
 		}
 		y++;
 	}
