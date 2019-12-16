@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 11:19:01 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/09 15:48:51 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/15 10:34:07 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void		get_obj4(t_json *json, t_obj *object)
 		object->specular = 0;
 	object->normal_map = get_texture(json, "normal_map");
 	object->texture = get_texture(json, "texture");
+	object->texture_transparency = get_texture(json, "texture_transparency");
+	object->disruption = get_disruption(json, "disruption");
 	object->restriction = get_restriction(json, &object->numbers_plane);
 }
 

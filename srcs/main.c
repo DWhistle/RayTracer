@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/11/09 16:49:40 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/15 11:09:15 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ int		render(void *window, t_scene *scene)
 	time_t				rawtime;
 	struct tm			*timeinfo;
 
+	if (scene->accuracy.depth_pt)
+		return (0);
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
 	pixels = ft_get_window_pixels(window, &screen);
@@ -75,21 +77,17 @@ int		main(int argc, char **argv)
 	t_rect	r;
 
 	(void)argc;
-	printf("rewrwe\n");
 	atexit(SDL_Quit);
 	json1 = parse_json(argv[1]);
-	printf("rewrwe");
 	if (json1 == NULL)
 		exit(0);
 	scene = convert_objects(json1->content);
-	printf("rewrwe");
 	free_json(json1);
 	list = ft_libui_init();
 	r = ft_new_rect(WIN_X, WIN_Y, ((t_scene*)scene)->w, ((t_scene*)scene)->h);
-	add_window((void**)&list, r, 0x00000000, "Ray Tracer v1.0");
+	add_window((void**)&list, r, 0x00000000, "Ray Tracer");
 	set_event_function(list->content, FT_EVENT_KEYPRESS, ft_key_func, scene);
 	set_event_function(list->content, FT_EVENT_TICKFUNC, ft_tickfunc, NULL);
 	ft_mainloop(list);
-	printf("rewrwe");
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 11:18:57 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/09 15:45:12 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/12 16:11:08 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,6 @@ void			get_scene2(t_json *obj, t_scene *scene);
 t_scene			*get_scene(t_json *obj);
 int				check_names_light(char *name);
 void			*convert_objects(t_json *j);
+t_texture		get_disruption(t_json *j, char *name);
 
 #endif

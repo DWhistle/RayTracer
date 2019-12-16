@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/09 11:45:09 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/09 15:46:12 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/12 13:15:00 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ t_vec			lightt(t_scene *objs, t_vec vec,
 							t_accuracy accuracy, t_point_data *point_data);
 t_vec			rand_point(t_vec point, double r);
 t_vec			get_uv_spehere(t_vec point);
-t_vec			get_pixel(t_vec uv, t_texture texture);
 t_vec			get_uv_cylinder(t_texture texture, t_vec point, double param);
 t_vec			get_uv_cone(t_texture texture, t_vec point);
 t_vec			get_uv_plane(t_texture texture, t_vec point);

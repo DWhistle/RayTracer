@@ -6,7 +6,7 @@
 #    By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 19:22:42 by hgreenfe          #+#    #+#              #
-#    Updated: 2019/11/09 15:54:25 by kmeera-r         ###   ########.fr        #
+#    Updated: 2019/11/12 15:08:58 by kmeera-r         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,6 +76,7 @@ FILES := main \
 		 len_capsule \
 		 len_box \
 		 len_box_fract \
+		 perlin_noise
 		 
 		 #converter
 

@@ -6,11 +6,37 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:01:37 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/09 15:49:57 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/15 11:11:06 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "light.h"
+
+t_vec			get_disruption_obj(t_point_data shadow)
+{
+	t_vec point;
+	t_vec disruption_vec;
+
+	point = rot(shadow.obj->rot_quat, vec_sub(shadow.point, shadow.obj->point));
+	if (shadow.obj->disruption.texture)
+	{
+		if (shadow.obj->type == SPHERE)
+			disruption_vec = (get_pixel(get_uv_spehere(point), shadow.obj->disruption));
+		else if (shadow.obj->type == CYLINDER)
+			disruption_vec = (get_pixel(get_uv_cylinder(shadow.obj->disruption, point,
+					shadow.obj->param.arr[2]), shadow.obj->disruption));
+		else if (shadow.obj->type == CONE)
+			disruption_vec = (get_pixel(get_uv_cone(shadow.obj->disruption, point),\
+					shadow.obj->disruption));
+		else if (shadow.obj->type == PLANE)
+			disruption_vec = (get_pixel(get_uv_plane(shadow.obj->disruption, point),\
+					shadow.obj->disruption));
+		else
+			return (shadow.obj->color);
+		return (vec_dotdec(shadow.obj->color, disruption_vec.arr[0] / 256));
+	}
+	return (shadow.obj->color);
+}
 
 t_vec			get_uv_plane(t_texture texture, t_vec point)
 {
@@ -45,7 +71,7 @@ t_vec			get_color_obj(t_point_data shadow)
 			return (get_pixel(get_uv_plane(shadow.obj->texture, point),\
 					shadow.obj->texture));
 	}
-	return (shadow.obj->color);
+	return (get_disruption_obj(shadow));
 }
 
 t_point_data	get_point(t_scene *objs, t_vec vec,

@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:49:11 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/09 15:46:39 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/15 10:34:38 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ typedef struct	s_obj
 	int				neg;
 	double			fract;
 	t_texture		texture;
+	t_texture		disruption;
+	t_texture		texture_transparency;
 	int				numbers_plane;
 	t_restriction	*restriction;
 	double			frequency;

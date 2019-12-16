@@ -1,7 +1,6 @@
-//dhorker
 {
-    "w": 512,
-    "h": 512,
+    "w": 256,
+    "h": 256,
     "FOW": 100.0,
     "cartoon effect":0,
     "blur motion":0,
@@ -50,18 +49,20 @@
         "y":40.0,
         "z":50.0
       },
-      "rad":0.0,  
-      "reflection":0.2,
-      "refraction":2.1,
-      "tr_refraction":0.2,
+      "rad":0.0,
       "transparency":0.0,
+      "texture_transparency":
+      {
+        "path":"chess.bmp"
+      },
       "specular":40,
       "point":
       {
         "x":0.0,
         "y":0.0,
         "z":550.0
-      }
+      },
+      "disruption": -1
     },
     "fsphere2":
     {
@@ -227,5 +228,5 @@
       },
       "type":3,
       "radius":3.0
-    },
+    }
   }

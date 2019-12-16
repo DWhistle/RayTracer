@@ -6,11 +6,59 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 11:18:47 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/09 15:48:25 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/11/12 17:10:20 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "converter.h"
+#include "perlin_noise.h"
+
+t_texture		get_disruption(t_json *j, char *name)
+{
+	int				name_disruption;
+	int				res;
+	t_texture		disrupt;
+	SDL_Surface		*serf;
+	int x = 0, y = 0;
+
+	disrupt.h = 1200;
+	disrupt.w = 1200;
+	disrupt.len_u = 1200;
+	disrupt.len_v = 1200;
+	name_disruption = query_attribute(j, name, &res).int_value;
+	disrupt.texture = 0;
+	if (res)
+		return (disrupt);
+	if (name_disruption == 0)
+	{
+		if (!(serf = SDL_LoadBMP("chess.bmp")))
+			return (disrupt);
+		disrupt.texture = serf->pixels;
+		return (disrupt);
+	}
+	else if (name_disruption == 2)
+	{
+		disrupt.texture = ft_memalloc(sizeof(unsigned char) * 1200 * 1200 * 4);
+		while (x < 1200)
+		{
+			y = 0;
+			while (y < 4800)
+			{
+				disrupt.texture[y + x * 4800] =  25600 * noise1(y / 4800);
+				y++;
+				disrupt.texture[y + x * 4800] = disrupt.texture[y + x * 4800 - 1];
+				y++;
+				disrupt.texture[y + x * 4800] = disrupt.texture[y + x * 4800 - 1];
+				y++;
+				disrupt.texture[y + x * 4800] = disrupt.texture[y + x * 4800 - 1];
+				y++;
+			}
+			x++;
+		}
+		return (disrupt);
+	}
+	return (disrupt);
+}
 
 t_texture		get_texture(t_json *j, char *name)
 {
