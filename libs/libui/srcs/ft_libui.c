@@ -13,6 +13,7 @@
 #include "ftui.h"
 #include "ft_window.h"
 #include "ft_events.h"
+#include <pthread.h>
 
 int				add_window(void **libui, t_rect rect,
 		int color, char const *title)
@@ -45,14 +46,14 @@ void			*ft_libui_init(void)
 	return (list);
 }
 
-int				ft_process(t_list *list)
+void			*ft_process(void *list)
 {
 	t_list			*next;
 	t_window		*wnd;
 	int				ticks;
 
-	if (!list || !list->content)
-		return (1);
+	if (!list || !((t_list*)list)->content)
+		return (NULL);
 	ticks = SDL_GetTicks();
 	next = list;
 	while (next)
@@ -69,6 +70,35 @@ int				ft_process(t_list *list)
 		}
 		next = next->next;
 	}
+	return (list);
+}
+
+int				ft_pthread(t_list *list)
+{
+	t_window			*wnd;
+
+	wnd = list->content;
+	if (!wnd->thread)
+	{
+		wnd->thread = ft_memalloc(sizeof(pthread_t));
+		pthread_create((wnd->thread), NULL, &ft_process, (void *)list);
+	}
+	else
+	{
+		if (wnd->quit)
+			pthread_cancel(*(wnd->thread));
+		else
+			pthread_join(*(wnd->thread), NULL);
+		ft_memdel((void**)&(wnd->thread));
+	}
+	return (0);
+}
+
+int				ft_save_pthread(t_list *list)
+{
+	if (!list || !list->content)
+		return (1);
+	ft_pthread(list);
 	return (0);
 }
 

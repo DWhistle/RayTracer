@@ -52,10 +52,11 @@ void	ft_tickfunc(void *wnd, int n, void *param)
 
 void	ft_key_func(void *wnd, int n, void *param)
 {
-	(void)param;
 	if (n == FTUI_KEY_ESCAPE)
 	{
 		ft_set_window_quit(wnd, 1);
+		param = ft_get_window_input_param(wnd);
+		((t_scene*)param)->enabled = 0;
 	}
 }
 
@@ -83,6 +84,7 @@ int		main(int argc, char **argv)
 	if (json1 == NULL)
 		exit(0);
 	scene = convert_objects(json1->content);
+	((t_scene*)scene)->enabled = 1;
 	printf("rewrwe");
 	free_json(json1);
 	list = ft_libui_init();

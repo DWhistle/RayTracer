@@ -1,7 +1,7 @@
 //dhorker
 {
-    "w": 256,
-    "h": 256,
+    "w": 512,
+    "h": 512,
     "FOW": 100.0,
     "cartoon effect":0,
     "blur motion":0,
