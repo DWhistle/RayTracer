@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_libui.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgreenfe <hgreenfe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 17:58:56 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/07/29 21:52:57 by hgreenfe         ###   ########.fr       */
+/*   Updated: 2019/11/29 20:47:35 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void			ft_mainloop(void *list)
 	quit = 0;
 	while (!quit)
 	{
-		if (SDL_PollEvent(&event))
+		while (SDL_PollEvent(&event))
 		{
 			next = list;
 			quit = 1;
