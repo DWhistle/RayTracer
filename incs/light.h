@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/09 11:45:09 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/12 13:15:00 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/12/16 08:33:55 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 # include "ray_render.h"
 
 int				get_shadow(t_scene *objs, t_vec vec,\
-							t_accuracy accuracy, t_point_data point_data);
+							t_accuracy accuracy, t_point_data point_data, double len, double *tr_intensity);
 double			color_calc(t_scene *objs, t_vec vec,\
-						t_point_data *point_data, t_vec li);
+						t_point_data *point_data, t_vec li, int number_lights, double len);
 t_vec			light_math(t_scene *objs,\
 				t_vec vec, t_point_data *point_data);
 t_point_data	update_p_d(t_point_data p_d, t_vec point,\

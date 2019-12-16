@@ -1,6 +1,6 @@
 {
-    "w": 256,
-    "h": 256,
+    "w": 512,
+    "h": 512,
     "FOW": 100.0,
     "cartoon effect":0,
     "blur motion":0,
@@ -23,7 +23,7 @@
     {
       "antialiasing": 1,
       "depth raymarching": 600,
-      "depth reflaction": 5,
+      "depth reflaction": 10,
       "max dist": 10000,
       "delta": 0.0001
     },
@@ -50,7 +50,7 @@
         "z":50.0
       },
       "rad":0.0,
-      "transparency":0.0,
+      "transparency":0.7,
       "texture_transparency":
       {
         "path":"chess.bmp"

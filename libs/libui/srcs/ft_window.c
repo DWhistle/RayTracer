@@ -33,6 +33,7 @@ void		*ft_create_new_window(void)
 	wnd->windowfunc = NULL;
 	wnd->renderfunc = NULL;
 	wnd->tickfunc = NULL;
+	wnd->thread = NULL;
 	return (wnd);
 }
 
@@ -42,8 +43,8 @@ void		ft_close_window(void **wnd)
 		return ;
 	if (((t_window*)*wnd)->beforeclose)
 		((t_window*)*wnd)->beforeclose(wnd, 0, NULL);
-	if (((t_window*)*wnd)->sdl_surface)
-		SDL_FreeSurface(((t_window*)*wnd)->sdl_surface);
+	//if (((t_window*)*wnd)->sdl_surface)
+	//	SDL_FreeSurface(((t_window*)*wnd)->sdl_surface);
 	if (((t_window*)*wnd)->sdl_texture)
 		SDL_DestroyTexture(((t_window*)*wnd)->sdl_texture);
 	if (((t_window*)*wnd)->ptr_rndr)

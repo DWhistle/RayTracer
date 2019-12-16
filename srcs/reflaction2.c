@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/08 15:14:26 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/15 11:53:12 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/12/16 10:08:42 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,13 @@
 #include "light.h"
 
 t_point_data	transparenc(t_scene *scene, t_vec vec,\
-				t_point_data point_data, t_point_data (*raymarch)())
+				t_point_data point_data, int depth_ref)
 {
 	t_point_data	n_point_data;
 
-	scene->accuracy.depth_ref--;
 	n_point_data = ray_render(scene, vec, vec_sum(point_data.point,\
-	vec_dotdec(vec, scene->accuracy.delta * 100.1)), raymarch);
+	vec_dotdec(vec, scene->accuracy.delta * 100)), depth_ref);
 	point_data.tranc_color = n_point_data.color;
-	scene->accuracy.depth_ref++;
 	return (point_data);
 }
 
@@ -58,31 +56,31 @@ int				get_texture_transparency(t_obj *obj, t_vec point)
 					obj->texture_transparency);
 		else
 			return (0);
-		obj->transparency = transparency.arr[0] / 256;
+		obj->transparency = transparency.arr[0] / 255;
 		return (1);
 	}
 	return (0);
 }
 
 t_point_data	ray_render(t_scene *scene, t_vec vec,\
-							t_vec point, t_point_data (*raymarch)())
+							t_vec point, int depth_ref)
 {
 	t_point_data	point_data;
 	float			n;
 
-	point_data = raymarch(scene, vec, scene->accuracy, point);
+	point_data = raymarching(scene, vec, scene->accuracy, point);
 	if (point_data.obj)
 	{
 		point_data.color = get_color_obj(point_data);
 		point_data.color = light_math(scene, vec, &point_data);
-		if (scene->accuracy.depth_ref)
+		if (scene->accuracy.depth_ref > depth_ref)
 		{
 			if (point_data.obj->reflection)
-				point_data = reflection(scene, vec, point_data, raymarching);
+				point_data = reflection(scene, vec, point_data, depth_ref + 1);
 			if (point_data.obj->tr_refraction && point_data.obj->type != PLANE)
-				point_data = refraction(scene, vec, point_data, raymarching);
+				point_data = refraction(scene, vec, point_data, depth_ref + 1);
 			if (get_texture_transparency(point_data.obj, point_data.point) || point_data.obj->transparency)
-				point_data = transparenc(scene, vec, point_data, raymarching);
+				point_data = transparenc(scene, vec, point_data, depth_ref + 1);
 		}
 		n = point_data.obj->transparency + point_data.obj->reflection\
 		+ point_data.obj->tr_refraction;

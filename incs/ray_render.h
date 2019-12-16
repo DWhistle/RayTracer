@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 13:06:37 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/12 16:00:47 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/12/16 09:32:39 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ double			len_triangular_prism(t_vec point, t_vec param);
 double			len_hexagonal_prism(t_vec point, t_vec param);
 t_point_data	path_tracing(t_scene scene, t_vec vec,
 							t_accuracy accuracy, t_vec point);
-t_point_data	ray_render(t_scene *scene, t_vec vec,
-							t_vec point, t_point_data (*raymarch)());
 t_point_data	raymarching(t_scene *objs, t_vec vec,
 							t_accuracy accuracy, t_vec point);
 t_vec			get_normal(t_vec point, t_obj obj);
@@ -66,12 +64,11 @@ double			map(t_vec point, t_vec param);
 float			sd_cross(t_vec point, t_vec param);
 t_vec			get_ref_vec(t_point_data point_data, t_vec vec);
 t_vec			get_ref_color(t_point_data *points);
-t_point_data	reflection(t_scene *scene, t_vec vec, t_point_data point_data,\
-							t_point_data (*raymarch)());
-t_point_data	refraction(t_scene *scene, t_vec vec,\
-				t_point_data point_data, t_point_data (*raymarch)());
+t_point_data	reflection(t_scene *scene, t_vec vec, t_point_data point_data, int depth_ref);
 t_point_data	transparenc(t_scene *scene, t_vec vec,\
-				t_point_data point_data, t_point_data (*raymarch)());
+				t_point_data point_data, int depth_ref);
 t_point_data	ray_render(t_scene *scene, t_vec vec,\
-							t_vec point, t_point_data (*raymarch)());
+							t_vec point, int depth_ref);
+t_point_data	refraction(t_scene *scene, t_vec vec,\
+				t_point_data point_data, int depth_ref);
 #endif

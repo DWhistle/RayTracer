@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:17:23 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/09 16:08:12 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/12/16 09:20:47 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,33 +58,28 @@ t_vec			f(t_point_data *points, int depth_ref)
 	return (color);
 }
 
-t_point_data	reflection(t_scene *scene, t_vec vec, t_point_data point_data,\
-							t_point_data (*raymarch)())
+t_point_data	reflection(t_scene *scene, t_vec vec, t_point_data point_data, int depth_ref)
 {
 	t_point_data	n_point_data;
 	t_vec			n_vec;
 
-	scene->accuracy.depth_ref--;
 	n_vec = get_ref_vec(point_data, vec);
 	n_point_data = ray_render(scene, n_vec, vec_sum(point_data.point,\
-	vec_dotdec(n_vec, scene->accuracy.delta * 1.1)), raymarch);
+	vec_dotdec(n_vec, scene->accuracy.delta * 1.1)), depth_ref);
 	point_data.ref_color = n_point_data.color;
-	scene->accuracy.depth_ref++;
 	scene->ignore = 0;
 	return (point_data);
 }
 
 t_point_data	refraction(t_scene *scene, t_vec vec,\
-				t_point_data point_data, t_point_data (*raymarch)())
+				t_point_data point_data, int depth_ref)
 {
 	t_point_data	n_point_data;
 	t_vec			n_vec;
 
 	n_vec = transparency(vec, point_data, point_data.obj->refraction, 1.0);
-	scene->accuracy.depth_ref--;
 	n_point_data = ray_render(scene, n_vec, vec_sum(point_data.point,\
-	vec_dotdec(n_vec, scene->accuracy.delta * 100.1)), raymarch);
+	vec_dotdec(n_vec, scene->accuracy.delta * 100.1)), depth_ref);
 	point_data.refr_color = n_point_data.color;
-	scene->accuracy.depth_ref++;
 	return (point_data);
 }

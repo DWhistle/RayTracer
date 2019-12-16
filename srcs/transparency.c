@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:18:05 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/09 16:09:25 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/12/16 09:25:09 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_vec			rot(t_quat quat, t_vec v)
 	return (new_vec3(t.x, t.y, t.z));
 }
 
-t_vec			transparency(t_vec vec, t_point_data point,\
+t_vec			transparency(t_vec vec, t_point_data point,
 					double obj_refr, double refr)
 {
 	double	a;
@@ -52,7 +52,7 @@ t_point_data	get_transparency(t_scene *objs,\
 	while (shadow.obj && shadow.obj->transparency)
 	{
 		objs->ignore = shadow.obj;
-		shadow = ray_render(objs, vec, shadow.point, raymarching);
+		shadow = ray_render(objs, vec, shadow.point, 0);
 	}
 	point_data.tranc_color = shadow.color;
 	return (point_data);

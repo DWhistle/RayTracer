@@ -13,6 +13,7 @@
 #ifndef FT_WINDOW_H
 # define FT_WINDOW_H
 # include "SDL2/SDL.h"
+# include <pthread.h>
 # include "libft.h"
 # include "ftui.h"
 
@@ -20,6 +21,7 @@
 
 typedef	struct			s_window {
 	uint32_t			id;
+	pthread_t			*thread;
 	SDL_Window			*ptr_wnd;
 	SDL_Renderer		*ptr_rndr;
 	SDL_Surface			*sdl_surface;

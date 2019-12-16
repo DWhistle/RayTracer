@@ -28,7 +28,7 @@ SDL :=  $(PATH_SDL)/SDL2/build/.libs
 
 # used applications
 CC = gcc
-CCFLAGS = -Ofast -Wall -Wextra -Werror -pedantic-errors -I $(LIBDIR) -I $(INCDIR1) -I $(INCSDL)
+CCFLAGS = -Ofast -g -Wall -Wextra -Werror -pedantic-errors -I $(LIBDIR) -I $(INCDIR1) -I $(INCSDL)
 AR = ar
 ARFLAGS = -rs
 RM = rm

@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 17:56:13 by hgreenfe          #+#    #+#             */
-/*   Updated: 2019/11/15 11:09:15 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/12/16 09:06:24 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,12 @@ int		render(void *window, t_scene *scene)
 	time_t				rawtime;
 	struct tm			*timeinfo;
 
-	if (scene->accuracy.depth_pt)
-		return (0);
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
 	pixels = ft_get_window_pixels(window, &screen);
 	srand(time(NULL));
 	scene->accuracy.depth_pt++;
+	printf("%d\n", scene->accuracy.depth_pt);
 	ray_tracing(scene, (int**)&(pixels), scene->accuracy);
 	return (0);
 }
@@ -53,10 +52,11 @@ void	ft_tickfunc(void *wnd, int n, void *param)
 
 void	ft_key_func(void *wnd, int n, void *param)
 {
-	(void)param;
 	if (n == FTUI_KEY_ESCAPE)
 	{
 		ft_set_window_quit(wnd, 1);
+		param = ft_get_window_input_param(wnd);
+		((t_scene*)param)->enabled = 0;
 	}
 }
 
@@ -82,6 +82,7 @@ int		main(int argc, char **argv)
 	if (json1 == NULL)
 		exit(0);
 	scene = convert_objects(json1->content);
+	((t_scene*)scene)->enabled = 1;
 	free_json(json1);
 	list = ft_libui_init();
 	r = ft_new_rect(WIN_X, WIN_Y, ((t_scene*)scene)->w, ((t_scene*)scene)->h);

@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:01:37 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/15 11:11:06 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/12/16 10:03:16 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,29 +80,27 @@ t_point_data	get_point(t_scene *objs, t_vec vec,
 	t_point_data point_data;
 
 	accuracy.delta = 0;
-	point_data = ray_render(objs, vec, objs->cam, raymarching);
+	point_data = ray_render(objs, vec, objs->cam, 0);
 	return (point_data);
 }
 
 int				get_shadow(t_scene *objs, t_vec vec,\
-							t_accuracy accuracy, t_point_data point_data)
+							t_accuracy accuracy, t_point_data point_data, double len, double *tr_intensity)
 {
 	t_vec			point;
 	t_point_data	shadow;
 
-	point = point_data.point;
-	objs->ignore = point_data.obj;
+	accuracy.max_dist = len;
+	point = vec_sum(point_data.point, vec);
 	shadow = raymarching(objs, vec, accuracy, point);
-	objs->tr_intensity = 1;
+	*tr_intensity = 1.0;
 	while (shadow.obj && shadow.obj->transparency)
 	{
-		objs->tr_intensity *= shadow.obj->transparency;
-		objs->ignore = shadow.obj;
+		*tr_intensity *= shadow.obj->transparency;
 		accuracy.max_dist -= vec_len(vec_sub(shadow.point, point));
-		point = shadow.point;
+		point = vec_sum(shadow.point, vec_dotdec(vec, accuracy.delta * 100));
 		shadow = raymarching(objs, vec, accuracy, point);
 	}
-	objs->ignore = 0;
 	if (shadow.obj)
 		return (1);
 	return (0);

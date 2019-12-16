@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:49:11 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/15 10:34:38 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/12/16 08:34:02 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ typedef struct	s_scene
 	t_quat			rot;
 	int				signz;
 	double			tr_intensity;
+	int				enabled;
 }				t_scene;
 
 typedef struct	s_polygon
@@ -183,5 +184,16 @@ typedef struct	s_mandelbub
 	t_vec	w;
 	t_vec	trap;
 }				t_mandelbub;
+
+typedef	struct	s_pthread_param
+{
+	int			x;
+	int			ymin;
+	int			ymax;
+	t_vec		color;
+	int			**pixel;
+	t_accuracy	accuracy;
+	t_scene		*scene;
+}				t_pthread_param;
 
 #endif

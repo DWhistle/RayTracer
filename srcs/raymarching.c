@@ -34,7 +34,7 @@ double			get_dist(int neg, t_obj **obj, t_vec point, t_scene *scene)
 	dist = scene->accuracy.max_dist + 1;
 	while (counter != scene->number_objs)
 	{
-		if (neg == scene->objs[counter].neg && (!scene->ignore ||\
+		if (neg == scene->objs[counter].neg && (!scene->ignore ||
 			scene->objs[counter].ind != scene->ignore->ind))
 		{
 			r = update_r(scene->objs[counter], point);
