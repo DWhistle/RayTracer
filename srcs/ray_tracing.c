@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_tracing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:10:21 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/30 15:32:10 by bturcott         ###   ########.fr       */
+/*   Updated: 2019/12/16 08:18:34 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	*pthread_antialiasing(void *p_param)
 	int				y;
 	int				x;
 	int				w;
+	t_vec			color;
 
 	param = p_param;
 	y = param->ymin;
@@ -76,27 +77,21 @@ void	*pthread_antialiasing(void *p_param)
 		x = -1;
 		while (++x < param->x)
 		{
-			param->color = antialiasing(param->scene, (double)x / w - 0.5,
+			color = antialiasing(param->scene, (double)x / w - 0.5,
 				((double)y - param->scene->h * 0.5) / param->scene->h,
 				param->scene->points_data + x + w * y);
-			param->color = check_color(param->color);
-			if (param->accuracy.depth_pt != 1)
-				param->color =
-					vec_sum(param->color,
-								param->color);
-			//printf("%f\n", param->scene->color[x + param->scene->w * y]);
-			if (x == 0)
-				printf("%d: %f %f %f %f\n", y, param->color.arr[0]
-						,param->color.arr[1]
-						,param->color.arr[2]
-						,param->color.arr[3]);
-			param->color =
-				vec_dotdec(param->color, 1.0 / param->accuracy.depth_pt);
-			effects1(param->scene, &(param->color), param->pixel, x + w * y);
+			color = check_color(color);
+			if (param->accuracy.depth_pt == 1)
+				param->scene->color[x + w * y] = color;
+			else
+				param->scene->color[x + w * y] =\
+				vec_sum(param->scene->color[x + w * y], color);
+			color =
+				vec_dotdec(param->scene->color[x + w * y], 1.0 / param->accuracy.depth_pt);
+			effects1(param->scene, &color, param->pixel, x + w * y);
 		}
 		y++;
 	}
-	printf("%d - %d\n", param->ymin, param->ymax);
 	return (param);
 }
 
@@ -183,9 +178,8 @@ void	ray_tracing(t_scene *scene, int **pixel,
 					t_accuracy accuracy)
 {
 	t_list	*lst;
-
+	
 	lst = pthread_init(scene, pixel, accuracy);
-	printf("%p",(void *)lst);
 	//pthread_run(lst, scene);
 }
 
@@ -196,7 +190,6 @@ void	ray_tracing(t_scene *scene, int **pixel,
 	int			x;
 	int			y;
 	t_vec		color;
-
 	y = scene->h;
 	while (y--)
 	{
