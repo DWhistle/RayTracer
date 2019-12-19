@@ -66,7 +66,6 @@ t_scene	*get_scene(t_json *obj)
 
 	scene = (t_scene*)ft_memalloc(sizeof(t_scene));
 	scene->cam = get_vec(query_attribute(obj, "cam", &res).json_value);
-	printf("%f\n", scene->cam.arr[0]);
 	if (res)
 		scene->cam = new_vec0();
 	get_rot(obj, scene);

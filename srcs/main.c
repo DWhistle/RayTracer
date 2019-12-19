@@ -39,7 +39,6 @@ int		render(void *window, t_scene *scene)
 	srand(time(NULL));
 	scene->accuracy.depth_pt++;
 	ray_tracing(scene, (int**)&(pixels), scene->accuracy);
-	printf("\nsdads\n");
 	return (0);
 }
 
@@ -77,15 +76,12 @@ int		main(int argc, char **argv)
 	t_rect	r;
 
 	(void)argc;
-	printf("rewrwe\n");
 	atexit(SDL_Quit);
 	json1 = parse_json(argv[1]);
-	printf("rewrwe");
 	if (json1 == NULL)
 		exit(0);
 	scene = convert_objects(json1->content);
 	((t_scene*)scene)->enabled = 1;
-	printf("rewrwe");
 	free_json(json1);
 	list = ft_libui_init();
 	r = ft_new_rect(WIN_X, WIN_Y, ((t_scene*)scene)->w, ((t_scene*)scene)->h);
@@ -93,6 +89,5 @@ int		main(int argc, char **argv)
 	set_event_function(list->content, FT_EVENT_KEYPRESS, ft_key_func, scene);
 	set_event_function(list->content, FT_EVENT_TICKFUNC, ft_tickfunc, NULL);
 	ft_mainloop(list);
-	printf("rewrwe");
 	return (0);
 }

@@ -70,7 +70,6 @@ int				get_shadow(t_scene *objs, t_vec vec,\
 	*tr_intensity = 1;
 	while (shadow.obj && shadow.obj->transparency)
 	{
-		printf("%f\n", *tr_intensity);
 		*tr_intensity *= shadow.obj->transparency;
 		objs->ignore = shadow.obj;
 		accuracy.max_dist -= vec_len(vec_sub(shadow.point, point));
