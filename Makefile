@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+         #
+#    By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 19:22:42 by hgreenfe          #+#    #+#              #
-#    Updated: 2019/11/12 15:08:58 by kmeera-r         ###   ########.fr        #
+#    Updated: 2019/12/20 18:22:54 by bturcott         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,8 +48,8 @@ FILES := main \
 		 light \
 		 light_2 \
 		 light_3 \
-		 reflaction \
-		 reflaction2 \
+		 reflection \
+		 reflection2 \
 		 transparency \
 		 parser \
 		 get_next_line \
@@ -76,7 +76,8 @@ FILES := main \
 		 len_capsule \
 		 len_box \
 		 len_box_fract \
-		 perlin_noise
+		 perlin_noise \
+		 ray_tracing2
 		 
 		 #converter
 

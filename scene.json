@@ -50,19 +50,14 @@
         "z":50.0
       },
       "rad":0.0,
-      "transparency":0.7,
-      "texture_transparency":
-      {
-        "path":"chess.bmp"
-      },
+      "transparency":0.0,
       "specular":40,
       "point":
       {
         "x":0.0,
         "y":0.0,
         "z":550.0
-      },
-      "disruption": -1
+      }
     },
     "fsphere2":
     {
