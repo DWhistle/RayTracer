@@ -96,7 +96,7 @@ int			*ft_get_window_pixels(void *wnd, t_rect *rect)
 	t_window	*w;
 
 	w = (t_window*)wnd;
-	if (!wnd)
+	if (!wnd || !w->sdl_surface)
 		return (NULL);
 	if (rect)
 	{

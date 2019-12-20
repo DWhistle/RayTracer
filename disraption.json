@@ -29,7 +29,8 @@
     },
     "sphere":
     {
-
+      "amplitude":10.0,
+      "frequency": 10,
       "neg": 0,
       "color":
       {
