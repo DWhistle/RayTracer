@@ -6,12 +6,109 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 11:18:47 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/12 17:10:20 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/12/16 11:43:39 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "converter.h"
 #include "perlin_noise.h"
+#include <SDL2/SDL.h>
+#include <stdio.h>
+#include <time.h>
+#include <math.h>
+
+#define NUM_OCTAVES 4
+
+float noize(int x, int y)
+{
+    int n = x + y * 57;
+    n = (n<<13) ^ n;
+    return ( 1.0f - ( (n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) /
+            1073741824.0f);
+}
+
+float smooth(float x, float y)
+{
+    float corners = (noize(x - 1, y - 1) + noize(x + 1, y - 1)+
+         noize(x - 1, y + 1) + noize(x + 1, y + 1)) / 16;
+    float sides   = ( noize(x-1, y)  +noize(x + 1, y)  +
+         noize(x, y-1) + noize(x, y + 1) ) /  8;
+    float center  =  noize(x, y) / 4;
+    return (corners + sides + center);
+}
+
+float cosine_interpolate(float a, float b, float x)
+{
+    float ft = x * 3.1415927;
+    float f = (1 - cosf(ft)) * 0.5;
+    return(a*(1-f) + b*f);
+}
+
+float compile_noize(float x, float y)
+{
+    float int_X = (int)x;
+      float fractional_X = x - int_X;
+      float int_Y    = (int)y;
+      float fractional_Y = y - int_Y;
+     float v1 = smooth(int_X,     int_Y);
+     float v2 = smooth(int_X + 1, int_Y);
+     float v3 = smooth(int_X,     int_Y + 1);
+     float v4 = smooth(int_X + 1, int_Y + 1);
+      float i1 = cosine_interpolate(v1 , v2 , fractional_X);
+      float i2 = cosine_interpolate(v3 , v4 , fractional_X);
+      return cosine_interpolate(i1 , i2 , fractional_Y);
+}
+
+int     perlin_noize(float x, float y, float factor)
+{
+    float total;
+    float persistence;
+    float frequency;
+    float amplitude;
+    int i;
+    
+    i = 0;
+    total = cosf(sqrtf(2))*3.14f;
+    persistence = 0.5f;
+    frequency = 0.25f;
+     amplitude = 1;
+    x += (factor);
+    y += (factor);
+    while (i<NUM_OCTAVES)
+    {
+       total += compile_noize(x * frequency, y * frequency) * amplitude;
+       amplitude *= persistence;
+       frequency *=2;
+       i++;
+    }
+    total = fabsf(total);
+    int res = total*255.0f;
+    return (res);
+}
+
+void perlin(unsigned int **pixels)
+{
+    float factor;
+    int x;
+    int y;
+    int color;
+
+    srand(time(NULL));
+    y = 0;
+    while (y < 1200)
+    {
+        x = 0;
+        while (x < 1200)
+        {
+            factor = (rand() % 10) / 10;
+            color = perlin_noize(x, y, factor);
+            color = 0xff << 24 | color << 16 | color << 8 | color;
+            (*pixels)[x + y * 1200] = color;
+            x++;
+        }
+        y++;
+    }
+}
 
 t_texture		get_disruption(t_json *j, char *name)
 {
@@ -19,12 +116,12 @@ t_texture		get_disruption(t_json *j, char *name)
 	int				res;
 	t_texture		disrupt;
 	SDL_Surface		*serf;
-	int x = 0, y = 0;
+	unsigned int *pixels;
 
 	disrupt.h = 1200;
 	disrupt.w = 1200;
-	disrupt.len_u = 1200;
-	disrupt.len_v = 1200;
+	disrupt.len_u = 120;
+	disrupt.len_v = 120;
 	name_disruption = query_attribute(j, name, &res).int_value;
 	disrupt.texture = 0;
 	if (res)
@@ -38,23 +135,14 @@ t_texture		get_disruption(t_json *j, char *name)
 	}
 	else if (name_disruption == 2)
 	{
-		disrupt.texture = ft_memalloc(sizeof(unsigned char) * 1200 * 1200 * 4);
-		while (x < 1200)
-		{
-			y = 0;
-			while (y < 4800)
-			{
-				disrupt.texture[y + x * 4800] =  25600 * noise1(y / 4800);
-				y++;
-				disrupt.texture[y + x * 4800] = disrupt.texture[y + x * 4800 - 1];
-				y++;
-				disrupt.texture[y + x * 4800] = disrupt.texture[y + x * 4800 - 1];
-				y++;
-				disrupt.texture[y + x * 4800] = disrupt.texture[y + x * 4800 - 1];
-				y++;
-			}
-			x++;
-		}
+		serf = SDL_CreateRGBSurface(0, 1200, 1200, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
+		pixels = serf->pixels;
+		perlin(&pixels);
+		SDL_SaveBMP(serf, "bmp.bmp");
+		SDL_FreeSurface(serf);
+		if (!(serf = SDL_LoadBMP("bmp.bmp")))
+			return (disrupt);
+		disrupt.texture = serf->pixels;
 		return (disrupt);
 	}
 	return (disrupt);
