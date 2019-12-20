@@ -6,7 +6,7 @@
 /*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 19:48:30 by bturcott          #+#    #+#             */
-/*   Updated: 2019/11/09 19:21:29 by bturcott         ###   ########.fr       */
+/*   Updated: 2019/12/20 18:28:20 by bturcott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ t_list		*json_operator(t_parser *json)
 			if (!(obj = create_json_obj()))
 				return (NULL);
 			if (!make_json(json, obj))
-				{
-					ft_putendl("corrupted json");
-					exit(0);
-				}
+			{
+				ft_putendl("corrupted json");
+				exit(0);
+			}
 			ft_lstadd(&json->objects, ft_lstnew((void *)obj, sizeof(t_json)));
 		}
 		json->i += (json->f[json->i]) ? 1 : 0;

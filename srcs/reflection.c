@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   reflaction.c                                       :+:      :+:    :+:   */
+/*   reflection.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:17:23 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/12/16 09:20:47 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/12/20 18:24:23 by bturcott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ t_vec			f(t_point_data *points, int depth_ref)
 	return (color);
 }
 
-t_point_data	reflection(t_scene *scene, t_vec vec, t_point_data point_data, int depth_ref)
+t_point_data	reflection(t_scene *scene, t_vec vec,
+			t_point_data point_data, int depth_ref)
 {
 	t_point_data	n_point_data;
 	t_vec			n_vec;

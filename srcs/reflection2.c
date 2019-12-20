@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reflaction2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/08 15:14:26 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/12/16 10:08:42 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/12/20 18:22:26 by bturcott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,17 @@ int				get_texture_transparency(t_obj *obj, t_vec point)
 	if (obj->texture_transparency.texture)
 	{
 		if (obj->type == SPHERE)
-			transparency = get_pixel(get_uv_spehere(point), obj->texture_transparency);
+			transparency = get_pixel(get_uv_spehere(point),
+			obj->texture_transparency);
 		else if (obj->type == CYLINDER)
-			transparency = get_pixel(get_uv_cylinder(obj->texture_transparency, point,
-					obj->param.arr[2]), obj->texture_transparency);
+			transparency = get_pixel(get_uv_cylinder(obj->texture_transparency,
+			point, obj->param.arr[2]), obj->texture_transparency);
 		else if (obj->type == CONE)
-			transparency = get_pixel(get_uv_cone(obj->texture_transparency, point),\
-					obj->texture_transparency);
+			transparency = get_pixel(get_uv_cone(obj->texture_transparency,
+			point), obj->texture_transparency);
 		else if (obj->type == PLANE)
-			transparency = get_pixel(get_uv_plane(obj->texture_transparency, point),\
-					obj->texture_transparency);
+			transparency = get_pixel(get_uv_plane(obj->texture_transparency,
+			point), obj->texture_transparency);
 		else
 			return (0);
 		obj->transparency = transparency.arr[0] / 255;
@@ -79,7 +80,8 @@ t_point_data	ray_render(t_scene *scene, t_vec vec,\
 				point_data = reflection(scene, vec, point_data, depth_ref + 1);
 			if (point_data.obj->tr_refraction && point_data.obj->type != PLANE)
 				point_data = refraction(scene, vec, point_data, depth_ref + 1);
-			if (get_texture_transparency(point_data.obj, point_data.point) || point_data.obj->transparency)
+			if (get_texture_transparency(point_data.obj, point_data.point)
+			|| point_data.obj->transparency)
 				point_data = transparenc(scene, vec, point_data, depth_ref + 1);
 		}
 		n = point_data.obj->transparency + point_data.obj->reflection\
