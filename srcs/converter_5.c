@@ -21,93 +21,99 @@
 
 float noize(int x, int y)
 {
-    int n = x + y * 57;
-    n = (n<<13) ^ n;
-    return ( 1.0f - ( (n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) /
-            1073741824.0f);
+	int		n;
+
+	n = x + y * 57;
+	n = (n << 13) ^ n;
+	return (1.0f - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff)
+			/ 1073741824.0f);
 }
 
 float smooth(float x, float y)
 {
-    float corners = (noize(x - 1, y - 1) + noize(x + 1, y - 1)+
-         noize(x - 1, y + 1) + noize(x + 1, y + 1)) / 16;
-    float sides   = ( noize(x-1, y)  +noize(x + 1, y)  +
-         noize(x, y-1) + noize(x, y + 1) ) /  8;
-    float center  =  noize(x, y) / 4;
-    return (corners + sides + center);
+	float	corners;
+	float	sides;
+	float	center;
+
+	corners = (noize(x - 1, y - 1) + noize(x + 1, y - 1)+
+			   noize(x - 1, y + 1) + noize(x + 1, y + 1)) / 16;
+	sides = (noize(x - 1, y)  +noize(x + 1, y)  +
+			 noize(x, y - 1) + noize(x, y + 1)) /  8;
+	center =  noize(x, y) / 4;
+	return (corners + sides + center);
 }
 
 float cosine_interpolate(float a, float b, float x)
 {
-    float ft = x * 3.1415927;
-    float f = (1 - cosf(ft)) * 0.5;
-    return(a*(1-f) + b*f);
+	float ft = x * 3.1415927;
+	float f = (1 - cosf(ft)) * 0.5;
+	return (a * (1 - f) + b * f);
 }
 
 float compile_noize(float x, float y)
 {
-    float int_X = (int)x;
-      float fractional_X = x - int_X;
-      float int_Y    = (int)y;
-      float fractional_Y = y - int_Y;
-     float v1 = smooth(int_X,     int_Y);
-     float v2 = smooth(int_X + 1, int_Y);
-     float v3 = smooth(int_X,     int_Y + 1);
-     float v4 = smooth(int_X + 1, int_Y + 1);
-      float i1 = cosine_interpolate(v1 , v2 , fractional_X);
-      float i2 = cosine_interpolate(v3 , v4 , fractional_X);
-      return cosine_interpolate(i1 , i2 , fractional_Y);
+	float int_X = (int)x;
+	  float fractional_X = x - int_X;
+	  float int_Y	= (int)y;
+	  float fractional_Y = y - int_Y;
+	 float v1 = smooth(int_X,	 int_Y);
+	 float v2 = smooth(int_X + 1, int_Y);
+	 float v3 = smooth(int_X,	 int_Y + 1);
+	 float v4 = smooth(int_X + 1, int_Y + 1);
+	  float i1 = cosine_interpolate(v1 , v2 , fractional_X);
+	  float i2 = cosine_interpolate(v3 , v4 , fractional_X);
+	  return cosine_interpolate(i1 , i2 , fractional_Y);
 }
 
-int     perlin_noize(float x, float y, float factor)
+int	 perlin_noize(float x, float y, float factor)
 {
-    float total;
-    float persistence;
-    float frequency;
-    float amplitude;
-    int i;
-    
-    i = 0;
-    total = cosf(sqrtf(2))*3.14f;
-    persistence = 0.5f;
-    frequency = 0.25f;
-     amplitude = 1;
-    x += (factor);
-    y += (factor);
-    while (i<NUM_OCTAVES)
-    {
-       total += compile_noize(x * frequency, y * frequency) * amplitude;
-       amplitude *= persistence;
-       frequency *=2;
-       i++;
-    }
-    total = fabsf(total);
-    int res = total*255.0f;
-    return (res);
+	float total;
+	float persistence;
+	float frequency;
+	float amplitude;
+	int i;
+	
+	i = 0;
+	total = cosf(sqrtf(2))*3.14f;
+	persistence = 0.5f;
+	frequency = 0.25f;
+	 amplitude = 1;
+	x += (factor);
+	y += (factor);
+	while (i<NUM_OCTAVES)
+	{
+	   total += compile_noize(x * frequency, y * frequency) * amplitude;
+	   amplitude *= persistence;
+	   frequency *=2;
+	   i++;
+	}
+	total = fabsf(total);
+	int res = total*255.0f;
+	return (res);
 }
 
 void perlin(unsigned int **pixels)
 {
-    float factor;
-    int x;
-    int y;
-    int color;
+	float factor;
+	int x;
+	int y;
+	int color;
 
-    srand(time(NULL));
-    y = 0;
-    while (y < 1200)
-    {
-        x = 0;
-        while (x < 1200)
-        {
-            factor = (rand() % 10) / 10;
-            color = perlin_noize(x, y, factor);
-            color = 0xff << 24 | color << 16 | color << 8 | color;
-            (*pixels)[x + y * 1200] = color;
-            x++;
-        }
-        y++;
-    }
+	srand(time(NULL));
+	y = 0;
+	while (y < 1200)
+	{
+		x = 0;
+		while (x < 1200)
+		{
+			factor = (rand() % 10) / 10;
+			color = perlin_noize(x, y, factor);
+			color = 0xff << 24 | color << 16 | color << 8 | color;
+			(*pixels)[x + y * 1200] = color;
+			x++;
+		}
+		y++;
+	}
 }
 
 t_texture		get_disruption(t_json *j, char *name)

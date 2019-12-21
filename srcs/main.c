@@ -58,6 +58,14 @@ void	ft_key_func(void *wnd, int n, void *param)
 		param = ft_get_window_input_param(wnd);
 		((t_scene*)param)->enabled = 0;
 	}
+	if (n == 4)
+	{
+		((t_scene*)param)->cam.vec.x -= 1.0;
+	}
+	if (n == 7)
+	{
+		((t_scene*)param)->cam.vec.x += 1.0;
+	}
 }
 
 void	free_json(t_list *obj)

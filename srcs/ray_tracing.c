@@ -15,7 +15,7 @@
 #include "effects.h"
 #include <pthread.h>
 
-#define NUMBER_OF_THREADS 20
+#define NUMBER_OF_THREADS 16
 
 int		ft_wait_threads(pthread_t const *tread_ids, t_pthread_param **p_params)
 {
