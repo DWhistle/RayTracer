@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_tracing2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/20 18:09:37 by bturcott          #+#    #+#             */
-/*   Updated: 2019/12/20 19:12:10 by bturcott         ###   ########.fr       */
+/*   Updated: 2019/12/26 14:46:00 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ t_vec	check_color(t_vec color)
 
 void	effects1(t_scene *scene, t_vec *color, int **pixel, int pix)
 {
-	scene = 0;
+	if (scene->sepia)
+		*color = sepia(*color);
+	if (scene->ster)
+		*color = stereoscopy(*color, scene->ster);
 	(*pixel)[pix] = (unsigned int)(color->arr[0]) << 16 |
 		(unsigned int)(color->arr[1]) << 8 | (unsigned int)(color->arr[2])
 		| 0xff << 24;

@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:01:37 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/12/16 10:03:16 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/12/20 20:44:42 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,25 @@
 t_vec			get_disruption_obj(t_point_data shadow)
 {
 	t_vec point;
-	t_vec disruption_vec;
+	t_vec d_vec;
 
 	point = rot(shadow.obj->rot_quat, vec_sub(shadow.point, shadow.obj->point));
 	if (shadow.obj->disruption.texture)
 	{
 		if (shadow.obj->type == SPHERE)
-			disruption_vec = (get_pixel(get_uv_spehere(point), shadow.obj->disruption));
+			d_vec = (get_pixel(get_uv_spehere(point), shadow.obj->disruption));
 		else if (shadow.obj->type == CYLINDER)
-			disruption_vec = (get_pixel(get_uv_cylinder(shadow.obj->disruption, point,
+			d_vec = (get_pixel(get_uv_cylinder(shadow.obj->disruption, point,
 					shadow.obj->param.arr[2]), shadow.obj->disruption));
 		else if (shadow.obj->type == CONE)
-			disruption_vec = (get_pixel(get_uv_cone(shadow.obj->disruption, point),\
+			d_vec = (get_pixel(get_uv_cone(shadow.obj->disruption, point),\
 					shadow.obj->disruption));
 		else if (shadow.obj->type == PLANE)
-			disruption_vec = (get_pixel(get_uv_plane(shadow.obj->disruption, point),\
+			d_vec = (get_pixel(get_uv_plane(shadow.obj->disruption, point),\
 					shadow.obj->disruption));
 		else
 			return (shadow.obj->color);
-		return (vec_dotdec(shadow.obj->color, disruption_vec.arr[0] / 256));
+		return (vec_dotdec(shadow.obj->color, d_vec.arr[0] / 256));
 	}
 	return (shadow.obj->color);
 }
@@ -84,22 +84,22 @@ t_point_data	get_point(t_scene *objs, t_vec vec,
 	return (point_data);
 }
 
-int				get_shadow(t_scene *objs, t_vec vec,\
-							t_accuracy accuracy, t_point_data point_data, double len, double *tr_intensity)
+int				get_shadow(t_scene *objs,\
+							t_light_option *lo,\
+							t_accuracy accuracy, t_point_data point_data)
 {
 	t_vec			point;
 	t_point_data	shadow;
 
-	accuracy.max_dist = len;
-	point = vec_sum(point_data.point, vec);
-	shadow = raymarching(objs, vec, accuracy, point);
-	*tr_intensity = 1.0;
+	point = vec_sum(point_data.point, lo->li);
+	shadow = raymarching(objs, lo->li, accuracy, point);
+	lo->tr_intensity = 1.0;
 	while (shadow.obj && shadow.obj->transparency)
 	{
-		*tr_intensity *= shadow.obj->transparency;
+		lo->tr_intensity *= shadow.obj->transparency;
 		accuracy.max_dist -= vec_len(vec_sub(shadow.point, point));
-		point = vec_sum(shadow.point, vec_dotdec(vec, accuracy.delta * 100));
-		shadow = raymarching(objs, vec, accuracy, point);
+		point = vec_sum(shadow.point, vec_dotdec(lo->li, accuracy.delta * 100));
+		shadow = raymarching(objs, lo->li, accuracy, point);
 	}
 	if (shadow.obj)
 		return (1);
