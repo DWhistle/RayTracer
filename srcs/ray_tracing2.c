@@ -6,7 +6,7 @@
 /*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/20 18:09:37 by bturcott          #+#    #+#             */
-/*   Updated: 2019/12/20 18:19:54 by bturcott         ###   ########.fr       */
+/*   Updated: 2019/12/20 19:12:10 by bturcott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_vec	calc_color(t_pthread_param *param, int x, int y, int w)
 	color = vec_dotdec(param->scene->color[x + w * y],
 				1.0 / param->accuracy.depth_pt);
 	effects1(param->scene, &color, param->pixel, x + w * y);
-	return color;
+	return (color);
 }
 
 void	*pthread_antialiasing(void *p_param)

@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:10:21 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/12/20 19:34:29 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/12/20 19:48:43 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 #include "effects.h"
 #include <pthread.h>
 
-#define NUMBER_OF_THREADS 16
+#define NUMBER_OF_THREADS 20
 
-void	ft_wait_threads(pthread_t const *tread_ids, t_pthread_param **p_params)
+int		ft_wait_threads(pthread_t const *tread_ids, t_pthread_param **p_params)
 {
 	int		y;
 
@@ -28,9 +28,10 @@ void	ft_wait_threads(pthread_t const *tread_ids, t_pthread_param **p_params)
 		free(p_params[y]);
 	}
 	free(p_params);
+	return (0);
 }
 
-t_list	*pthread_init(t_scene *scene, int **pixel,
+int		pthread_init(t_scene *scene, int **pixel,
 		t_accuracy accuracy)
 {
 	pthread_t			tread_ids[NUMBER_OF_THREADS];
@@ -39,6 +40,8 @@ t_list	*pthread_init(t_scene *scene, int **pixel,
 	const int			step = scene->h / NUMBER_OF_THREADS;
 
 	y = -1;
+	if (step < 2)
+		return (1);
 	p_params = ft_memalloc(sizeof(t_pthread_param *) * NUMBER_OF_THREADS);
 	while (++y * step < scene->h - step)
 	{
@@ -55,14 +58,15 @@ t_list	*pthread_init(t_scene *scene, int **pixel,
 		pthread_create(tread_ids + y, NULL,
 				&pthread_antialiasing, (void *)p_params[y]);
 	}
-	ft_wait_threads(tread_ids, p_params);
-	return (NULL);
+	return (ft_wait_threads(tread_ids, p_params));
 }
 
 void	ray_tracing(t_scene *scene, int **pixel,
 		t_accuracy accuracy)
 {
-	t_list	*lst;
-
-	lst = pthread_init(scene, pixel, accuracy);
+	if (pthread_init(scene, pixel, accuracy))
+	{
+		ft_putendl("irrelevant window height");
+		exit(0);
+	}
 }
