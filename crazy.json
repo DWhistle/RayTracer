@@ -1,0 +1,76 @@
+{
+    "w": 512,
+    "h": 512,
+    "FOW": 120.0,
+    "cartoon effect":0,
+    "blur motion":0,
+    "negative":0,
+    "stereoscopy":0,
+    "sepia":0,
+    "cam":
+    {
+      "x":100.0,
+      "y":0.0,
+      "z":0.5
+    },
+    "direction":
+    {
+      "x":0.0,
+      "y":0.0,
+      "z":1.0
+    },
+    "accuracy":
+    {
+      "antialiasing": 2,
+      "depth raymarching": 100,
+      "depth reflaction": 10,
+      "max dist": 5000,
+      "delta": 0.01
+    },
+    "sphere":
+    {
+      "neg": 0,
+      "color":
+      {
+        "x":255.0,
+        "y":0.0,
+        "z":0.0
+      },
+      "rot_vec":
+      {
+        "x":1.0,
+        "y":0.0,
+        "z":1.0
+      },
+      "radius":80.0,
+      "param":
+      {
+        "x":100.0,
+        "y":40.0,
+        "z":50.0
+      },
+      "rad":0.0,
+      "transparency":0.0,
+      "specular":40,
+      "reflection":0.5,
+      "point":
+      {
+        "x":-4510.0,
+        "y":-4400.0,
+        "z":-450.0
+      },
+      "fract":220.0
+    },
+    "light3":
+    {
+      "intensity": 0.8,
+      "point":
+      {
+        "x":50.0,
+        "y":0.0,
+        "z":20.0
+      },
+      "type":3,
+      "radius":15.0
+    }
+  }

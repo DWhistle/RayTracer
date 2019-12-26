@@ -29,8 +29,8 @@
     },
     "sphere":
     {
-      "amplitude":10.0,
-      "frequency": 10,
+      "amplitude":3.0,
+      "frequency":0.3,
       "neg": 0,
       "color":
       {
@@ -60,6 +60,105 @@
         "y":0.0,
         "z":550.0
       }
+    },
+    "sphere2":
+    {
+      "neg": 0,
+      "color":
+      {
+        "x":255.0,
+        "y":0.0,
+        "z":0.0
+      },
+      "rot_vec":
+      {
+        "x":1.0,
+        "y":0.0,
+        "z":1.0
+      },
+      "radius":80.0,
+      "param":
+      {
+        "x":100.0,
+        "y":40.0,
+        "z":50.0
+      },
+      "rad":0.0,
+      "transparency":0.0,
+      "specular":0.0,
+      "point":
+      {
+        "x":150.0,
+        "y":0.0,
+        "z":550.0
+      },
+      "disruption":2
+    },
+    "sphere3":
+    {
+      "neg": 0,
+      "color":
+      {
+        "x":255.0,
+        "y":0.0,
+        "z":0.0
+      },
+      "rot_vec":
+      {
+        "x":1.0,
+        "y":0.0,
+        "z":1.0
+      },
+      "radius":80.0,
+      "param":
+      {
+        "x":100.0,
+        "y":40.0,
+        "z":50.0
+      },
+      "rad":0.0,
+      "transparency":0.0,
+      "specular":0.0,
+      "point":
+      {
+        "x":150.0,
+        "y":-170.0,
+        "z":550.0
+      },
+      "disruption":0
+    },
+    "sphere4":
+    {
+      "neg": 0,
+      "color":
+      {
+        "x":255.0,
+        "y":0.0,
+        "z":0.0
+      },
+      "rot_vec":
+      {
+        "x":1.0,
+        "y":0.0,
+        "z":1.0
+      },
+      "radius":80.0,
+      "param":
+      {
+        "x":100.0,
+        "y":40.0,
+        "z":50.0
+      },
+      "rad":0.0,
+      "transparency":0.0,
+      "specular":0.0,
+      "point":
+      {
+        "x":0.0,
+        "y":-170.0,
+        "z":550.0
+      },
+      "disruption":1
     },
     "plane":
     {
@@ -160,7 +259,7 @@
       },
       "fract":0.0
     },
-    "light2":
+    "3light2":
     {
       "intensity": 0.4,
       "point":
