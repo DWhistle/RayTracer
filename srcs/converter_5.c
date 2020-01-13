@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 11:18:47 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/12/20 18:39:06 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2020/01/13 20:12:26 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,110 +19,12 @@
 
 #define NUM_OCTAVES 4
 
-float noize(int x, int y)
-{
-	int		n;
-
-	n = x + y * 57;
-	n = (n << 13) ^ n;
-	return (1.0f - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff)
-			/ 1073741824.0f);
-}
-
-float smooth(float x, float y)
-{
-	float	corners;
-	float	sides;
-	float	center;
-
-	corners = (noize(x - 1, y - 1) + noize(x + 1, y - 1)+
-			   noize(x - 1, y + 1) + noize(x + 1, y + 1)) / 16;
-	sides = (noize(x - 1, y)  +noize(x + 1, y)  +
-			 noize(x, y - 1) + noize(x, y + 1)) /  8;
-	center =  noize(x, y) / 4;
-	return (corners + sides + center);
-}
-
-float cosine_interpolate(float a, float b, float x)
-{
-	float ft = x * 3.1415927;
-	float f = (1 - cosf(ft)) * 0.5;
-	return (a * (1 - f) + b * f);
-}
-
-float compile_noize(float x, float y)
-{
-	float int_X = (int)x;
-	  float fractional_X = x - int_X;
-	  float int_Y	= (int)y;
-	  float fractional_Y = y - int_Y;
-	 float v1 = smooth(int_X,	 int_Y);
-	 float v2 = smooth(int_X + 1, int_Y);
-	 float v3 = smooth(int_X,	 int_Y + 1);
-	 float v4 = smooth(int_X + 1, int_Y + 1);
-	  float i1 = cosine_interpolate(v1 , v2 , fractional_X);
-	  float i2 = cosine_interpolate(v3 , v4 , fractional_X);
-	  return cosine_interpolate(i1 , i2 , fractional_Y);
-}
-
-int	 perlin_noize(float x, float y, float factor)
-{
-	float total;
-	float persistence;
-	float frequency;
-	float amplitude;
-	int i;
-	
-	i = 0;
-	total = cosf(sqrtf(2))*3.14f;
-	persistence = 0.5f;
-	frequency = 0.25f;
-	 amplitude = 1;
-	x += (factor);
-	y += (factor);
-	while (i<NUM_OCTAVES)
-	{
-	   total += compile_noize(x * frequency, y * frequency) * amplitude;
-	   amplitude *= persistence;
-	   frequency *=2;
-	   i++;
-	}
-	total = fabsf(total);
-	int res = total*255.0f;
-	return (res);
-}
-
-void perlin(unsigned int **pixels)
-{
-	float factor;
-	int x;
-	int y;
-	int color;
-
-	srand(time(NULL));
-	y = 0;
-	while (y < 1200)
-	{
-		x = 0;
-		while (x < 1200)
-		{
-			factor = (rand() % 10) / 10;
-			color = perlin_noize(x, y, factor);
-			color = 0xff << 24 | color << 16 | color << 8 | color;
-			(*pixels)[x + y * 1200] = color;
-			x++;
-		}
-		y++;
-	}
-}
-
 t_texture		get_disruption(t_json *j, char *name)
 {
 	int				name_disruption;
 	int				res;
 	t_texture		disrupt;
 	SDL_Surface		*serf;
-	unsigned int *pixels;
 
 	disrupt.h = 1200;
 	disrupt.w = 1200;
@@ -135,18 +37,6 @@ t_texture		get_disruption(t_json *j, char *name)
 	if (name_disruption == 0)
 	{
 		if (!(serf = SDL_LoadBMP("chess.bmp")))
-			return (disrupt);
-		disrupt.texture = serf->pixels;
-		return (disrupt);
-	}
-	else if (name_disruption == 2)
-	{
-		serf = SDL_CreateRGBSurface(0, 1200, 1200, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
-		pixels = serf->pixels;
-		perlin(&pixels);
-		SDL_SaveBMP(serf, "bmp.bmp");
-		SDL_FreeSurface(serf);
-		if (!(serf = SDL_LoadBMP("bmp.bmp")))
 			return (disrupt);
 		disrupt.texture = serf->pixels;
 		return (disrupt);
@@ -225,32 +115,4 @@ t_restriction	*get_restriction(t_json *j, int *ns_p)
 		get_restriction2(&restr);
 	}
 	return (restr.r);
-}
-
-void			get_obj2(t_json *json, t_obj *object)
-{
-	int			res;
-	double		angle;
-	t_vec		rotvec;
-
-	object->transparency = query_attribute(json,\
-							"transparency", &res).float_value;
-	if (res)
-		object->transparency = 0;
-	object->frequency = query_attribute(json, "frequency", &res).float_value;
-	if (res)
-		object->frequency = 0;
-	object->amplitude = query_attribute(json, "amplitude", &res).float_value;
-	if (res)
-		object->amplitude = 0;
-	object->color = get_vec(query_attribute(json, "color", &res).json_value);
-	if (res)
-		object->color = new_vec0();
-	angle = query_attribute(json, "angle", &res).float_value;
-	if (res)
-		angle = 0;
-	rotvec = get_vec(query_attribute(json, "rot_vec", &res).json_value);
-	if (res)
-		rotvec = new_vec0();
-	object->rot_quat = create_quat(vec_norm(rotvec), angle);
 }

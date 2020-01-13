@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+         #
+#    By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 19:22:42 by hgreenfe          #+#    #+#              #
-#    Updated: 2019/12/20 18:22:54 by bturcott         ###   ########.fr        #
+#    Updated: 2020/01/13 20:03:46 by kmeera-r         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,7 +76,6 @@ FILES := main \
 		 len_capsule \
 		 len_box \
 		 len_box_fract \
-		 perlin_noise \
 		 ray_tracing2
 		 
 		 #converter

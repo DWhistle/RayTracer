@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 11:18:55 by kmeera-r          #+#    #+#             */
-/*   Updated: 2020/01/13 19:24:21 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2020/01/13 20:05:13 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,35 @@ int		get_mandelbub(t_json *json, t_obj *object)
 	return (res);
 }
 
-void	get_obj4(t_json *json, char *name, t_obj *object)
+void	get_obj2(t_json *json, t_obj *object)
+{
+	int			res;
+	double		angle;
+	t_vec		rotvec;
+
+	object->transparency = query_attribute(json,\
+							"transparency", &res).float_value;
+	if (res)
+		object->transparency = 0;
+	object->frequency = query_attribute(json, "frequency", &res).float_value;
+	if (res)
+		object->frequency = 0;
+	object->amplitude = query_attribute(json, "amplitude", &res).float_value;
+	if (res)
+		object->amplitude = 0;
+	object->color = get_vec(query_attribute(json, "color", &res).json_value);
+	if (res)
+		object->color = new_vec0();
+	angle = query_attribute(json, "angle", &res).float_value;
+	if (res)
+		angle = 0;
+	rotvec = get_vec(query_attribute(json, "rot_vec", &res).json_value);
+	if (res)
+		rotvec = new_vec0();
+	object->rot_quat = create_quat(vec_norm(rotvec), angle);
+}
+
+void	get_obj9(t_json *json, char *name, t_obj *object)
 {
 	if (ft_strncmp(name, "fract_box", 9) == 0)
 		get_fract_box(json, object);
@@ -57,5 +85,5 @@ void	get_obj3(t_json *json, char *name, t_obj *object)
 		get_octahedron(json, object);
 	else if (ft_strncmp(name, "box", 3) == 0)
 		get_box(json, object);
-	get_obj4(json, name, object);
+	get_obj9(json, name, object);
 }
