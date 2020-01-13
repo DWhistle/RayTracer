@@ -21,7 +21,7 @@
     },
     "accuracy":
     {
-      "antialiasing": 2,
+      "antialiasing": 1,
       "depth raymarching": 100,
       "depth reflaction": 10,
       "max dist": 5000,

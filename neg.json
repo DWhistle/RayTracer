@@ -2,10 +2,10 @@
     "w": 512,
     "h": 512,
     "FOW": 100.0,
-    "cartoon effect":1,
+    "cartoon effect":0,
     "blur motion":0,
     "negative":0,
-    "stereoscopy":1,
+    "stereoscopy":0,
     "sepia": 0,
     "cam":
     {
@@ -86,7 +86,7 @@
       "specular":40,
       "point":
       {
-        "x":0.0,
+        "x":15.0,
         "y":0.0,
         "z":500.0
       }
