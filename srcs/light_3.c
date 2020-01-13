@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:01:37 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/12/20 20:44:42 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2020/01/13 19:20:59 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,12 @@ t_vec			get_color_obj(t_point_data shadow)
 			return (get_pixel(get_uv_cone(shadow.obj->texture, point),\
 					shadow.obj->texture));
 		else if (shadow.obj->type == PLANE)
+		{
+			point = rot(quat_from_vec(vec_mul(new_vec3(0, 0, 1),\
+			shadow.norm)), point);
 			return (get_pixel(get_uv_plane(shadow.obj->texture, point),\
 					shadow.obj->texture));
+		}
 	}
 	return (get_disruption_obj(shadow));
 }

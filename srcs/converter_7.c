@@ -6,11 +6,32 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 11:18:55 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/09 15:48:57 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2020/01/13 19:24:21 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "converter.h"
+
+int		get_mandelbub(t_json *json, t_obj *object)
+{
+	int		res;
+
+	object->type = MANDELBUB;
+	object->len = len_mandelbub;
+	object->param = new_vec0();
+	object->param = get_vec(query_attribute(json, "param", &res).json_value);
+	if (res)
+		object->param = new_vec0();
+	return (res);
+}
+
+void	get_obj4(t_json *json, char *name, t_obj *object)
+{
+	if (ft_strncmp(name, "fract_box", 9) == 0)
+		get_fract_box(json, object);
+	else if (ft_strncmp(name, "mandelbub", 3) == 0)
+		get_mandelbub(json, object);
+}
 
 void	get_obj3(t_json *json, char *name, t_obj *object)
 {
@@ -36,6 +57,5 @@ void	get_obj3(t_json *json, char *name, t_obj *object)
 		get_octahedron(json, object);
 	else if (ft_strncmp(name, "box", 3) == 0)
 		get_box(json, object);
-	else if (ft_strncmp(name, "mandelbub", 3) == 0)
-		get_mandelbub(json, object);
+	get_obj4(json, name, object);
 }

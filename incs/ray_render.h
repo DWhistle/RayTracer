@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_render.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bturcott <bturcott@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 13:06:37 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/12/20 18:12:29 by bturcott         ###   ########.fr       */
+/*   Updated: 2019/12/26 15:42:43 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,5 @@ t_point_data	ray_render(t_scene *scene, t_vec vec,\
 t_point_data	refraction(t_scene *scene, t_vec vec,\
 				t_point_data point_data, int depth_ref);
 void			*pthread_antialiasing(void *p_param);
+double			len_box_fract(t_vec point, t_vec param);
 #endif

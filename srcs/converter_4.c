@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 11:19:09 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/09 16:10:58 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2020/01/13 19:24:01 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,12 @@ int			get_box(t_json *json, t_obj *object)
 	return (res);
 }
 
-int			get_mandelbub(t_json *json, t_obj *object)
+int			get_fract_box(t_json *json, t_obj *object)
 {
 	int		res;
 
-	object->type = MANDELBUB;
-	object->len = len_mandelbub;
+	object->type = BOX;
+	object->len = len_box_fract;
 	object->param = new_vec0();
 	object->param = get_vec(query_attribute(json, "param", &res).json_value);
 	if (res)

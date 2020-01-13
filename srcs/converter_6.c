@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 11:19:01 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/15 10:34:07 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2019/12/26 15:40:32 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int			check_names_obj(char *name)
 			|| !ft_strncmp(name, "tor", 3)\
 			|| !ft_strncmp(name, "plane", 5)\
 			|| !ft_strncmp(name, "cylinder", 8)\
+			|| !ft_strncmp(name, "fract_box", 9)\
 			|| !ft_strncmp(name, "box", 3)\
 			|| !ft_strncmp(name, "octahedron", 10)\
 			|| !ft_strncmp(name, "ellipsoid", 9)\
