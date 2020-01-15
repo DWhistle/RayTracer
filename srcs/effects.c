@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 11:23:07 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/09 15:49:04 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2020/01/15 17:42:27 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int		*motion_blur(int *pixels, int w, int h)
 	t_motion_blur mb;
 
 	mb.a = 1;
-	while (mb.a < 25)
+	while (mb.a < 7)
 	{
 		mb.x = w;
 		while (mb.x--)

@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 13:06:37 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/12/26 15:42:43 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2020/01/15 17:29:51 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,5 @@ t_point_data	refraction(t_scene *scene, t_vec vec,\
 				t_point_data point_data, int depth_ref);
 void			*pthread_antialiasing(void *p_param);
 double			len_box_fract(t_vec point, t_vec param);
+void			effects2(t_scene *scene, int **pixel);
 #endif

@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:49:11 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/12/16 08:34:02 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2020/01/15 17:33:45 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ typedef struct	s_obj
 {
 	int				type;
 	t_quat			rot_quat;
-	t_vec			point;
 	double			rad;
 	double			(*len)();
 	int				ind;
@@ -83,6 +82,7 @@ typedef struct	s_obj
 	double			amplitude;
 	t_texture		normal_map;
 	double			transparency;
+	t_vec			point;
 }				t_obj;
 
 typedef struct	s_light

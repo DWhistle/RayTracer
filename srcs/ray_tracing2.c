@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/20 18:09:37 by bturcott          #+#    #+#             */
-/*   Updated: 2019/12/26 14:46:00 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2020/01/15 17:46:26 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,10 @@ void	effects1(t_scene *scene, t_vec *color, int **pixel, int pix)
 		*color = sepia(*color);
 	if (scene->ster)
 		*color = stereoscopy(*color, scene->ster);
+	if (scene->neg)
+		*color = negative(*color);
+	if (scene->ce)
+		*color = cartoon(*color);
 	(*pixel)[pix] = (unsigned int)(color->arr[0]) << 16 |
 		(unsigned int)(color->arr[1]) << 8 | (unsigned int)(color->arr[2])
 		| 0xff << 24;

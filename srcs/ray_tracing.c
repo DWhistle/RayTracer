@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:10:21 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/12/20 19:48:43 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2020/01/15 17:30:07 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,5 @@ void	ray_tracing(t_scene *scene, int **pixel,
 		ft_putendl("irrelevant window height");
 		exit(0);
 	}
+	effects2(scene, pixel);
 }
