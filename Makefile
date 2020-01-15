@@ -6,7 +6,7 @@
 #    By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 19:22:42 by hgreenfe          #+#    #+#              #
-#    Updated: 2020/01/13 20:03:46 by kmeera-r         ###   ########.fr        #
+#    Updated: 2020/01/15 19:43:22 by kmeera-r         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ LIBS = ft ui
 # used applications
 
 CC = gcc
-CCFLAGS = -g -Wall -Wextra -Werror -pedantic-errors -I $(INCDIR1) -I $(INCDIR2) -O 
+CCFLAGS = -g -Wall -Wextra -Werror -pedantic-errors -I $(INCDIR1) -I $(INCDIR2) -O -fsanitize=address
 RM = rm
 RMFLAGS = -rf
 

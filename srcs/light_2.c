@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:01:38 by kmeera-r          #+#    #+#             */
-/*   Updated: 2019/11/12 15:59:58 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2020/01/15 19:54:29 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_vec			get_uv_spehere(t_vec point)
 	v = (1.0 - phi / 3.14);
 	return (new_vec2(u, v));
 }
-
+//909 410400
 t_vec			get_pixel(t_vec uv, t_texture texture)
 {
 	double v;
@@ -53,6 +53,14 @@ t_vec			get_pixel(t_vec uv, t_texture texture)
 
 	u = (int)(uv.arr[0] * texture.h) * texture.w * 3;
 	v = (int)(uv.arr[1] * texture.w) * 3;
+	ft_putnbr((int)v);
+	ft_putchar(' ');
+	ft_putnbr((int)u);
+	ft_putchar(' ');
+	ft_putnbr((int)u + (int)v);
+	ft_putchar(' ');
+	ft_putnbr(texture.h * texture.w);
+	ft_putchar('\n');
 	return (new_vec3(texture.texture[(int)v + (int)u + 2],
 					texture.texture[(int)v + (int)u + 1],
 					texture.texture[(int)v + (int)u]));

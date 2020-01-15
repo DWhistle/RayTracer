@@ -6,7 +6,7 @@
 /*   By: kmeera-r <kmeera-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:10:21 by kmeera-r          #+#    #+#             */
-/*   Updated: 2020/01/15 17:30:07 by kmeera-r         ###   ########.fr       */
+/*   Updated: 2020/01/15 19:37:25 by kmeera-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,19 @@
 
 #define NUMBER_OF_THREADS 16
 
-int		ft_wait_threads(pthread_t const *tread_ids, t_pthread_param **p_params)
+int		ft_wait_threads(pthread_t *tread_ids, t_pthread_param **p_params)
 {
 	int		y;
 
 	y = -1;
+	printf("tetst\n");
 	while (++y < NUMBER_OF_THREADS)
 	{
 		pthread_join(tread_ids[y], NULL);
 		free(p_params[y]);
 	}
-	free(p_params);
+	//free(p_params);
+	printf("tetst2\n");
 	return (0);
 }
 
@@ -43,6 +45,7 @@ int		pthread_init(t_scene *scene, int **pixel,
 	if (step < 2)
 		return (1);
 	p_params = ft_memalloc(sizeof(t_pthread_param *) * NUMBER_OF_THREADS);
+	printf("%d\n", step);
 	while (++y * step < scene->h - step)
 	{
 		p_params[y] = ft_memalloc(sizeof(t_pthread_param));
@@ -58,16 +61,17 @@ int		pthread_init(t_scene *scene, int **pixel,
 		pthread_create(tread_ids + y, NULL,
 				&pthread_antialiasing, (void *)p_params[y]);
 	}
+	printf("%d\n", step);
 	return (ft_wait_threads(tread_ids, p_params));
 }
 
 void	ray_tracing(t_scene *scene, int **pixel,
 		t_accuracy accuracy)
 {
-	if (pthread_init(scene, pixel, accuracy))
-	{
-		ft_putendl("irrelevant window height");
-		exit(0);
-	}
+	printf("%d\n",pthread_init(scene, pixel, accuracy));
+	ft_putendl("testik");
+	printf("tetst3\n");
+	ft_putendl("testik");
 	effects2(scene, pixel);
+	printf("tetst3\n");
 }
