@@ -80,9 +80,9 @@ LIBFLAGS = -L$(LIBDIR) -lft -L $(SDL) -lSDL2
 all: $(NAME)
 
 sdl_config:
-	touch sdl_config
 	touch $(PATH_SDL)/SDL2/README.txt
 	cd $(PATH_SDL)/SDL2; sh ./autogen.sh && ./configure --prefix=$(PATH_SDL) --exec-prefix=$(PATH_SDL)
+	touch sdl_config
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
